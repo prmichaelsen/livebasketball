@@ -37,7 +37,6 @@ public class TestJUnit {
 	static List<WebElement> rows;
 	static WebElement num2Field;
 	static WebElement submitBtn;
-	static Hashtable<String,Boolean> notifications;
 	static Hashtable<String,Match> matches;
 	static Toolkit tk;
 	static boolean playSounds;
@@ -50,198 +49,217 @@ public class TestJUnit {
 
 	@Before 
 	public void beforeEach(){
-		//Schedule a job for the event-dispatching thread:
-		//adding TrayIcon.
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				createAndShowGUI();
-			}
-		});
-		//prevent additional instances of this app from running
-		try{
-			serverSocket = new ServerSocket(33133);
-		}catch(IOException e){
-			System.err.println("Could not listen on port: 33133");
-			JOptionPane.showMessageDialog(null,
-					"Could not start Flashscores Live Basketball on port 33133.\nIs the port in use? Please close any processes that may be using this port. \nOther processes that may be using this port may include, for example, other \ninstances of Flashscores Live Basketball."); 
-			System.exit(0);
-		}
-		//add shutdown hook
-		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-			public void run() {
-				if(driver != null){
-					driver.quit(); 
-				}
-			}
-		}));
-		//kill any existing drivers
-		try{
-			Runtime.getRuntime().exec("taskkill /F /PID phantomjs.exe");
-		}catch(IOException e){
-			System.err.println("Could not kill headless drivers");
-			System.err.println(e);
-		}
-		//set up driver
-		System.out.println("Initializing...");
-		String OS_name = System.getProperty("os.name");
-		String driver_path = "";
-		if(OS_name.startsWith("Windows")){
-			driver_path = "phantomjs.exe";
-		}else if (OS_name.startsWith("Mac")){
-			System.out.println("Mac not supported");
-			System.exit(0);
-		}
-		File file = new File(driver_path);
-		System.setProperty("phantomjs.binary.path", file.getAbsolutePath());
-		driver = new PhantomJSDriver();
-		driver.manage().timeouts().implicitlyWait(500, TimeUnit.MILLISECONDS);
-		//initialize program options
-		playSounds = true;
-		displayPopups = true;
-		String sport = "basketball";
-		String stage = "stage-live"; //can be stage-live, stage-finished, stage-interrupted, or stage-scheduled
-		int numRounds = 3; //the round to send alert when finishing that round
-		//initialize global var & utils
-		notifications = new Hashtable<String,Boolean>();	
-		matches = new Hashtable<String,Match>();	
-		tk = Toolkit.getDefaultToolkit();
-		//start driver
-		driver.get("http://www.flashscore.com/"+sport+"/");
-		System.out.println("Initialized.");
-		System.out.println("Running..."); 
-		while(true){
-			if(driver == null){
-				System.err.println("No driver found. Exiting...");
-				System.exit(0); 
-			}
-
-			//set up common elements
-			try {
-				rows = driver.findElements(By.cssSelector(".fs-table>.table-main>."+sport+">tbody>tr."+stage));
-			}
-			catch (NoSuchElementException e){ } 
-
-
-			//get scores
-			for(WebElement web_el : rows){
-				boolean isHomeTeam = false;
-				boolean isAwayTeam = false;
-				String row_id = web_el.getAttribute("id");
-				String match_id = null;
-				String team = null;
-				if(row_id != null){
-					team = row_id.substring(0,1); //first character indicates home/away team
-					match_id = row_id.substring(2); //remaining str is match id
-				}
-				if(team != null){
-					if(team.equals("g")){
-						isHomeTeam = true; isAwayTeam = false;
+		//Thread.UncaughtExceptionHandler h = new Thread.UncaughtExceptionHandler() {
+			//public void uncaughtException(Thread th, Throwable ex) {
+				//System.out.println("Uncaught exception: " + ex);
+			//}
+		//};
+		//Thread t = new Thread() {
+			//public void run() {
+				//Schedule a job for the event-dispatching thread:
+				//adding TrayIcon.
+				SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						createAndShowGUI();
 					}
-					else if (team.equals("x")){
-						isAwayTeam = true; isHomeTeam = false; 
-					}
+				});
+				//prevent additional instances of this app from running
+				try{
+					serverSocket = new ServerSocket(33133);
+				}catch(IOException e){
+					System.err.println("Could not listen on port: 33133");
+					JOptionPane.showMessageDialog(null,
+							"Could not start Flashscores Live Basketball on port 33133.\nIs the port in use? Please close any processes that may be using this port. \nOther processes that may be using this port may include, for example, other \ninstances of Flashscores Live Basketball."); 
+					System.exit(0);
 				}
-				if(match_id != null){
-					Match match = matches.get(match_id);
-					if(match == null){
-						match = new Match(match_id);
-						matches.put(match_id, match); 
+				//add shutdown hook
+				Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+					public void run() {
+						if(driver != null){
+							driver.quit(); 
+						}
 					}
-					WebElement homeTeamNameDOM = null;
-					WebElement awayTeamNameDOM = null;
-					WebElement roundStatusDOM = null;
-					String homeTeamName = null;
-					String awayTeamName = null;
-					String roundStatus = null;
-					if(isHomeTeam){
-						try{
-							roundStatusDOM = web_el.findElement(By.cssSelector("td.timer>span"));	
-							if(roundStatusDOM != null){ 
-								roundStatus = (roundStatusDOM.getAttribute("innerHTML"));
-								match.setRoundStatus(roundStatus);
+				}));
+				//kill any existing drivers
+				try{
+					Runtime.getRuntime().exec("taskkill /F /PID phantomjs.exe");
+				}catch(IOException e){
+					System.err.println("Could not kill headless drivers");
+					System.err.println(e);
+				}
+				//set up driver
+				System.out.println("Initializing...");
+				String OS_name = System.getProperty("os.name");
+				String driver_path = "";
+				if(OS_name.startsWith("Windows")){
+					driver_path = "phantomjs.exe";
+				}else if (OS_name.startsWith("Mac")){
+					System.out.println("Mac not supported");
+					System.exit(0);
+				}
+				File file = new File(driver_path);
+				System.setProperty("phantomjs.binary.path", file.getAbsolutePath());
+				driver = new PhantomJSDriver();
+				driver.manage().timeouts().implicitlyWait(500, TimeUnit.MILLISECONDS);
+				//initialize program options
+				playSounds = true;
+				displayPopups = true;
+				String sport = "basketball";
+				String stage = "stage-live"; //can be stage-live, stage-finished, stage-interrupted, or stage-scheduled
+				int numRounds = 3; //the round to send alert when finishing that round
+				//initialize global var & utils
+				matches = new Hashtable<String,Match>();	
+				tk = Toolkit.getDefaultToolkit();
+				//start driver
+				driver.get("http://www.flashscore.com/"+sport+"/");
+				System.out.println("Initialized.");
+				System.out.println("Running..."); 
+				while(true){
+					if(driver == null){
+						System.err.println("No driver found. Exiting...");
+						System.exit(0); 
+					}
+
+					//set up common elements
+					try {
+						rows = driver.findElements(By.cssSelector(".fs-table>.table-main>."+sport+">tbody>tr."+stage));
+					}
+					catch (NoSuchElementException e){ } 
+
+
+					//get scores
+					for(WebElement web_el : rows){
+						boolean isHomeTeam = false;
+						boolean isAwayTeam = false;
+						String row_id = null;
+						try{ 
+							row_id = web_el.getAttribute("id");
+						}
+						catch (StaleElementReferenceException e){ }
+						String match_id = null;
+						String team = null;
+						if(row_id != null){
+							team = row_id.substring(0,1); //first character indicates home/away team
+							match_id = row_id.substring(2); //remaining str is match id
+						}
+						if(team != null){
+							if(team.equals("g")){
+								isHomeTeam = true; isAwayTeam = false;
+							}
+							else if (team.equals("x")){
+								isAwayTeam = true; isHomeTeam = false; 
 							}
 						}
-						catch (NoSuchElementException e){ } 
-					}
-
-					if(isHomeTeam){
-						try{
-							homeTeamNameDOM = web_el.findElement(By.cssSelector("td.team-home>span"));	
-						}
-						catch (NoSuchElementException e){ }
-						if(homeTeamNameDOM != null){ 
-							homeTeamName = (homeTeamNameDOM.getAttribute("innerHTML"));
-							match.setHomeTeam(homeTeamName);
-						}
-					}
-					if(isAwayTeam){
-						try{ 
-							awayTeamNameDOM = web_el.findElement(By.cssSelector("td.team-away>span"));	
-						}
-						catch (NoSuchElementException e){ }
-						if(awayTeamNameDOM != null){ 
-							awayTeamName = (awayTeamNameDOM.getAttribute("innerHTML"));
-							match.setAwayTeam(awayTeamName);
-						}
-					}
-					List<WebElement> scoreDOMs = new ArrayList<WebElement>();
-					List<Integer> scores = new ArrayList<Integer>(); 
-					if(isHomeTeam){
-						try{ 
-							scoreDOMs = web_el.findElements(By.cssSelector("td.part-bottom"));	
-						}
-						catch (NoSuchElementException e){ } 
-					}
-					if(isAwayTeam){ 
-						try{ 
-							scoreDOMs =web_el.findElements(By.cssSelector("td.part-top"));	
-						}
-						catch (NoSuchElementException e){ }
-					} 
-
-					for(WebElement scoreTd : scoreDOMs ){
-						try{
-							int score = Integer.parseInt(scoreTd.getAttribute("innerHTML"));
-							scores.add(score); 
-						}catch(NumberFormatException e){}; 
-					}
-					if(isHomeTeam){ 
-						match.setHomeScores(scores);
-					}else if(isAwayTeam){
-						match.setAwayScores(scores);
-					}
-				}
-			}	
-			Enumeration e = matches.elements();
-			while(e.hasMoreElements()){
-				Match match = (Match)e.nextElement();
-				System.out.println(match);
-				if(match.doesMeetCondition()){
-					if(playSounds){
-						Thread beepThread = new Thread(new Runnable(){
-							public void run(){
+						if(match_id != null){
+							Match match = matches.get(match_id);
+							if(match == null){
+								match = new Match(match_id);
+								matches.put(match_id, match); 
+							}
+							WebElement homeTeamNameDOM = null;
+							WebElement awayTeamNameDOM = null;
+							WebElement roundStatusDOM = null;
+							String homeTeamName = null;
+							String awayTeamName = null;
+							String roundStatus = null;
+							if(isHomeTeam){
 								try{
-									for(int i = 0; i < 20; i++){
-										tk.beep(); 
-										TimeUnit.SECONDS.sleep(1);
+									roundStatusDOM = web_el.findElement(By.cssSelector("td.timer>span"));	
+									if(roundStatusDOM != null){ 
+										roundStatus = (roundStatusDOM.getAttribute("innerHTML"));
+										match.setRoundStatus(roundStatus);
 									}
-								}catch(InterruptedException e){};
+								}
+								catch (NoSuchElementException e){ } 
+								catch (StaleElementReferenceException e){ }
 							}
-						});
-						beepThread.start();
-					} 
-					if(displayPopups){
-						Thread popupThread = new Thread(new Runnable(){
-							public void run(){
-								JOptionPane.showMessageDialog(null,
-									"Round 4 Starting with 3-Round-Favor:\n"+match.getMatchName()); 
+
+							if(isHomeTeam){
+								try{
+									homeTeamNameDOM = web_el.findElement(By.cssSelector("td.team-home>span"));	
+									if(homeTeamNameDOM != null){ 
+										homeTeamName = (homeTeamNameDOM.getAttribute("innerHTML"));
+										match.setHomeTeam(homeTeamName);
+									}
+								}
+								catch (NoSuchElementException e){ }
+								catch (StaleElementReferenceException e){ }
 							}
-						});
-						popupThread.start();
-					} 
-				} 
-			}
-		}
+							if(isAwayTeam){
+								try{ 
+									awayTeamNameDOM = web_el.findElement(By.cssSelector("td.team-away>span"));	
+									if(awayTeamNameDOM != null){ 
+										awayTeamName = (awayTeamNameDOM.getAttribute("innerHTML"));
+										match.setAwayTeam(awayTeamName);
+									}
+								}
+								catch (NoSuchElementException e){ }
+								catch (StaleElementReferenceException e){ }
+							}
+							List<WebElement> scoreDOMs = new ArrayList<WebElement>();
+							List<Integer> scores = new ArrayList<Integer>(); 
+							if(isHomeTeam){
+								try{ 
+									scoreDOMs = web_el.findElements(By.cssSelector("td.part-bottom"));	
+								}
+								catch (NoSuchElementException e){ } 
+							}
+							if(isAwayTeam){ 
+								try{ 
+									scoreDOMs =web_el.findElements(By.cssSelector("td.part-top"));	
+								}
+								catch (NoSuchElementException e){ }
+							} 
+
+							for(WebElement scoreTd : scoreDOMs ){
+								try{
+									int score = Integer.parseInt(scoreTd.getAttribute("innerHTML"));
+									scores.add(score); 
+								}
+								catch(NumberFormatException e){} 
+								catch (StaleElementReferenceException e){ }
+							}
+							if(isHomeTeam){ 
+								match.setHomeScores(scores);
+							}else if(isAwayTeam){
+								match.setAwayScores(scores);
+							}
+						}
+					}	
+					Enumeration e = matches.elements();
+					while(e.hasMoreElements()){
+						Match match = (Match)e.nextElement();
+						System.out.println(match);
+						if(match.doesMeetCondition()){
+							if(playSounds){
+								Thread beepThread = new Thread(new Runnable(){
+									public void run(){
+										try{
+											for(int i = 0; i < 20; i++){
+												tk.beep(); 
+												TimeUnit.SECONDS.sleep(1);
+											}
+										}catch(InterruptedException e){};
+									}
+								});
+								beepThread.start();
+							} 
+							if(displayPopups){
+								Thread popupThread = new Thread(new Runnable(){
+									public void run(){
+										JOptionPane.showMessageDialog(null,
+											"Round 4 Starting with 3-Round-Favor:\n"+match.getMatchName()); 
+									}
+								});
+								popupThread.start();
+							} 
+						} 
+					}
+				}
+			//}
+		//};
+		//t.setUncaughtExceptionHandler(h);
+		//t.start();
 	}
 
 	@After
@@ -385,7 +403,7 @@ public class TestJUnit {
 			boolean hasPositive = false;
 			boolean hasNegative = false;
 			boolean hasZero = false; 
-			for(int j = 0; j < homeScores.size(); j++){
+			for(int j = 2; j < homeScores.size(); j++){
 				int diff = homeScores.get(j) - awayScores.get(j); 
 				if(diff > 0){
 					hasPositive = true;		
