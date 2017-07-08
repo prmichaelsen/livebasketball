@@ -49,13 +49,30 @@ public class TestJUnit {
 
 	@Before 
 	public void beforeEach(){
-		//Thread.UncaughtExceptionHandler h = new Thread.UncaughtExceptionHandler() {
-			//public void uncaughtException(Thread th, Throwable ex) {
-				//System.out.println("Uncaught exception: " + ex);
-			//}
-		//};
-		//Thread t = new Thread() {
-			//public void run() {
+		Thread.UncaughtExceptionHandler h = new Thread.UncaughtExceptionHandler() {
+			public void uncaughtException(Thread th, Throwable ex) {
+				System.out.println("Uncaught exception: " + ex);
+				System.out.println("Quitting any existing drivers...");
+				if(driver != null){
+					driver.quit(); 
+				}
+				//kill any existing drivers
+				System.out.println("Killing any existing drivers...");
+				try{
+					Runtime.getRuntime().exec("taskkill /F /PID phantomjs.exe");
+				}catch(IOException e){
+					System.err.println("Could not kill headless drivers");
+					System.err.println(e);
+				}
+				System.out.println("Done.");
+				JOptionPane.showMessageDialog(null,
+						"There was an error and Flashscores Live Basketball must exit. Please restart the application. \n\n Uncaught exception: \n" + ex); 
+				System.out.println("Exiting...");
+				System.exit(1);
+			}
+		};
+		Thread t = new Thread() {
+			public void run() {
 				//Schedule a job for the event-dispatching thread:
 				//adding TrayIcon.
 				SwingUtilities.invokeLater(new Runnable() {
@@ -256,10 +273,10 @@ public class TestJUnit {
 						} 
 					}
 				}
-			//}
-		//};
-		//t.setUncaughtExceptionHandler(h);
-		//t.start();
+			}
+		};
+		t.setUncaughtExceptionHandler(h);
+		t.start();
 	}
 
 	@After
@@ -388,14 +405,29 @@ public class TestJUnit {
 
 		public void setRoundStatus(String status){
 			if(status.contains("Quarter")){
-				String roundStatus = status.substring(0,status.indexOf("<"));
-				String time = status.substring(status.indexOf(";")+1, status.indexOf("<span"));
-				this.roundStatus = roundStatus; 
+				if(status.contains("1st")){
+					this.roundStatus = "1st Quarter"; 
+				}
+				if(status.contains("2nd")){
+					this.roundStatus = "2nd Quarter"; 
+				}
+				if(status.contains("3rd")){
+					this.roundStatus = "3rd Quarter"; 
+				}
+				if(status.contains("4th")){
+					this.roundStatus = "4th Quarter"; 
+				}
 				try{
-					this.time = Integer.parseInt(time);
-				}catch(NumberFormatException e){}; 
+					String time = status.substring(status.indexOf(";")+1, status.indexOf("<span"));
+					if(time != null){
+						this.time = Integer.parseInt(time); 
+					}
+				}catch(StringIndexOutOfBoundsException e){ }
+				catch(NumberFormatException e){}; 
 			} else if (status.contains("Half Time")){
 				this.roundStatus = "Half Time"; 
+			} else if (status.contains("Finished")){
+				this.roundStatus = "Finished"; 
 			}
 		} 
 
@@ -403,7 +435,7 @@ public class TestJUnit {
 			boolean hasPositive = false;
 			boolean hasNegative = false;
 			boolean hasZero = false; 
-			for(int j = 2; j < homeScores.size(); j++){
+			for(int j = 0; j < homeScores.size(); j++){
 				int diff = homeScores.get(j) - awayScores.get(j); 
 				if(diff > 0){
 					hasPositive = true;		
