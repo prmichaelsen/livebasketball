@@ -8,6 +8,7 @@ import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.*;
+import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
 import java.lang.InterruptedException;
@@ -65,8 +66,15 @@ public class TestJUnit {
 					System.err.println(e);
 				}
 				System.out.println("Done.");
-				JOptionPane.showMessageDialog(null,
-						"There was an error and Flashscores Live Basketball must exit. Please restart the application. \n\n Uncaught exception: \n" + ex); 
+				String msg =  "There was an error and Flashscores Live Basketball must exit. Please restart the application. \n\nUncaught exception: \n" + ex ;
+				JTextArea textArea = new JTextArea(msg);
+				JScrollPane scrollPane = new JScrollPane(textArea);  
+				textArea.setLineWrap(true);  
+				textArea.setWrapStyleWord(true); 
+				textArea.setEditable(false);
+				scrollPane.setPreferredSize( new Dimension( 500, 300 ) );
+				JOptionPane.showMessageDialog(
+						null, scrollPane, "Error", JOptionPane.ERROR_MESSAGE);
 				System.out.println("Exiting...");
 				System.exit(1);
 			}
@@ -85,8 +93,15 @@ public class TestJUnit {
 					serverSocket = new ServerSocket(33133);
 				}catch(IOException e){
 					System.err.println("Could not listen on port: 33133");
-					JOptionPane.showMessageDialog(null,
-							"Could not start Flashscores Live Basketball on port 33133.\nIs the port in use? Please close any processes that may be using this port. \nOther processes that may be using this port may include, for example, other \ninstances of Flashscores Live Basketball."); 
+					String msg =  "Could not start Flashscores Live Basketball on port 33133.\nIs the port in use? Please close any processes that may be using this port. Other processes that may be using this port may include, for example, other instances of Flashscores Live Basketball.";
+					JTextArea textArea = new JTextArea(msg);
+					JScrollPane scrollPane = new JScrollPane(textArea);  
+					textArea.setLineWrap(true);  
+					textArea.setWrapStyleWord(true); 
+					textArea.setEditable(false);
+					scrollPane.setPreferredSize( new Dimension( 500, 300 ) );
+					JOptionPane.showMessageDialog(
+							null, scrollPane, "Error", JOptionPane.ERROR_MESSAGE);
 					System.exit(0);
 				}
 				//add shutdown hook
