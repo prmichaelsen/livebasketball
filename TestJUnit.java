@@ -2,6 +2,7 @@ import java.awt.AWTException;
 import java.awt.CheckboxMenuItem;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.Menu;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
@@ -17,6 +18,7 @@ import java.net.ServerSocket;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
@@ -44,7 +46,9 @@ public class TestJUnit {
 	static boolean playSounds;
 	static boolean displayPopups;
 	static ServerSocket serverSocket;
-	static int num;
+	static JFrame frm;
+	static JTextArea matchesTextArea;
+
 
 	@BeforeClass
 	public static void beforeClass(){
@@ -75,6 +79,7 @@ public class TestJUnit {
 				textArea.setLineWrap(true);  
 				textArea.setWrapStyleWord(true); 
 				textArea.setEditable(false);
+				textArea.setMargin( new Insets(10,10,10,10) );
 				scrollPane.setPreferredSize( new Dimension( 500, 300 ) );
 				Thread popupThread = new Thread(new Runnable(){
 					public void run(){
@@ -105,6 +110,7 @@ public class TestJUnit {
 			textArea.setLineWrap(true);  
 			textArea.setWrapStyleWord(true); 
 			textArea.setEditable(false);
+			textArea.setMargin( new Insets(10,10,10,10) );
 			scrollPane.setPreferredSize( new Dimension( 500, 300 ) );
 			JOptionPane.showMessageDialog(
 					null, scrollPane, "Error", JOptionPane.ERROR_MESSAGE);
@@ -148,7 +154,6 @@ public class TestJUnit {
 		//start thread
 		ScoreChecker scoreChecker = new ScoreChecker();
 		while(true){
-			num = 0;
 			Thread t = new Thread(scoreChecker, "Flashscores Live Basketball Scorechecker"); 
 			t.setUncaughtExceptionHandler(h);
 			t.start();
@@ -180,8 +185,8 @@ public class TestJUnit {
 			return;
 		}
 		final PopupMenu popup = new PopupMenu();
-		final TrayIcon trayIcon =
-			new TrayIcon(createImage("icon.gif", "tray icon"));
+		final Image iconImage = createImage("icon.gif", "tray icon");
+		final TrayIcon trayIcon = new TrayIcon(iconImage);
 		final SystemTray tray = SystemTray.getSystemTray();
 
 		// Create a popup menu components
@@ -238,6 +243,38 @@ public class TestJUnit {
 				System.exit(0);
 			}
 		});
+
+		frm = new JFrame("Flashscores Live Basketball");
+		frm.setIconImage(iconImage);
+		//frm.setImageAutoSize(true);
+		String msg = "Starting Up...";
+		matchesTextArea = new JTextArea(msg);
+		JScrollPane scrollPane = new JScrollPane(matchesTextArea);  
+		matchesTextArea.setLineWrap(true);  
+		matchesTextArea.setWrapStyleWord(true); 
+		matchesTextArea.setEditable(false); 
+		matchesTextArea.setMargin( new Insets(10,10,10,10) );
+		scrollPane.setPreferredSize( new Dimension( 500, 300 ) );
+		frm.getContentPane().add(scrollPane);
+
+		trayIcon.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e){
+				frm.setVisible(true);
+				frm.setExtendedState(JFrame.NORMAL);
+			} 
+		});
+		frm.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				frm.setVisible(false);
+				frm.setExtendedState(JFrame.ICONIFIED);
+			}
+		});
+		frm.setSize(500, 500);
+		frm.setLocationRelativeTo(null);
+		frm.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		frm.setVisible(true);
 	}
 
 	//Obtain the image URL
@@ -245,7 +282,7 @@ public class TestJUnit {
 			return (new ImageIcon("icon.gif", description)).getImage();
 	} 
 
-	public class Match {
+	public class Match implements Comparable<Match>{
 		private String homeTeam;
 		private String awayTeam;
 		private List<Integer> homeScores;
@@ -254,6 +291,7 @@ public class TestJUnit {
 		private String roundStatus;
 		private int time;
 		private boolean notified;
+		private long lastUpdated;
 		
 		public Match(String key){
 			this.key = key;
@@ -264,6 +302,7 @@ public class TestJUnit {
 			roundStatus = ""; 
 			time = 0;
 			notified = false;
+			lastUpdated = 0;
 		}
 
 		public void setHomeScores(List<Integer> scores){
@@ -307,8 +346,21 @@ public class TestJUnit {
 				this.roundStatus = "Half Time"; 
 			} else if (status.contains("Finished")){
 				this.roundStatus = "Finished"; 
+			} else if (status.contains("Overtime")){
+				this.roundStatus = "Overtime"; 
+				try{
+					String time = status.substring(status.indexOf(";")+1, status.indexOf("<span"));
+					if(time != null){
+						this.time = Integer.parseInt(time); 
+					}
+				}catch(StringIndexOutOfBoundsException e){ }
+				catch(NumberFormatException e){}; 
 			}
 		} 
+
+		public void setLastUpdated(long timeInMillis){
+			this.lastUpdated = timeInMillis;
+		}
 
 		public boolean doesMeetCondition(){
 			boolean hasPositive = false;
@@ -344,12 +396,19 @@ public class TestJUnit {
 		public String toString(){
 			return 
 				((notified)? " * " : "") + this.getMatchName() + "\n" +
-				"-------------------------\n" +
 				roundStatus + " - " + time + "'\n" +
-				"-------------------------\n" + 
 				homeTeam + ": " + homeScores + "\n" + 
 				awayTeam + ": " + awayScores + "\n"; 
 		} 
+		
+		public long getLastUpdated(){ 
+			return lastUpdated;
+		}
+
+		@Override
+		public int compareTo(Match match){ 
+			return (int) (this.lastUpdated - match.getLastUpdated());
+		}
 	} 
 
 	public class ScoreChecker implements Runnable {
@@ -416,6 +475,7 @@ public class TestJUnit {
 							match = new Match(match_id);
 							matches.put(match_id, match); 
 						}
+						match.setLastUpdated(System.currentTimeMillis());
 						WebElement homeTeamNameDOM = null;
 						WebElement awayTeamNameDOM = null;
 						WebElement roundStatusDOM = null;
@@ -486,10 +546,15 @@ public class TestJUnit {
 						}
 					}
 				}	
-				Enumeration e = matches.elements();
+				Enumeration e = matches.elements(); 
+				List<Match> matchList = new ArrayList<Match>();
 				while(e.hasMoreElements()){
 					Match match = (Match)e.nextElement();
 					System.out.println(match);
+					//if updated less than a minute ago
+					if(match.getLastUpdated() > System.currentTimeMillis() - 1*60*1000){
+						matchList.add(match); //add to matchlist and display in GUI
+					}
 					if(match.doesMeetCondition()){
 						if(playSounds){
 							Thread beepThread = new Thread(new Runnable(){
@@ -515,6 +580,16 @@ public class TestJUnit {
 						} 
 					} 
 				}
+				//display in GUI the match list
+				Collections.sort(matchList); 
+				StringBuilder sb = new StringBuilder();
+				sb.append("Live Matches: \n\n");
+				for( Match match : matchList){ 
+					sb.append(match);
+					sb.append("\n\n");
+				}
+				String msg =  sb.toString();
+				matchesTextArea.setText(msg);
 			}
 		} 
 	}
