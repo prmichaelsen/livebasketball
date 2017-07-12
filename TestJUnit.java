@@ -48,6 +48,7 @@ public class TestJUnit {
 	static ServerSocket serverSocket;
 	static JFrame frm;
 	static JTextArea matchesTextArea;
+	static int looking;
 
 
 	@BeforeClass
@@ -84,7 +85,7 @@ public class TestJUnit {
 				Thread popupThread = new Thread(new Runnable(){
 					public void run(){
 						JOptionPane.showMessageDialog(
-							null, scrollPane, "Error", JOptionPane.ERROR_MESSAGE);
+							frm, scrollPane, "Error", JOptionPane.ERROR_MESSAGE);
 					}
 				});
 				popupThread.start();
@@ -113,7 +114,7 @@ public class TestJUnit {
 			textArea.setMargin( new Insets(10,10,10,10) );
 			scrollPane.setPreferredSize( new Dimension( 500, 300 ) );
 			JOptionPane.showMessageDialog(
-					null, scrollPane, "Error", JOptionPane.ERROR_MESSAGE);
+					frm, scrollPane, "Error", JOptionPane.ERROR_MESSAGE);
 			System.exit(0);
 		}
 		//add shutdown hook
@@ -414,6 +415,20 @@ public class TestJUnit {
 	public class ScoreChecker implements Runnable {
 
 		public void run(){
+			//running thread
+			Thread runningStatus = new Thread(){ 
+				@Override
+				public void run(){
+					try{
+						while(true){
+							looking = (looking+1)%3;
+							TimeUnit.SECONDS.sleep(1); 
+						}
+					}catch(InterruptedException e){};
+				}
+			};
+			runningStatus.start(); 
+
 			//initialize program options
 			playSounds = true;
 			displayPopups = true;
@@ -572,7 +587,7 @@ public class TestJUnit {
 						if(displayPopups){
 							Thread popupThread = new Thread(new Runnable(){
 								public void run(){
-									JOptionPane.showMessageDialog(null,
+									JOptionPane.showMessageDialog(frm,
 										"Round 4 Starting with 3-Round-Favor:\n"+match.getMatchName()); 
 								}
 							});
@@ -583,10 +598,18 @@ public class TestJUnit {
 				//display in GUI the match list
 				Collections.sort(matchList); 
 				StringBuilder sb = new StringBuilder();
-				sb.append("Live Matches: \n\n");
+				sb.append("Live Matches:");
+				int dots = looking;
+				for(int i = 0; i < dots; i++){
+					sb.append("."); 
+				}
+				sb.append("\n\n");
 				for( Match match : matchList){ 
 					sb.append(match);
 					sb.append("\n\n");
+				}
+				if( matchList.isEmpty() ){ 
+					sb.append("No Live Matches Found");
 				}
 				String msg =  sb.toString();
 				matchesTextArea.setText(msg);
