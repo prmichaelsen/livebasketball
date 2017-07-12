@@ -291,7 +291,8 @@ public class TestJUnit {
 		private String key;
 		private String roundStatus;
 		private int time;
-		private boolean notified;
+		private boolean conditionOneMet;
+		private boolean conditionTwoMet;
 		private long lastUpdated;
 		
 		public Match(String key){
@@ -302,7 +303,7 @@ public class TestJUnit {
 			awayTeam = ""; 
 			roundStatus = ""; 
 			time = 0;
-			notified = false;
+			conditionOneMet = false;
 			lastUpdated = 0;
 		}
 
@@ -363,7 +364,7 @@ public class TestJUnit {
 			this.lastUpdated = timeInMillis;
 		}
 
-		public boolean doesMeetCondition(){
+		public boolean doesMeetConditionOne(){
 			boolean hasPositive = false;
 			boolean hasNegative = false;
 			boolean hasZero = false; 
@@ -381,12 +382,37 @@ public class TestJUnit {
 			} 
 			if( (!hasPositive || !hasNegative)  && !hasZero ){ 
 				if( roundStatus.equals("3rd Quarter") && time == 10){
-					if(!notified){
-						return notified = true;
+					if(!conditionOneMet){
+						return conditionOneMet = true;
 					}
 				} 
 			}
-			//System.out.println("+/-/0: " + hasPositive+"/"+ hasNegative+"/"+ hasZero );
+			return false;
+		}
+
+		public boolean doesMeetConditionTwo(){
+			boolean hasPositive = false;
+			boolean hasNegative = false;
+			boolean hasZero = false; 
+			for(int j = 0; j < homeScores.size() - 1; j++){
+				int diff = homeScores.get(j) - awayScores.get(j); 
+				if(diff > 0){
+					hasPositive = true;		
+				}
+				else if(diff < 0){
+					hasNegative = true; 
+				} 
+				else {
+					hasZero = true;
+				}
+			} 
+			if( (!hasPositive || !hasNegative)  && !hasZero ){ 
+				if( roundStatus.equals("4th Quarter") && time == 1){
+					if(!conditionTwoMet){
+						return conditionTwoMet = true;
+					}
+				} 
+			}
 			return false;
 		}
 
@@ -396,7 +422,7 @@ public class TestJUnit {
 
 		public String toString(){
 			return 
-				((notified)? " * " : "") + this.getMatchName() + "\n" +
+				((conditionOneMet)? " * " : "") + this.getMatchName() + "\n" +
 				roundStatus + " - " + time + "'\n" +
 				homeTeam + ": " + homeScores + "\n" + 
 				awayTeam + ": " + awayScores + "\n"; 
@@ -414,21 +440,7 @@ public class TestJUnit {
 
 	public class ScoreChecker implements Runnable {
 
-		public void run(){
-			//running thread
-			Thread runningStatus = new Thread(){ 
-				@Override
-				public void run(){
-					try{
-						while(true){
-							looking = (looking+1)%3;
-							TimeUnit.SECONDS.sleep(1); 
-						}
-					}catch(InterruptedException e){};
-				}
-			};
-			runningStatus.start(); 
-
+		public void run(){ 
 			//initialize program options
 			playSounds = true;
 			displayPopups = true;
@@ -570,7 +582,7 @@ public class TestJUnit {
 					if(match.getLastUpdated() > System.currentTimeMillis() - 1*60*1000){
 						matchList.add(match); //add to matchlist and display in GUI
 					}
-					if(match.doesMeetCondition()){
+					if(match.doesMeetConditionOne() || match.doesMeetConditionTwo()){
 						if(playSounds){
 							Thread beepThread = new Thread(new Runnable(){
 								public void run(){
@@ -612,7 +624,11 @@ public class TestJUnit {
 					sb.append("No Live Matches Found");
 				}
 				String msg =  sb.toString();
-				matchesTextArea.setText(msg);
+				matchesTextArea.setText(msg); 
+				looking = (looking+1)%3;
+				try{
+					TimeUnit.SECONDS.sleep(2); 
+				}catch(InterruptedException e2){};
 			}
 		} 
 	}
