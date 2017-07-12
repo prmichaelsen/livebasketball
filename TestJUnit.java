@@ -293,6 +293,7 @@ public class TestJUnit {
 		private int time;
 		private boolean conditionOneMet;
 		private boolean conditionTwoMet;
+		private boolean potentialMatch;
 		private long lastUpdated;
 		
 		public Match(String key){
@@ -304,6 +305,8 @@ public class TestJUnit {
 			roundStatus = ""; 
 			time = 0;
 			conditionOneMet = false;
+			conditionTwoMet = false;
+			potentialMatch = true;
 			lastUpdated = 0;
 		}
 
@@ -364,6 +367,30 @@ public class TestJUnit {
 			this.lastUpdated = timeInMillis;
 		}
 
+		public void checkPotential(){
+			boolean hasPositive = false;
+			boolean hasNegative = false;
+			boolean hasZero = false; 
+			for(int j = 0; j < homeScores.size() - 1; j++){
+				int diff = homeScores.get(j) - awayScores.get(j); 
+				if(diff > 0){
+					hasPositive = true;		
+				}
+				else if(diff < 0){
+					hasNegative = true; 
+				} 
+				else {
+					hasZero = true;
+				}
+			} 
+			if( (hasPositive && hasNegative) || hasZero ){
+				System.out.println("here with " + this);
+				if( roundStatus.equals("3rd Quarter") ){
+					potentialMatch = false;
+				} 
+			}
+		}
+
 		public boolean doesMeetConditionOne(){
 			boolean hasPositive = false;
 			boolean hasNegative = false;
@@ -420,9 +447,21 @@ public class TestJUnit {
 			return homeTeam + " vs. " + awayTeam; 
 		}
 
+		public String getMessage(){
+			if(conditionTwoMet){ 
+				return "Round 4 Starting with 3-Round-Favor:\n"+this.getMatchName();
+			}
+			else if(conditionOneMet){
+				return "Round 3 Ending with 3-Round-Favor:\n"+this.getMatchName();
+			}
+			return "";
+		} 
+
 		public String toString(){
 			return 
-				((conditionOneMet)? " * " : "") + this.getMatchName() + "\n" +
+				((conditionOneMet | conditionTwoMet)? " * " : "") + 
+				//((potentialMatch & !(conditionOneMet || conditionTwoMet))? " + " : "") + 
+				this.getMatchName() + "\n" +
 				roundStatus + " - " + time + "'\n" +
 				homeTeam + ": " + homeScores + "\n" + 
 				awayTeam + ": " + awayScores + "\n"; 
@@ -582,6 +621,7 @@ public class TestJUnit {
 					if(match.getLastUpdated() > System.currentTimeMillis() - 1*60*1000){
 						matchList.add(match); //add to matchlist and display in GUI
 					}
+					//match.checkPotential();
 					if(match.doesMeetConditionOne() || match.doesMeetConditionTwo()){
 						if(playSounds){
 							Thread beepThread = new Thread(new Runnable(){
@@ -600,7 +640,7 @@ public class TestJUnit {
 							Thread popupThread = new Thread(new Runnable(){
 								public void run(){
 									JOptionPane.showMessageDialog(frm,
-										"Round 4 Starting with 3-Round-Favor:\n"+match.getMatchName()); 
+										match.getMessage()); 
 								}
 							});
 							popupThread.start();
