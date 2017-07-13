@@ -1,0 +1,2 @@
+Main-Class: TestRunner
+Class-Path: ../lib/client-combined-3.4.0-no-deps.jar ../lib/hamcrest-core-1.3.jar ../lib/junit-4.12.jar ../lib/selenium-server-standalone-3.4.0.jar
