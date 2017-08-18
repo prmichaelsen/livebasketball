@@ -33,7 +33,7 @@ import org.openqa.selenium.htmlunit.*;
 import org.openqa.selenium.phantomjs.*;
 import org.openqa.selenium.support.ui.*;
 
-public class Flashscores {
+public class Main {
 
 	static WebDriver driver;
 	static WebElement tables;
@@ -131,7 +131,7 @@ public class Flashscores {
 		System.setProperty("phantomjs.binary.path", file.getAbsolutePath());
 
 		//start thread
-		ScoreChecker scoreChecker = new Flashscores().new ScoreChecker();
+		ScoreChecker scoreChecker = new Main().new ScoreChecker();
 		while(true){
 			Thread t = new Thread(scoreChecker, "Flashscores Live Basketball Scorechecker"); 
 			t.setUncaughtExceptionHandler(h);

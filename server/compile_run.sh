@@ -1,15 +1,42 @@
 #!bin/bash
 
-# this script only works if you have your dependencies set up the same way
-# as below. If this is not the case, please consult ./README.txt
+lib_path="./lib/"
+# mark java dependencies here:
+require+=("client-combined-3.4.0-no-deps.jar")
+require+=("hamcrest-core-1.3.jar")
+require+=("junit-4.12.jar")
+require+=("selenium-server-standalone-3.4.0.jar")
+
+# determine os
+platform=-1
+linux=0
+windows=1
+mac=2
+unamestr=`uname`
+echo "Detected OS is $unamestr"
+if [[ "$unamestr" == 'Linux' ]]; then
+   platform=$linux
+elif [[ "$unamestr" == 'MINGW32_NT-10.0-WOW' ]]; then
+   platform=$windows
+else
+	echo "Unsupported OS"
+	exit
+fi
+
+# build class_path
+path_seperator=( ":" ";" ":" ) 
+class_path="."
+for req in "${require[@]}"
+do
+	class_path="$class_path${path_seperator[$platform]}$lib_path$req"
+done
 
 echo Compiling
-javac -cp "./lib/client-combined-3.4.0-no-deps.jar:./lib/hamcrest-core-1.3.jar:./lib/junit-4.12.jar:./lib/selenium-server-standalone-3.4.0.jar:." *.java -d bin -Xlint:deprecation 
-
+javac -cp $class_path *.java -d bin -Xlint:deprecation 
 
 echo Packaging Jar
 cd bin
-jar cfm flashscores.jar Manifest.txt *.class
+jar cfm main.jar Manifest.txt *.class
 
 echo Running
-java -jar ./flashscores.jar
+java -jar ./main.jar
