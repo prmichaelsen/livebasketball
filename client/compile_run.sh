@@ -31,12 +31,23 @@ do
 	class_path="$class_path${path_seperator[$platform]}$lib_path$req"
 done
 
+# create Manifest.txt 
+for req in "${require[@]}"
+do
+	manifest_path="$manifest_path .$lib_path$req"
+done
+manifest="./bin/Manifest"
+echo "Main-Class: Main" > $manifest
+printf "Class-Path:" >> $manifest
+printf "$manifest_path" >> $manifest
+echo >> $manifest 
+
 echo Compiling
-javac -cp $class_path *.java -d bin -Xlint:deprecation 
+javac -cp "$class_path" *.java -d bin -Xlint:deprecation 
 
 echo Packaging Jar
 cd bin
-jar cfm main.jar Manifest.txt *.class
+jar cfm main.jar Manifest *.class
 
 echo Running
 java -jar ./main.jar
