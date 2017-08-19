@@ -41,6 +41,7 @@ public class Main {
 	static WebElement num2Field;
 	static WebElement submitBtn;
 	static Hashtable<String,Match> matches;
+	static Hashtable<String,League> leagues;
 	static Toolkit tk;
 	static boolean playSounds;
 	static boolean displayPopups;
@@ -341,6 +342,7 @@ public class Main {
 
 			//initialize global var & utils
 			matches = new Hashtable<String,Match>();	
+			leagues = new Hashtable<String,League>();	
 			tk = Toolkit.getDefaultToolkit();
 			System.out.println("Initialized.");
 			System.out.println("Running..."); 
@@ -355,6 +357,14 @@ public class Main {
 					rows = driver.findElements(By.cssSelector(".fs-table>.table-main>."+sport+">tbody>tr."+stage));
 				}
 				catch (NoSuchElementException e){ } 
+
+				//get leagues 
+				getLeagues();
+				Enumeration league_e = leagues.elements(); 
+				while(league_e.hasMoreElements()){
+					League league = (League)league_e.nextElement();
+					System.out.println(league);
+				}
 
 
 				//get scores
@@ -496,6 +506,87 @@ public class Main {
 					TimeUnit.SECONDS.sleep(2); 
 				}catch(InterruptedException e2){};
 			}
+		} 
+	}
+
+
+	public class League implements Comparable<League>{
+		private String country;
+		private String name;
+		private String id;
+		private boolean active;
+
+		public League(){
+			country = "";
+			name = "";
+			id = "";
+			active = true; 
+		};
+
+		public void enable(){ this.active = true; };
+		public void disable(){ this.active = false; };
+
+		public void setCountry(String country){ this.country = country; };
+		public void setName(String name){ this.name = name; };
+
+		public String getCountry(){ return country; }
+		public String getName(){ return name; }
+		public String getId(){ return country + name; }
+
+		@Override
+		public int compareTo(League league){
+			int countryCompare = this.country.compareTo(league.country);
+			if(countryCompare == 0){
+				return this.name.compareTo(league.name);
+			}
+			else{ 
+				return countryCompare;
+			}
+		}
+
+		@Override
+		public String toString(){
+			return this.getId() + ": " + ((active)? "Enabled" : "Disabled");
+		}
+	}
+
+	public static void getLeagues(){ 
+		List<WebElement> leaguesDOM = null;
+
+		try {
+			leaguesDOM = driver.findElements(By.cssSelector("#fs > div > table > thead > tr > td.head_ab > span.country.left > span.name"));
+		}
+		catch (NoSuchElementException e){ } 
+
+		if(leaguesDOM != null){
+			//get scores
+			for(WebElement leagueDOM : leaguesDOM){
+				WebElement countryDOM = null;
+				WebElement nameDOM = null;
+				League league = new Main().new League();
+				try{
+					countryDOM = leagueDOM.findElement(By.cssSelector("span.country_part"));
+					if(countryDOM != null){ 
+						league.setCountry(countryDOM.getAttribute("innerHTML"));
+					}
+				}
+				catch(NoSuchElementException e){}
+				catch(StaleElementReferenceException e){}
+				try{
+					nameDOM = leagueDOM.findElement(By.cssSelector("span.tournament_part"));
+					if(nameDOM != null){ 
+						league.setName(nameDOM.getAttribute("innerHTML"));
+					}
+				}
+				catch(NoSuchElementException e){}
+				catch(StaleElementReferenceException e){}
+				if(league.getId() != null){
+					League stored_league = leagues.get(league.getId());
+					if(stored_league == null){
+						leagues.put(league.getId(), league); 
+					}
+				} 
+			} 
 		} 
 	}
 }
