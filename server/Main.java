@@ -367,6 +367,7 @@ public class Main {
 				}
 
 
+
 				//get scores
 				for(WebElement web_el : rows){
 					boolean isHomeTeam = false;
