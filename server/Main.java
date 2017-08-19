@@ -1,3 +1,6 @@
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import java.awt.AWTException;
 import java.awt.CheckboxMenuItem;
 import java.awt.Dimension;
@@ -12,8 +15,12 @@ import java.awt.TrayIcon;
 import java.awt.event.*;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.lang.InterruptedException;
 import java.lang.Thread;
 import java.net.ServerSocket;
@@ -41,7 +48,7 @@ public class Main {
 	static WebElement num2Field;
 	static WebElement submitBtn;
 	static Hashtable<String,Match> matches;
-	static Hashtable<String,League> leagues;
+	static Leagues leagues;
 	static Toolkit tk;
 	static boolean playSounds;
 	static boolean displayPopups;
@@ -342,7 +349,7 @@ public class Main {
 
 			//initialize global var & utils
 			matches = new Hashtable<String,Match>();	
-			leagues = new Hashtable<String,League>();	
+			leagues = new Leagues();	
 			tk = Toolkit.getDefaultToolkit();
 			System.out.println("Initialized.");
 			System.out.println("Running..."); 
@@ -358,15 +365,33 @@ public class Main {
 				}
 				catch (NoSuchElementException e){ } 
 
-				//get leagues 
+				//read leagues from file
+				Gson gson = new GsonBuilder().setPrettyPrinting().create(); 
+        try (Reader reader = new FileReader("../data/leagues.json")) { 
+					// Convert JSON to Java Object
+            leagues = gson.fromJson(reader, Leagues.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+				//update leagues
 				getLeagues();
-				Enumeration league_e = leagues.elements(); 
-				while(league_e.hasMoreElements()){
-					League league = (League)league_e.nextElement();
-					System.out.println(league);
-				}
 
+				//save leagues to file
+				try (FileWriter writer = new FileWriter("../data/leagues.json")) { 
+					gson.toJson(leagues, writer); 
+				} catch (IOException e) {
+					e.printStackTrace();
+				} 
 
+				//print saved leagues
+				if(leagues != null){
+					Enumeration leagues_e = leagues.getLeagues().elements(); 
+					while(leagues_e.hasMoreElements()){
+						League league = (League)leagues_e.nextElement();
+						System.out.println(league);
+					} 
+				} 
 
 				//get scores
 				for(WebElement web_el : rows){
@@ -504,7 +529,7 @@ public class Main {
 					}
 				}
 				try{
-					TimeUnit.SECONDS.sleep(2); 
+					TimeUnit.SECONDS.sleep(5); 
 				}catch(InterruptedException e2){};
 			}
 		} 
@@ -582,13 +607,27 @@ public class Main {
 				catch(NoSuchElementException e){}
 				catch(StaleElementReferenceException e){}
 				if(league.getId() != null){
-					League stored_league = leagues.get(league.getId());
+					League stored_league = leagues.getLeagues().get(league.getId());
 					if(stored_league == null){
-						leagues.put(league.getId(), league); 
+						leagues.getLeagues().put(league.getId(), league); 
 					}
 				} 
 			} 
 		} 
+	}
+
+	public class Leagues{ 
+		private Hashtable<String,League> leagues; 
+
+		public Leagues(){ 
+			leagues = new Hashtable<String,League>();
+		};
+
+		public Hashtable<String,League> getLeagues(){ return leagues; }
+		public void setLeagues(Hashtable<String,League> leagues){
+			this.leagues = leagues;
+		}
+
 	}
 }
 

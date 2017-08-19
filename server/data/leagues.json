@@ -1,0 +1,154 @@
+{
+  "leagues": {
+    "AUSTRALIA: SEABL Women - Play Offs": {
+      "country": "AUSTRALIA: ",
+      "name": "SEABL Women - Play Offs",
+      "id": "",
+      "active": false
+    },
+    "EUROPE: EuroBasket U16 B - 21th-24th places": {
+      "country": "EUROPE: ",
+      "name": "EuroBasket U16 B - 21th-24th places",
+      "id": "",
+      "active": true
+    },
+    "ASIA: Asia Cup - Play Offs": {
+      "country": "ASIA: ",
+      "name": "Asia Cup - Play Offs",
+      "id": "",
+      "active": true
+    },
+    "WORLD: Friendly International": {
+      "country": "WORLD: ",
+      "name": "Friendly International",
+      "id": "",
+      "active": true
+    },
+    "EUROPE: European Championship U16 B Women": {
+      "country": "EUROPE: ",
+      "name": "European Championship U16 B Women",
+      "id": "",
+      "active": true
+    },
+    "ASIA: Southeast Asian Games Women": {
+      "country": "ASIA: ",
+      "name": "Southeast Asian Games Women",
+      "id": "",
+      "active": true
+    },
+    "EUROPE: EuroBasket U16 - 9th-16th places": {
+      "country": "EUROPE: ",
+      "name": "EuroBasket U16 - 9th-16th places",
+      "id": "",
+      "active": true
+    },
+    "ASIA: Southeast Asian Games": {
+      "country": "ASIA: ",
+      "name": "Southeast Asian Games",
+      "id": "",
+      "active": true
+    },
+    "USA: BIG3 (3x3) - 5th-8th places": {
+      "country": "USA: ",
+      "name": "BIG3 (3x3) - 5th-8th places",
+      "id": "",
+      "active": true
+    },
+    "AUSTRALIA: SEABL - Play Offs": {
+      "country": "AUSTRALIA: ",
+      "name": "SEABL - Play Offs",
+      "id": "",
+      "active": true
+    },
+    "EUROPE: EuroBasket U16 B - 13th-16th places": {
+      "country": "EUROPE: ",
+      "name": "EuroBasket U16 B - 13th-16th places",
+      "id": "",
+      "active": true
+    },
+    "EUROPE: World Cup - Qualification - Preliminary": {
+      "country": "EUROPE: ",
+      "name": "World Cup - Qualification - Preliminary",
+      "id": "",
+      "active": true
+    },
+    "EUROPE: EuroBasket U16 B - 9th-16th places": {
+      "country": "EUROPE: ",
+      "name": "EuroBasket U16 B - 9th-16th places",
+      "id": "",
+      "active": true
+    },
+    "EUROPE: EuroBasket U16 B - 17th-24th places": {
+      "country": "EUROPE: ",
+      "name": "EuroBasket U16 B - 17th-24th places",
+      "id": "",
+      "active": true
+    },
+    "WORLD: Universiade": {
+      "country": "WORLD: ",
+      "name": "Universiade",
+      "id": "",
+      "active": true
+    },
+    "EUROPE: EuroBasket U16 - 13th-16th places": {
+      "country": "EUROPE: ",
+      "name": "EuroBasket U16 - 13th-16th places",
+      "id": "",
+      "active": true
+    },
+    "WORLD: DBB Supercup": {
+      "country": "WORLD: ",
+      "name": "DBB Supercup",
+      "id": "",
+      "active": true
+    },
+    "EUROPE: EuroBasket U16 B - Play Offs": {
+      "country": "EUROPE: ",
+      "name": "EuroBasket U16 B - Play Offs",
+      "id": "",
+      "active": true
+    },
+    "EUROPE: EuroBasket U16 B - 5th-8th places": {
+      "country": "EUROPE: ",
+      "name": "EuroBasket U16 B - 5th-8th places",
+      "id": "",
+      "active": true
+    },
+    "USA: BIG3 (3x3) - Play Offs": {
+      "country": "USA: ",
+      "name": "BIG3 (3x3) - Play Offs",
+      "id": "",
+      "active": true
+    },
+    "AFRICA: African Championship Women": {
+      "country": "AFRICA: ",
+      "name": "African Championship Women",
+      "id": "",
+      "active": true
+    },
+    "EUROPE: EuroBasket U16 - 5th-8th places": {
+      "country": "EUROPE: ",
+      "name": "EuroBasket U16 - 5th-8th places",
+      "id": "",
+      "active": true
+    },
+    "ASIA: Asia Cup - 5th-8th places": {
+      "country": "ASIA: ",
+      "name": "Asia Cup - 5th-8th places",
+      "id": "",
+      "active": true
+    },
+    "USA: WNBA": {
+      "country": "USA: ",
+      "name": "WNBA",
+      "id": "",
+      "active": true
+    },
+    "EUROPE: EuroBasket U16 - Play Offs": {
+      "country": "EUROPE: ",
+      "name": "EuroBasket U16 - Play Offs",
+      "id": "",
+      "active": true
+    }
+  }
+}

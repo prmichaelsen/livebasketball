@@ -6,6 +6,7 @@ require+=("client-combined-3.4.0-no-deps.jar")
 require+=("hamcrest-core-1.3.jar")
 require+=("junit-4.12.jar")
 require+=("selenium-server-standalone-3.4.0.jar")
+require+=("gson-2.8.1.jar")
 
 # determine os
 platform=-1
