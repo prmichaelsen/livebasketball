@@ -101,9 +101,9 @@ public class Main {
 		});
 		//prevent additional instances of this app from running
 		try{
-			serverSocket = new ServerSocket(33133);
+			serverSocket = new ServerSocket(33533);
 		}catch(IOException e){
-			System.err.println("Could not listen on port: 33133");
+			System.err.println("Could not listen on port: 33533");
 			String msg =  "Could not start Flashscores Live Basketball on port 33133.\nIs the port in use? Please close any processes that may be using this port. Other processes that may be using this port may include, for example, other instances of Flashscores Live Basketball.";
 			System.err.println(msg);
 			System.exit(0);
@@ -541,7 +541,8 @@ public class Main {
 						for(Client client : clients){
 							try{
 								Gson lgson = new Gson(); 
-								String msg = lgson.toJson(match);  
+								Notification notification = new Notification(match.getMatchName(), "Live");
+								String msg = lgson.toJson(notification);
 								client.writeToClient(msg+"\n"); 
 							} catch (SocketException e2){
 								System.err.println("Client is no longer connected! You should find a way to remove this client from the list of connected clients");
@@ -584,13 +585,13 @@ public class Main {
 						//send java client notifications
 						if(clients != null){
 							for(Client client : clients){
-								try{
-									Gson lgson = new Gson(); 
-									String msg = lgson.toJson(match);  
-									client.writeToClient(msg+"\n"); 
-								} catch (IOException e2){
-									e2.printStackTrace();
-								}
+								//try{
+									//Gson lgson = new Gson(); 
+									//String msg = lgson.toJson(match);  
+									//client.writeToClient(msg+"\n"); 
+								//} catch (IOException e2){
+									//e2.printStackTrace();
+								//}
 							}
 						}
 					}
@@ -732,5 +733,26 @@ public class Main {
 			else throw new IOException("outToClient never initialized");
 		} 
 	}
+
+	public class Notification{
+		private String matchName;
+		private String condition;
+
+		public Notification(){}
+		public Notification( String matchName, String condition){
+			this.matchName = matchName;
+			this.condition = condition;
+		}
+
+		public void setMatchName(String matchName){ this.matchName = matchName; }
+		public void setCondition(String condition){ this.condition = condition; }
+
+		public String getCondition(String condition){ return condition; }
+		public String getMatchName(String matchName){ return matchName; } 
+
+		public String getMessage(){
+			return condition + ":\n" + matchName;
+		} 
+	} 
 }
 
