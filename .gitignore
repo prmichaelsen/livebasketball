@@ -11,3 +11,5 @@
 client/bin/* 
 server/bin/*
 server/rest/bin/*
+tcp_client_server/tcp_client/bin/*
+tcp_client_server/tcp_server/bin/*
