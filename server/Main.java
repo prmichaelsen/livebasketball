@@ -39,6 +39,11 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.*;
 import org.openqa.selenium.phantomjs.*;
 import org.openqa.selenium.support.ui.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketException;
+import java.io.DataOutputStream;
+import java.net.URLEncoder;
 
 public class Main {
 
@@ -49,6 +54,7 @@ public class Main {
 	static WebElement submitBtn;
 	static Hashtable<String,Match> matches;
 	static Leagues leagues;
+	static List<Client> clients;
 	static Toolkit tk;
 	static boolean playSounds;
 	static boolean displayPopups;
@@ -139,14 +145,17 @@ public class Main {
 		File file = new File(driver_path);
 		System.setProperty("phantomjs.binary.path", file.getAbsolutePath());
 
-		//start thread
+		//start threads
 		ScoreChecker scoreChecker = new Main().new ScoreChecker();
 		while(true){
-			Thread t = new Thread(scoreChecker, "Flashscores Live Basketball Scorechecker"); 
+			Thread t = new Thread(scoreChecker, "Flashscores Live Basketball ScoreChecker"); 
 			t.setUncaughtExceptionHandler(h);
 			t.start();
+			ScoreNotifier scoreNotifier = new Main().new ScoreNotifier();
+			Thread scoreNotifierThread = new Thread(scoreNotifier, "Flashscores Live Basketball ScoreNotifier"); 
+			scoreNotifierThread.start();
 			try{
-			t.join();
+				t.join();
 			}catch(InterruptedException e){ };
 		}
 	} 
@@ -331,6 +340,34 @@ public class Main {
 		}
 	} 
 
+	public class ScoreNotifier implements Runnable {
+		public void run(){
+			//start tcp websocket
+			String clientSentence;
+			String capitalizedSentence;
+			ServerSocket welcomeSocket = null;
+			clients = new ArrayList<Client>();
+			try{
+				welcomeSocket = new ServerSocket(6789);
+			} catch (IOException e){
+				e.printStackTrace();
+			}
+
+			while(true){ 
+				Client client = new Client(welcomeSocket);
+				try{
+					System.out.println("Waiting for new connection...");
+					if(client.waitForConnection()){
+						System.out.println("New client connected to server!");
+						clients.add(client); 
+					}
+				}catch(IOException e){
+					e.printStackTrace();
+				} 
+			} 
+		} 
+	}
+
 	public class ScoreChecker implements Runnable {
 
 		public void run(){ 
@@ -351,14 +388,15 @@ public class Main {
 			//initialize global var & utils
 			matches = new Hashtable<String,Match>();	
 			leagues = new Leagues();	
-			tk = Toolkit.getDefaultToolkit();
+			tk = Toolkit.getDefaultToolkit(); 
+
 			System.out.println("Initialized.");
 			System.out.println("Running..."); 
 			while(true){
 				if(driver == null){
 					System.err.println("No driver found. Exiting...");
 					System.exit(0); 
-				}
+				} 
 
 				//set up common elements
 				try {
@@ -497,9 +535,25 @@ public class Main {
 				Enumeration e = matches.elements(); 
 				while(e.hasMoreElements()){
 					Match match = (Match)e.nextElement();
-					System.out.println(match);
+					System.out.println(match); 
+					// send all match info to java client
+				  if(clients != null){
+						for(Client client : clients){
+							try{
+								Gson lgson = new Gson(); 
+								String msg = lgson.toJson(match);  
+								client.writeToClient(msg+"\n"); 
+							} catch (SocketException e2){
+								System.err.println("Client is no longer connected! You should find a way to remove this client from the list of connected clients");
+								e2.printStackTrace();
+							} catch (IOException e2){
+								e2.printStackTrace();
+							}
+						}
+					}
 					if(match.doesMeetConditionOne() || match.doesMeetConditionTwo()){
 						System.out.println( "------\n------\n MATCH\n------\n------\n");
+						//send mobile notifications
 						try{
 							String s = null;
 							String[] cmd = new String[] {"python3", "push_notifications.py", match.getCondition(), match.getMatchName()};
@@ -527,6 +581,18 @@ public class Main {
 							System.err.println("Could not send push notifications");
 							System.err.println(er);
 						} 
+						//send java client notifications
+						if(clients != null){
+							for(Client client : clients){
+								try{
+									Gson lgson = new Gson(); 
+									String msg = lgson.toJson(match);  
+									client.writeToClient(msg+"\n"); 
+								} catch (IOException e2){
+									e2.printStackTrace();
+								}
+							}
+						}
 					}
 				}
 				try{
@@ -627,6 +693,43 @@ public class Main {
 		public Hashtable<String,League> getLeagues(){ return leagues; }
 		public void setLeagues(Hashtable<String,League> leagues){
 			this.leagues = leagues;
+		} 
+	}
+
+	public class Client{
+		private ServerSocket welcomeSocket;
+		private Socket connectionSocket;
+		private BufferedReader inFromClient;
+		private DataOutputStream outToClient;
+
+		public Client(ServerSocket socket){
+			welcomeSocket = socket;
+		}
+
+		public boolean waitForConnection() throws IOException{
+			if(welcomeSocket != null){
+				Socket connectionSocket = welcomeSocket.accept();
+				inFromClient =
+					new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
+				outToClient = new DataOutputStream(connectionSocket.getOutputStream());
+				return true;
+			} 
+			return false;
+		}
+
+		public String readLineFromClient() throws IOException{
+			if(inFromClient != null){ 
+				String line = inFromClient.readLine();
+				return line; 
+			}
+			else throw new IOException("inFromClient never initialized");
+		}
+		
+		public void writeToClient(String line) throws IOException{
+			if(outToClient != null){
+				outToClient.writeBytes(line); 
+			}
+			else throw new IOException("outToClient never initialized");
 		} 
 	}
 }
