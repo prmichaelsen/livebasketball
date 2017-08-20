@@ -57,6 +57,7 @@ public class Main {
 	static JTextArea matchesTextArea;
 	static int looking;
 	static Runtime mainRuntime;
+	//static MinimalServerRest server;
 
 	public static void main(String args[]){ 
 		//mainRuntime = Runtime.getRuntime();
@@ -626,8 +627,7 @@ public class Main {
 		public Hashtable<String,League> getLeagues(){ return leagues; }
 		public void setLeagues(Hashtable<String,League> leagues){
 			this.leagues = leagues;
-		}
-
+		} 
 	}
 }
 

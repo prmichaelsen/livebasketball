@@ -7,6 +7,14 @@ require+=("hamcrest-core-1.3.jar")
 require+=("junit-4.12.jar")
 require+=("selenium-server-standalone-3.4.0.jar")
 require+=("gson-2.8.1.jar")
+require+=("commons-lang3-3.5/*.jar") 
+require+=("commons-lang3-3.5/*.jar")
+require+=("*")
+require+=("jaxrs-ri/ext/*")
+require+=("jaxrs-ri/api/*")
+require+=("jaxrs-ri/lib/*")
+require+=("jetty-distribution-9.4.3.v20170317/lib/*")
+require+=("jetty-distribution-9.4.3.v20170317/modules/sessions/*.jar")
 
 # determine os
 platform=-1
@@ -43,12 +51,28 @@ printf "Class-Path:" >> $manifest
 printf "$manifest_path" >> $manifest
 echo >> $manifest 
 
+cd bin 
+if [ -e *.jar ]
+then
+	rm *.jar
+fi
+if [ -e *.class ]
+then
+	rm *.class
+fi
+
 echo Compiling
+cd ..
 javac -cp "$class_path" *.java -d bin -Xlint:deprecation 
 
 echo Packaging Jar
 cd bin
 jar cfm main.jar Manifest *.class
 
+echo Starting Server
+cd ../rest
+sh compile_run.sh &
+
 echo Running
-java -jar ./main.jar
+cd ../bin
+java -jar ./main.jar 

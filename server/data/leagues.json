@@ -102,9 +102,9 @@
       "id": "",
       "active": true
     },
-    "EUROPE: EuroBasket U16 B - Play Offs": {
-      "country": "EUROPE: ",
-      "name": "EuroBasket U16 B - Play Offs",
+    "USA: BIG3 (3x3) - Play Offs": {
+      "country": "USA: ",
+      "name": "BIG3 (3x3) - Play Offs",
       "id": "",
       "active": true
     },
@@ -114,9 +114,9 @@
       "id": "",
       "active": true
     },
-    "USA: BIG3 (3x3) - Play Offs": {
-      "country": "USA: ",
-      "name": "BIG3 (3x3) - Play Offs",
+    "EUROPE: EuroBasket U16 B - Play Offs": {
+      "country": "EUROPE: ",
+      "name": "EuroBasket U16 B - Play Offs",
       "id": "",
       "active": true
     },
@@ -126,15 +126,15 @@
       "id": "",
       "active": true
     },
-    "EUROPE: EuroBasket U16 - 5th-8th places": {
-      "country": "EUROPE: ",
-      "name": "EuroBasket U16 - 5th-8th places",
-      "id": "",
-      "active": true
-    },
     "ASIA: Asia Cup - 5th-8th places": {
       "country": "ASIA: ",
       "name": "Asia Cup - 5th-8th places",
+      "id": "",
+      "active": true
+    },
+    "EUROPE: EuroBasket U16 - 5th-8th places": {
+      "country": "EUROPE: ",
+      "name": "EuroBasket U16 - 5th-8th places",
       "id": "",
       "active": true
     },
