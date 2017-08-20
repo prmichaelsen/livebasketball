@@ -42,6 +42,12 @@
       "id": "",
       "active": true
     },
+    "SPAIN: Women\u0027s Cup": {
+      "country": "SPAIN: ",
+      "name": "Women\u0027s Cup",
+      "id": "SPAIN: Women\u0027s Cup",
+      "active": true
+    },
     "ASIA: Southeast Asian Games": {
       "country": "ASIA: ",
       "name": "Southeast Asian Games",
@@ -94,6 +100,12 @@
       "country": "EUROPE: ",
       "name": "EuroBasket U16 - 13th-16th places",
       "id": "",
+      "active": true
+    },
+    "SPAIN: Men\u0027s Cup": {
+      "country": "SPAIN: ",
+      "name": "Men\u0027s Cup",
+      "id": "SPAIN: Men\u0027s Cup",
       "active": true
     },
     "WORLD: DBB Supercup": {

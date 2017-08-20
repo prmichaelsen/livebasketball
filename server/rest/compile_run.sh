@@ -10,6 +10,7 @@ require+=("jaxrs-ri/api/*")
 require+=("jaxrs-ri/lib/*")
 require+=("jetty-distribution-9.4.3.v20170317/lib/*")
 require+=("jetty-distribution-9.4.3.v20170317/modules/sessions/*.jar")
+require+=("gson-2.8.1.jar")
 
 # determine os
 platform=-1

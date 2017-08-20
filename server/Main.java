@@ -558,7 +558,7 @@ public class Main {
 
 		public String getCountry(){ return country; }
 		public String getName(){ return name; }
-		public String getId(){ return country + name; }
+		public String getId(){ return id = country + name; }
 
 		@Override
 		public int compareTo(League league){
