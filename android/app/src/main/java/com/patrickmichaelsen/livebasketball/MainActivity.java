@@ -5,14 +5,20 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
+    private List<Person> persons;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +28,13 @@ public class MainActivity extends AppCompatActivity {
 
         Intent i = new Intent(this,RegistrationService.class);
         this.startService(i);
+
+        RecyclerView rv = (RecyclerView)findViewById(R.id.rv);
+        LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
+        rv.setLayoutManager(llm);
+        this.initializeData();
+        RVAdapter adapter = new RVAdapter(persons);
+        rv.setAdapter(adapter);
 
         /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -55,5 +68,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    private void initializeData(){
+        persons = new ArrayList<>();
+        persons.add(new Person("Emma Wilson", "23 years old", R.drawable.ic_feedback_black_48dp));
+        persons.add(new Person("Lavery Maiss", "25 years old", R.drawable.ic_feedback_black_48dp));
+        persons.add(new Person("Lillie Watts", "35 years old", R.drawable.ic_feedback_black_48dp));
+        persons.add(new Person("Patrick James", "15 years old", R.drawable.ic_feedback_black_48dp));
+        persons.add(new Person("Paul Parker", "38 years old", R.drawable.ic_feedback_black_48dp));
+        persons.add(new Person("Dan Fortworth", "21 years old", R.drawable.ic_feedback_black_48dp));
     }
 }
