@@ -64,8 +64,9 @@ public class MainActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("REST", error.getMessage());
+                Log.e("REST", (error.getMessage() != null)? error.getMessage() : "Error not found");
             }
+
         });
         // Add the request to the RequestQueue.
         ApplicationContext.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);

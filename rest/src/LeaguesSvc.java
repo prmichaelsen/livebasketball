@@ -25,6 +25,7 @@ public class LeaguesSvc {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Leagues getLeagues() { 
+		System.out.println("Received request: getLeagues()");
 		Leagues leagues = new Leagues();
 		//read leagues from file
 		Gson gson = new GsonBuilder().setPrettyPrinting().create(); 
