@@ -16,10 +16,11 @@
             android:padding="16dp"
             >
 
-            <ImageView
+
+            <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/league_photo"
+                android:id="@+id/league_is_enabled_checkbox"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginRight="16dp"
@@ -29,16 +30,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/league_country"
-                android:layout_toRightOf="@+id/league_photo"
+                android:text="Country"
+                android:layout_toRightOf="@+id/league_is_enabled_checkbox"
                 android:layout_alignParentTop="true"
-                android:textSize="30sp"
+                android:textSize="20sp"
                 />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/league_name"
-                android:layout_toRightOf="@+id/league_photo"
+                android:text="Tournament Title"
+                android:layout_toRightOf="@+id/league_is_enabled_checkbox"
                 android:layout_below="@+id/league_country"
                 />
         </RelativeLayout>

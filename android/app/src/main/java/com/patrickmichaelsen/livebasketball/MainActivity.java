@@ -30,7 +30,6 @@ import static com.patrickmichaelsen.livebasketball.R.id.rv;
 
 public class MainActivity extends AppCompatActivity {
 
-    private List<Person> persons;
     private Leagues leagues;
 
     @Override
@@ -43,8 +42,6 @@ public class MainActivity extends AppCompatActivity {
         Intent i = new Intent(this,RegistrationService.class);
         this.startService(i);
 
-        // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(this);
         String url ="http://10.0.2.2:8080/livebasketball/leagues";
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -60,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                         Collection collection = leagues.getLeagues().values();
                         List list = new ArrayList(collection);
                         Collections.sort(list);
-                        RVLeagueAdapter adapter = new RVLeagueAdapter(list);
+                        RVLeagueAdapter adapter = new RVLeagueAdapter(list, getApplicationContext());
                         rv.setAdapter(adapter);
                         Log.e("REST", response.substring(0,500));
                     }
@@ -71,15 +68,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-
-        //RecyclerView rv = (RecyclerView)findViewById(rv);
-        //LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
-        //rv.setLayoutManager(llm);
-        //this.initializeData();
-        //RVAdapter adapter = new RVAdapter(persons);
-        //rv.setAdapter(adapter);
-
+        ApplicationContext.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
 
         /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -113,14 +102,5 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-    private void initializeData(){
-        persons = new ArrayList<>();
-        persons.add(new Person("Emma Wilson", "23 years old", R.drawable.ic_feedback_black_48dp));
-        persons.add(new Person("Lavery Maiss", "25 years old", R.drawable.ic_feedback_black_48dp));
-        persons.add(new Person("Lillie Watts", "35 years old", R.drawable.ic_feedback_black_48dp));
-        persons.add(new Person("Patrick James", "15 years old", R.drawable.ic_feedback_black_48dp));
-        persons.add(new Person("Paul Parker", "38 years old", R.drawable.ic_feedback_black_48dp));
-        persons.add(new Person("Dan Fortworth", "21 years old", R.drawable.ic_feedback_black_48dp));
     }
 }

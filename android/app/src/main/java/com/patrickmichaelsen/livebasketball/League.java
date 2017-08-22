@@ -22,10 +22,12 @@ public class League implements Comparable<League>{
 
     public void setCountry(String country){ this.country = country; };
     public void setName(String name){ this.name = name; };
+    public void setEnabled(boolean active){ this.active = active; }
 
     public String getCountry(){ return country; }
     public String getName(){ return name; }
     public String getId(){ return id = country + name; }
+    public boolean getEnabled(){ return active; }
 
     @Override
     public int compareTo(League league){
