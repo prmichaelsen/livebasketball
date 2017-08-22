@@ -1,4 +1,6 @@
 #!bin/bash
+rm -rf bin
+mkdir bin
 
 lib_path="./lib/"
 # mark java dependencies here:
@@ -47,16 +49,10 @@ printf "Class-Path:" >> $manifest
 printf "$manifest_path" >> $manifest
 echo >> $manifest 
 
-cd bin 
-rm -f *.jar
-rm -f *.class
-
-
 echo Compiling
-cd ..
 find -name "*.java" > java
-# find -name "*.jar" > class_path
 javac -cp $class_path -d bin @java -Xlint:deprecation 
+rm -f java
 
 echo Packaging Jar
 cd bin 

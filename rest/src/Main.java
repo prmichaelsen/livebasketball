@@ -20,7 +20,7 @@ public class Main {
 		sh.setInitParameter("com.sun.jersey.api.json.POJOMappingFeature", "true");
 
 		Server server = new Server(8080);
-		ServletContextHandler context = new ServletContextHandler(server, "/jetty", ServletContextHandler.SESSIONS);
+		ServletContextHandler context = new ServletContextHandler(server, "/livebasketball", ServletContextHandler.SESSIONS);
 		context.addServlet(sh, "/*");
 		server.start();
 		server.join();      

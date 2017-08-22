@@ -13,12 +13,26 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+
+import static com.patrickmichaelsen.livebasketball.R.id.rv;
 
 public class MainActivity extends AppCompatActivity {
 
     private List<Person> persons;
+    private Leagues leagues;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,12 +43,43 @@ public class MainActivity extends AppCompatActivity {
         Intent i = new Intent(this,RegistrationService.class);
         this.startService(i);
 
-        RecyclerView rv = (RecyclerView)findViewById(R.id.rv);
-        LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
-        rv.setLayoutManager(llm);
-        this.initializeData();
-        RVAdapter adapter = new RVAdapter(persons);
-        rv.setAdapter(adapter);
+        // Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url ="http://10.0.2.2:8080/livebasketball/leagues";
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Display the first 500 characters of the response string.
+                        Gson gson = new Gson();
+                        leagues = gson.fromJson(response, Leagues.class);
+                        RecyclerView rv = (RecyclerView)findViewById(R.id.rv);
+                        LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
+                        rv.setLayoutManager(llm);
+                        Collection collection = leagues.getLeagues().values();
+                        List list = new ArrayList(collection);
+                        Collections.sort(list);
+                        RVLeagueAdapter adapter = new RVLeagueAdapter(list);
+                        rv.setAdapter(adapter);
+                        Log.e("REST", response.substring(0,500));
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("REST", error.getMessage());
+            }
+        });
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+
+        //RecyclerView rv = (RecyclerView)findViewById(rv);
+        //LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
+        //rv.setLayoutManager(llm);
+        //this.initializeData();
+        //RVAdapter adapter = new RVAdapter(persons);
+        //rv.setAdapter(adapter);
+
 
         /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
