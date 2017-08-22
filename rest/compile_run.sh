@@ -48,14 +48,8 @@ printf "$manifest_path" >> $manifest
 echo >> $manifest 
 
 cd bin 
-if [ -e *.jar ]
-then
-	rm *.jar
-fi
-if [ -e *.class ]
-then
-	rm *.class
-fi
+rm -f *.jar
+rm -f *.class
 
 
 echo Compiling
