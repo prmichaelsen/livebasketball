@@ -26,10 +26,13 @@ public class LeaguesSvc {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Leagues getLeagues() { 
 		System.out.println("Received request: getLeagues()");
+		java.nio.file.Path currentRelativePath = java.nio.file.Paths.get("");
+		String s = currentRelativePath.toAbsolutePath().toString();
+		System.out.println("Current relative path is: " + s);
 		Leagues leagues = new Leagues();
 		//read leagues from file
 		Gson gson = new GsonBuilder().setPrettyPrinting().create(); 
-		try (Reader reader = new FileReader("../server/data/leagues.json")) { 
+		try (Reader reader = new FileReader("../../server/data/leagues.json")) { 
 			// Convert JSON to Java Object
 			leagues = gson.fromJson(reader, Leagues.class);
 		} catch (IOException e) {
@@ -53,7 +56,7 @@ public class LeaguesSvc {
 
 		//read leagues from file
 		Gson gson = new GsonBuilder().setPrettyPrinting().create(); 
-		try (Reader reader = new FileReader("../server/data/leagues.json")) { 
+		try (Reader reader = new FileReader("../../server/data/leagues.json")) { 
 			// Convert JSON to Java Object
 			leagues = gson.fromJson(reader, Leagues.class);
 		} catch (IOException e) {
@@ -66,7 +69,7 @@ public class LeaguesSvc {
 		} 
 
 		//save leagues to file
-		try (FileWriter writer = new FileWriter("../server/data/leagues.json")) { 
+		try (FileWriter writer = new FileWriter("../../server/data/leagues.json")) { 
 			gson.toJson(leagues, writer); 
 		} catch (IOException e) {
 			e.printStackTrace(); 
