@@ -78,7 +78,7 @@ public class LeaguesSvc {
 		//print saved leagues
 		System.out.println(leagues);
 
-		return new Response<String>("Succesfully inserted league settings: " + league);
+		return new Response<String>("Succesfully updated league settings: " + league);
 	} 
 } 
 

@@ -120,10 +120,10 @@
       "id": "",
       "active": true
     },
-    "USA: BIG3 (3x3) - Play Offs": {
-      "country": "USA: ",
-      "name": "BIG3 (3x3) - Play Offs",
-      "id": "USA: BIG3 (3x3) - Play Offs",
+    "EUROPE: EuroBasket U16 B - Play Offs": {
+      "country": "EUROPE: ",
+      "name": "EuroBasket U16 B - Play Offs",
+      "id": "EUROPE: EuroBasket U16 B - Play Offs",
       "active": true
     },
     "EUROPE: EuroBasket U16 B - 5th-8th places": {
@@ -132,28 +132,34 @@
       "id": "EUROPE: EuroBasket U16 B - 5th-8th places",
       "active": true
     },
-    "EUROPE: EuroBasket U16 B - Play Offs": {
-      "country": "EUROPE: ",
-      "name": "EuroBasket U16 B - Play Offs",
-      "id": "EUROPE: EuroBasket U16 B - Play Offs",
+    "USA: BIG3 (3x3) - Play Offs": {
+      "country": "USA: ",
+      "name": "BIG3 (3x3) - Play Offs",
+      "id": "USA: BIG3 (3x3) - Play Offs",
       "active": true
     },
     "AFRICA: African Championship Women": {
       "country": "AFRICA: ",
       "name": "African Championship Women",
       "id": "AFRICA: African Championship Women",
-      "active": false
+      "active": true
     },
-    "ASIA: Asia Cup - 5th-8th places": {
-      "country": "ASIA: ",
-      "name": "Asia Cup - 5th-8th places",
-      "id": "ASIA: Asia Cup - 5th-8th places",
-      "active": false
+    "WORLD: Club Friendly": {
+      "country": "WORLD: ",
+      "name": "Club Friendly",
+      "id": "WORLD: Club Friendly",
+      "active": true
     },
     "EUROPE: EuroBasket U16 - 5th-8th places": {
       "country": "EUROPE: ",
       "name": "EuroBasket U16 - 5th-8th places",
       "id": "EUROPE: EuroBasket U16 - 5th-8th places",
+      "active": true
+    },
+    "ASIA: Asia Cup - 5th-8th places": {
+      "country": "ASIA: ",
+      "name": "Asia Cup - 5th-8th places",
+      "id": "ASIA: Asia Cup - 5th-8th places",
       "active": true
     },
     "USA: WNBA": {
