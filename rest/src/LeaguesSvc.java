@@ -26,9 +26,6 @@ public class LeaguesSvc {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Leagues getLeagues() { 
 		System.out.println("Received request: getLeagues()");
-		java.nio.file.Path currentRelativePath = java.nio.file.Paths.get("");
-		String s = currentRelativePath.toAbsolutePath().toString();
-		System.out.println("Current relative path is: " + s);
 		Leagues leagues = new Leagues();
 		//read leagues from file
 		Gson gson = new GsonBuilder().setPrettyPrinting().create(); 
@@ -38,21 +35,14 @@ public class LeaguesSvc {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
-		//Response<Leagues> response = new Response<Leagues>();
-		//response.setReturnData(leagues);
 		return leagues;
 	}
 	
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response<String> postLeagues(League league) {
-		System.out.println("Output json server .... \n");
 		System.out.println(league);
 		Leagues leagues = new Leagues();
-
-		java.nio.file.Path currentRelativePath = java.nio.file.Paths.get("");
-		String s = currentRelativePath.toAbsolutePath().toString();
-		System.out.println("Current relative path is: " + s);
 
 		//read leagues from file
 		Gson gson = new GsonBuilder().setPrettyPrinting().create(); 
@@ -74,9 +64,6 @@ public class LeaguesSvc {
 		} catch (IOException e) {
 			e.printStackTrace(); 
 		} 
-
-		//print saved leagues
-		System.out.println(leagues);
 
 		return new Response<String>("Succesfully updated league settings: " + league);
 	} 
