@@ -1,3 +1,4 @@
+import com.google.api.client.http.ByteArrayContent;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
@@ -153,7 +154,7 @@ public class Main {
 		client.start();
 	} 
 
-	public class League implements Comparable<League>{
+	public static class League implements Comparable<League>{
 		private String country;
 		private String name;
 		private String id;
@@ -171,10 +172,12 @@ public class Main {
 
 		public void setCountry(String country){ this.country = country; };
 		public void setName(String name){ this.name = name; };
+		public void setId(String id){ this.id = id; };
+		public void setEnabled(boolean active){ this.active = active; };
 
 		public String getCountry(){ return country; }
 		public String getName(){ return name; }
-		public String getId(){ return id = country + name; }
+		public String getId(){ return (id != "" ) ? id : ( id = country + name ) ; }
 		public boolean getEnabled(){ return active; }
 
 		@Override
@@ -190,7 +193,7 @@ public class Main {
 
 		@Override
 		public String toString(){
-			return this.getId() + ": " + ((active)? "Enabled" : "Disabled");
+			return this.getId();
 		}
 	} 
 
@@ -293,6 +296,14 @@ public class Main {
 						System.out.println(
 								"Row : " + e.getFirstRow() +
 								" value :" + table.getValueAt(e.getFirstRow(), e.getColumn()));
+						boolean active = (boolean) table.getValueAt(e.getFirstRow(), 0);
+						League league = (League) table.getValueAt(e.getFirstRow(), 1);
+						league.setEnabled(active);
+						try{
+							postLeague(league);
+						} catch (Exception e2){
+							e2.printStackTrace();
+						}
 					}
 				}
 			});
@@ -346,7 +357,7 @@ public class Main {
 				League league = list.get(i);
 				Object[] row = { 
 					league.getEnabled(),
-					league.getId()
+					league
 				};
 				array[i] = row;
 			}
@@ -551,4 +562,29 @@ public class Main {
 		}
 		return leagues;
 	} 
+
+	public static String postLeague(League league) throws Exception {
+		String requestBody = new Gson().toJson(league, League.class);
+		HttpRequestFactory requestFactory =
+			new NetHttpTransport().createRequestFactory(new HttpRequestInitializer() {
+				@Override
+				public void initialize(HttpRequest request) {
+					request.setParser(new JsonObjectParser(new GsonFactory()));
+				}
+			});
+		GenericUrl url = new GenericUrl("http://ec2-34-211-119-222.us-west-2.compute.amazonaws.com/livebasketball/leagues");
+		HttpRequest request = requestFactory.buildPostRequest(url, ByteArrayContent.fromString("application/json", requestBody));
+		Response response = new Gson().fromJson(request.execute().parseAsString(), Response.class);
+		System.out.println(response.getReturnData());
+		return response.getReturnData();
+	} 
+	
+	public class Response {
+		private String returnData;
+		public Response(String returnData){
+			this.returnData = returnData;
+		}
+		public String getReturnData(){return returnData;}
+		public void setReturnData(String returnData){this.returnData = returnData;}
+	}
 } 
