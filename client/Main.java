@@ -69,6 +69,16 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import javax.swing.*;
 import java.util.concurrent.BlockingQueue;
+import com.google.api.client.http.GenericUrl;
+import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpRequestFactory;
+import com.google.api.client.http.HttpRequestInitializer;
+import com.google.api.client.http.HttpResponseException;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.client.json.JsonObjectParser; 
+import java.util.List;
 
 public class Main {
 
@@ -85,6 +95,11 @@ public class Main {
 	static int looking;
 
 	public static void main(String args[]){ 
+		try{
+			getLeagues();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 		//handle uncaught exceptions
 		Thread.UncaughtExceptionHandler h = new Thread.UncaughtExceptionHandler() {
 			public void uncaughtException(Thread th, Throwable ex) {
@@ -195,7 +210,7 @@ public class Main {
 		}
 	} 
 
-	public class Leagues{ 
+	public static class Leagues{ 
 		private Hashtable<String,League> leagues; 
 
 		public Leagues(){ 
@@ -417,5 +432,23 @@ public class Main {
 		public String getMessage(){
 			return condition + ":\n" + matchName;
 		} 
+	} 
+
+	public static Leagues getLeagues() throws Exception {
+		HttpRequestFactory requestFactory =
+			new NetHttpTransport().createRequestFactory(new HttpRequestInitializer() {
+				@Override
+				public void initialize(HttpRequest request) {
+					request.setParser(new JsonObjectParser(new GsonFactory()));
+				}
+			});
+		GenericUrl url = new GenericUrl("http://ec2-34-211-119-222.us-west-2.compute.amazonaws.com/livebasketball/leagues");
+		HttpRequest request = requestFactory.buildGetRequest(url);
+		Leagues leagues = new Gson().fromJson(request.execute().parseAsString(), Leagues.class);
+		if(leagues != null){
+			System.out.println(leagues);
+			System.out.println(leagues.getLeagues());
+		}
+		return leagues;
 	} 
 } 
