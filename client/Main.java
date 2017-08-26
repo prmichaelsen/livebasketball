@@ -1,21 +1,30 @@
+import com.google.api.client.http.GenericUrl;
+import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpRequestFactory;
+import com.google.api.client.http.HttpRequestInitializer;
+import com.google.api.client.http.HttpResponseException;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.JsonObjectParser; 
+import com.google.api.client.json.gson.GsonFactory;
 import com.google.gson.Gson;
-import java.net.UnknownHostException;
-import java.util.concurrent.LinkedBlockingQueue;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import java.awt.AWTException;
 import java.awt.CheckboxMenuItem;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Menu;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
-import java.awt.Toolkit;
+import java.awt.Toolkit; 
 import java.awt.TrayIcon;
 import java.awt.event.*;
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -25,60 +34,34 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.InterruptedException;
 import java.lang.Thread;
-import java.net.ServerSocket;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
-import javax.swing.*;
+import java.lang.Thread;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
-import java.io.DataOutputStream;
-import java.net.URLEncoder;
-import java.awt.AWTException;
-import java.awt.CheckboxMenuItem;
-import java.awt.Dimension;
-import java.awt.Image;
-import java.awt.Insets;
-import java.awt.Menu;
-import java.awt.MenuItem;
-import java.awt.PopupMenu;
-import java.awt.SystemTray;
-import java.awt.Toolkit;
-import java.awt.TrayIcon;
-import java.awt.event.*;
-import java.io.File;
-import java.io.IOException;
-import java.lang.InterruptedException;
-import java.lang.Thread;
-import java.net.ServerSocket;
 import java.net.URL;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeUnit;
 import javax.swing.*;
-import java.util.concurrent.BlockingQueue;
-import com.google.api.client.http.GenericUrl;
-import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpRequestFactory;
-import com.google.api.client.http.HttpRequestInitializer;
-import com.google.api.client.http.HttpResponseException;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.client.json.JsonObjectParser; 
-import java.util.List;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.event.TableModelListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.table.AbstractTableModel;
 
 public class Main {
 
@@ -192,6 +175,7 @@ public class Main {
 		public String getCountry(){ return country; }
 		public String getName(){ return name; }
 		public String getId(){ return id = country + name; }
+		public boolean getEnabled(){ return active; }
 
 		@Override
 		public int compareTo(League league){
@@ -291,14 +275,38 @@ public class Main {
 		frm = new JFrame("Livebasketball");
 		frm.setIconImage(iconImage);
 		String msg = "Starting Up...";
-		matchesTextArea = new JTextArea(msg);
-		JScrollPane scrollPane = new JScrollPane(matchesTextArea);  
-		matchesTextArea.setLineWrap(true);  
-		matchesTextArea.setWrapStyleWord(true); 
-		matchesTextArea.setEditable(false); 
-		matchesTextArea.setMargin( new Insets(10,10,10,10) );
-		scrollPane.setPreferredSize( new Dimension( 500, 300 ) );
-		frm.getContentPane().add(scrollPane);
+		//matchesTextArea = new JTextArea(msg); 
+		//JScrollPane scrollPane = new JScrollPane(matchesTextArea);  
+		//matchesTextArea.setLineWrap(true);  
+		//matchesTextArea.setWrapStyleWord(true); 
+		//matchesTextArea.setEditable(false); 
+		//matchesTextArea.setMargin( new Insets(10,10,10,10) );
+		//scrollPane.setPreferredSize( new Dimension( 500, 300 ) );
+		//frm.getContentPane().add(scrollPane);
+		try{ 
+			//Create and set up the content pane.
+			JTable table = new JTable(new LeagueTableModel(getLeagues()));
+			table.getModel().addTableModelListener(new TableModelListener() { 
+				@Override
+				public void tableChanged(TableModelEvent e) {
+					if(e.getColumn() == 0 && e.getFirstRow()>-1){
+						System.out.println(
+								"Row : " + e.getFirstRow() +
+								" value :" + table.getValueAt(e.getFirstRow(), e.getColumn()));
+					}
+				}
+			});
+			//table.setPreferredScrollableViewportSize(new Dimension(500, 500));
+			table.setFillsViewportHeight(true); 
+			//table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); 
+			table.getColumnModel().getColumn(0).setMaxWidth(20);
+			//Create the scroll pane and add the table to it.
+			JScrollPane scrollPane = new JScrollPane(table); 
+			//Add the scroll pane to this panel.
+			frm.getContentPane().add(scrollPane);
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 
 		trayIcon.addActionListener(new ActionListener() {
 			@Override
@@ -317,8 +325,100 @@ public class Main {
 		frm.setSize(500, 500);
 		frm.setLocationRelativeTo(null);
 		frm.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		frm.pack();
 		frm.setVisible(true);
 	}
+
+	public static class LeagueTableModel extends AbstractTableModel {
+		private boolean DEBUG = false;
+		private String[] columnNames = {
+			"",
+			"League"
+		};
+		private Object[][] data;
+
+		public LeagueTableModel(Leagues leagues){
+			Collection<League> collection = leagues.getLeagues().values();
+			List<League> list = new ArrayList(collection);
+			Collections.sort(list); 
+			Object[][] array = new Object[list.size()][];
+			for (int i = 0; i < list.size(); i++) {
+				League league = list.get(i);
+				Object[] row = { 
+					league.getEnabled(),
+					league.getId()
+				};
+				array[i] = row;
+			}
+			data = array;
+		}
+
+		public int getColumnCount() { return columnNames.length; } 
+		public int getRowCount() { return data.length; } 
+		public String getColumnName(int col) { return columnNames[col]; } 
+		public Object getValueAt(int row, int col) { return data[row][col]; }
+
+		/*
+		 * JTable uses this method to determine the default renderer/
+		 * editor for each cell.  If we didn't implement this method,
+		 * then the last column would contain text ("true"/"false"),
+		 * rather than a check box.
+		 */
+		public Class getColumnClass(int c) {
+			return getValueAt(0, c).getClass();
+		}
+
+		/*
+		 * Don't need to implement this method unless your table's
+		 * editable.
+		 */
+		public boolean isCellEditable(int row, int col) {
+			//Note that the data/cell address is constant,
+			//no matter where the cell appears onscreen.
+			if (col > 1) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+
+		/*
+		 * Don't need to implement this method unless your table's
+		 * data can change.
+		 */
+		public void setValueAt(Object value, int row, int col) {
+			if (DEBUG) {
+				System.out.println("Setting value at " + row + "," + col
+						+ " to " + value
+						+ " (an instance of "
+						+ value.getClass() + ")");
+			}
+
+			data[row][col] = value;
+			fireTableCellUpdated(row, col);
+
+			if (DEBUG) {
+				System.out.println("New value of data:");
+				printDebugData();
+			}
+		}
+
+		private void printDebugData() {
+			int numRows = getRowCount();
+			int numCols = getColumnCount();
+
+			for (int i=0; i < numRows; i++) {
+				System.out.print("    row " + i + ":");
+				for (int j=0; j < numCols; j++) {
+					System.out.print("  " + data[i][j]);
+				}
+				System.out.println();
+			}
+			System.out.println("--------------------------");
+		}
+
+	}
+
 
 	//Obtain the image URL
 	protected static Image createImage(String path, String description) {
