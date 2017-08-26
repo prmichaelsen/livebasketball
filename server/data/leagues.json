@@ -66,6 +66,12 @@
       "id": "EUROPE: EuroBasket U16 B - Play Offs",
       "active": true
     },
+    "WORLD: Club Friendly Women": {
+      "country": "WORLD: ",
+      "name": "Club Friendly Women",
+      "id": "WORLD: Club Friendly Women",
+      "active": true
+    },
     "EUROPE: EuroBasket U16 B - 9th-16th places": {
       "country": "EUROPE: ",
       "name": "EuroBasket U16 B - 9th-16th places",
@@ -258,10 +264,10 @@
       "id": "ASIA: Southeast Asian Games Women",
       "active": true
     },
-    "AAA_TESTAAA_TEST": {
-      "country": "AAA_TEST",
-      "name": "AAA_TEST",
-      "id": "AAA_TESTAAA_TEST",
+    "AFRICA: African Championship Women": {
+      "country": "AFRICA: ",
+      "name": "African Championship Women",
+      "id": "AFRICA: African Championship Women",
       "active": true
     },
     "ASIA: Southeast Asian Games": {
@@ -270,22 +276,16 @@
       "id": "ASIA: Southeast Asian Games",
       "active": true
     },
-    "AFRICA: African Championship Women": {
-      "country": "AFRICA: ",
-      "name": "African Championship Women",
-      "id": "AFRICA: African Championship Women",
+    "EUROPE: European Championship U16 B Women - 17th-22th places": {
+      "country": "EUROPE: ",
+      "name": "European Championship U16 B Women - 17th-22th places",
+      "id": "EUROPE: European Championship U16 B Women - 17th-22th places",
       "active": true
     },
     "EUROPE: EuroBasket U16 - 5th-8th places": {
       "country": "EUROPE: ",
       "name": "EuroBasket U16 - 5th-8th places",
       "id": "EUROPE: EuroBasket U16 - 5th-8th places",
-      "active": true
-    },
-    "EUROPE: European Championship U16 B Women - 17th-22th places": {
-      "country": "EUROPE: ",
-      "name": "European Championship U16 B Women - 17th-22th places",
-      "id": "EUROPE: European Championship U16 B Women - 17th-22th places",
       "active": true
     }
   }

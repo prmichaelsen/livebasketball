@@ -541,6 +541,22 @@ public class Main {
 					if(match.doesMeetConditionThree()){
 						if(match.doesMeetConditionOne() || match.doesMeetConditionTwo()){
 							System.out.println( "------\n------\n MATCH\n------\n------\n");
+							// send java client notifications
+							if(clients != null){
+								for(Client client : clients){
+									try{
+										Gson lgson = new Gson();
+										Notification notification = new Notification(match.getCondition(), match.getMatchName());
+										String msg = lgson.toJson(notification);
+										client.writeToClient(msg+"\n");
+									} catch (SocketException e2){
+										System.err.println("Client is no longer connected! You should find a way to remove this client from the list of connected clients");
+										e2.printStackTrace();
+									} catch (IOException e2){
+										e2.printStackTrace();
+									}
+								}
+							} 
 							//send mobile notifications
 							try{
 								String s = null;
