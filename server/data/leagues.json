@@ -18,6 +18,12 @@
       "id": "EUROPE: EuroBasket U16 B - 17th-24th places",
       "active": true
     },
+    "AFRICA: African Championship Women - Play Offs": {
+      "country": "AFRICA: ",
+      "name": "African Championship Women - Play Offs",
+      "id": "AFRICA: African Championship Women - Play Offs",
+      "active": true
+    },
     "WORLD: Universiade Women - 9th-16th places": {
       "country": "WORLD: ",
       "name": "Universiade Women - 9th-16th places",
@@ -34,6 +40,24 @@
       "country": "AUSTRALIA: ",
       "name": "SEABL Women - Play Offs",
       "id": "AUSTRALIA: SEABL Women - Play Offs",
+      "active": true
+    },
+    "AFRICA: African Championship Women - 9th-12th places": {
+      "country": "AFRICA: ",
+      "name": "African Championship Women - 9th-12th places",
+      "id": "AFRICA: African Championship Women - 9th-12th places",
+      "active": true
+    },
+    "WORLD: World Tour Lausanne 3x3 - Play Offs": {
+      "country": "WORLD: ",
+      "name": "World Tour Lausanne 3x3 - Play Offs",
+      "id": "WORLD: World Tour Lausanne 3x3 - Play Offs",
+      "active": true
+    },
+    "ASIA: Southeast Asian Games - Play Offs": {
+      "country": "ASIA: ",
+      "name": "Southeast Asian Games - Play Offs",
+      "id": "ASIA: Southeast Asian Games - Play Offs",
       "active": true
     },
     "EUROPE: EuroBasket U16 B - Play Offs": {
@@ -78,6 +102,18 @@
       "id": "EUROPE: EuroBasket U16 B - 21th-24th places",
       "active": true
     },
+    "WORLD: Universiade Women - Play Offs": {
+      "country": "WORLD: ",
+      "name": "Universiade Women - Play Offs",
+      "id": "WORLD: Universiade Women - Play Offs",
+      "active": true
+    },
+    "AFRICA: African Championship Women - 5th-8th places": {
+      "country": "AFRICA: ",
+      "name": "African Championship Women - 5th-8th places",
+      "id": "AFRICA: African Championship Women - 5th-8th places",
+      "active": true
+    },
     "USA: WNBA": {
       "country": "USA: ",
       "name": "WNBA",
@@ -112,6 +148,18 @@
       "country": "WORLD: ",
       "name": "Friendly International",
       "id": "",
+      "active": true
+    },
+    "WORLD: Universiade Women - 5th-8th places": {
+      "country": "WORLD: ",
+      "name": "Universiade Women - 5th-8th places",
+      "id": "WORLD: Universiade Women - 5th-8th places",
+      "active": true
+    },
+    "WORLD: Universiade Women - 13th-16th places": {
+      "country": "WORLD: ",
+      "name": "Universiade Women - 13th-16th places",
+      "id": "WORLD: Universiade Women - 13th-16th places",
       "active": true
     },
     "AUSTRALIA: SEABL - Play Offs": {
@@ -186,10 +234,22 @@
       "id": "EUROPE: European Championship U16 B Women - Play Offs",
       "active": true
     },
-    "AAA_TESTAAA_TEST": {
-      "country": "AAA_TEST",
-      "name": "AAA_TEST",
-      "id": "AAA_TESTAAA_TEST",
+    "WORLD: AmeriCup": {
+      "country": "WORLD: ",
+      "name": "AmeriCup",
+      "id": "WORLD: AmeriCup",
+      "active": true
+    },
+    "EUROPE: European Championship U16 B Women - 13th-16th places": {
+      "country": "EUROPE: ",
+      "name": "European Championship U16 B Women - 13th-16th places",
+      "id": "EUROPE: European Championship U16 B Women - 13th-16th places",
+      "active": true
+    },
+    "EUROPE: European Championship U16 B Women - 5th-8th places": {
+      "country": "EUROPE: ",
+      "name": "European Championship U16 B Women - 5th-8th places",
+      "id": "EUROPE: European Championship U16 B Women - 5th-8th places",
       "active": true
     },
     "ASIA: Southeast Asian Games Women": {
@@ -198,10 +258,10 @@
       "id": "ASIA: Southeast Asian Games Women",
       "active": true
     },
-    "AFRICA: African Championship Women": {
-      "country": "AFRICA: ",
-      "name": "African Championship Women",
-      "id": "AFRICA: African Championship Women",
+    "AAA_TESTAAA_TEST": {
+      "country": "AAA_TEST",
+      "name": "AAA_TEST",
+      "id": "AAA_TESTAAA_TEST",
       "active": true
     },
     "ASIA: Southeast Asian Games": {
@@ -210,10 +270,22 @@
       "id": "ASIA: Southeast Asian Games",
       "active": true
     },
+    "AFRICA: African Championship Women": {
+      "country": "AFRICA: ",
+      "name": "African Championship Women",
+      "id": "AFRICA: African Championship Women",
+      "active": true
+    },
     "EUROPE: EuroBasket U16 - 5th-8th places": {
       "country": "EUROPE: ",
       "name": "EuroBasket U16 - 5th-8th places",
       "id": "EUROPE: EuroBasket U16 - 5th-8th places",
+      "active": true
+    },
+    "EUROPE: European Championship U16 B Women - 17th-22th places": {
+      "country": "EUROPE: ",
+      "name": "European Championship U16 B Women - 17th-22th places",
+      "id": "EUROPE: European Championship U16 B Women - 17th-22th places",
       "active": true
     }
   }

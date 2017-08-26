@@ -538,36 +538,38 @@ public class Main {
 				while(e.hasMoreElements()){
 					Match match = (Match)e.nextElement();
 					System.out.println(match); 
-					if(match.doesMeetConditionOne() || match.doesMeetConditionTwo()){
-						System.out.println( "------\n------\n MATCH\n------\n------\n");
-						//send mobile notifications
-						try{
-							String s = null;
-							String[] cmd = new String[] {"python3", "push_notifications.py", match.getCondition(), match.getMatchName()};
-							Process p = Runtime.getRuntime().exec(cmd);
-							BufferedReader stdInput = new BufferedReader(new 
-									InputStreamReader(p.getInputStream()));
+					if(match.doesMeetConditionThree()){
+						if(match.doesMeetConditionOne() || match.doesMeetConditionTwo()){
+							System.out.println( "------\n------\n MATCH\n------\n------\n");
+							//send mobile notifications
+							try{
+								String s = null;
+								String[] cmd = new String[] {"python3", "push_notifications.py", match.getCondition(), match.getMatchName()};
+								Process p = Runtime.getRuntime().exec(cmd);
+								BufferedReader stdInput = new BufferedReader(new 
+										InputStreamReader(p.getInputStream()));
 
-							BufferedReader stdError = new BufferedReader(new 
-									InputStreamReader(p.getErrorStream()));
+								BufferedReader stdError = new BufferedReader(new 
+										InputStreamReader(p.getErrorStream()));
 
-							// read the output from the command
-							System.out.println("Here is the standard output of the command:\n");
-							while ((s = stdInput.readLine()) != null) {
-								System.out.println(s);
-							}
+								// read the output from the command
+								System.out.println("Here is the standard output of the command:\n");
+								while ((s = stdInput.readLine()) != null) {
+									System.out.println(s);
+								}
 
-							// read any errors from the attempted command
-							System.out.println("Here is the standard error of the command (if any):\n");
-							while ((s = stdError.readLine()) != null) {
-								System.out.println(s);
-							}
-							System.out.println(cmd);
-							System.out.println("Sent push notifications");
-						}catch(IOException er){
-							System.err.println("Could not send push notifications");
-							System.err.println(er);
-						} 
+								// read any errors from the attempted command
+								System.out.println("Here is the standard error of the command (if any):\n");
+								while ((s = stdError.readLine()) != null) {
+									System.out.println(s);
+								}
+								System.out.println(cmd);
+								System.out.println("Sent push notifications");
+							}catch(IOException er){
+								System.err.println("Could not send push notifications");
+								System.err.println(er);
+							} 
+						}
 					}
 				}
 				try{
