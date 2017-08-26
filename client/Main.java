@@ -318,7 +318,8 @@ public class Main {
 			BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
 			Socket clientSocket = null; 
 			try{
-				clientSocket = new Socket("localhost", 6789);
+				clientSocket = new Socket("ec2-34-213-227-13.us-west-2.compute.amazonaws.com", 6789);
+			System.out.println("connected!");
 			} catch ( UnknownHostException e){
 				e.printStackTrace();
 			} catch ( IOException e){
