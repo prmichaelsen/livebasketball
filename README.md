@@ -17,6 +17,9 @@ it should be noted that this codebase is beyond terrible and, while, functional,
 	* deploy current server files
 	* get league ids for each match
 	* only send notifications for selected leagues
+	
+* bonus fun time
+	* create a db program that only allows one connection at a time for editing app data
   
 * technical debt
   * seperate classes out of main.java
