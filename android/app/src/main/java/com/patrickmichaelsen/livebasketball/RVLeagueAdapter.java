@@ -8,8 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -73,22 +75,29 @@ public class RVLeagueAdapter extends RecyclerView.Adapter<RVLeagueAdapter.League
             leagueCountry = (TextView)itemView.findViewById(R.id.league_country);
             leagueName = (TextView)itemView.findViewById(R.id.league_name);
             leagueIsEnabledCheckbox = (CheckBox)itemView.findViewById(R.id.league_is_enabled_checkbox);
-            leagueIsEnabledCheckbox.setOnClickListener(new View.OnClickListener() {
+            leagueIsEnabledCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
                 @Override
-                public void onClick(View v) {
-                    league.setEnabled(leagueIsEnabledCheckbox.isSelected());
-                    Log.i("CHECKBOX", String.format("checkbox onClick, isSelected: %s, identityHashCode: %s", leagueIsEnabledCheckbox.isSelected(), System.identityHashCode(leagueIsEnabledCheckbox)));
+                public void onCheckedChanged(CompoundButton v, boolean isChecked) {
+                    //android calls this method every time this view is rendered
+                    //to prevent useless rest calls, make sure this
+                    // was actually pressed, not just rendered
+                    if(!v.isPressed()){
+                       return;
+                    }
+                    league.setEnabled(v.isChecked());
+                    Log.i("CHECKBOX", String.format("checkbox onClick, name: %s%s, isSelected: %s, identityHashCode: %s", leagueCountry, leagueName, v.isChecked(), System.identityHashCode(leagueIsEnabledCheckbox)));
                     Gson gson = new Gson();
                     String params = gson.toJson(league, League.class);
                     JSONObject jsonObject = null;
                     try{
                         jsonObject = new JSONObject(params);
                     }catch(Exception e){
-                        Log.e("ERROR:",e.getMessage());
+                        Log.e("ERROR:",(e.getMessage() != null )? e.getMessage() : "Could not get error");
                     }
-                    String url ="http://10.0.2.2:8080/livebasketball/leagues";
+                    String url ="http://ec2-34-211-119-222.us-west-2.compute.amazonaws.com/livebasketball/leagues";
                     if(jsonObject == null){
                         Log.e("Error: ", "Could not parse JSON");
+                        Toast.makeText(mContext, "Error saving selected league", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     JsonObjectRequest jsObjRequest = new JsonObjectRequest
@@ -97,12 +106,17 @@ public class RVLeagueAdapter extends RecyclerView.Adapter<RVLeagueAdapter.League
                                 @Override
                                 public void onResponse(JSONObject response) {
                                     Log.i("REST:%n %s", response.toString());
+                                    Gson gson = new Gson();
+                                    com.patrickmichaelsen.livebasketball.Response responseObj = gson.fromJson(response.toString(), com.patrickmichaelsen.livebasketball.Response.class);
+                                    Toast.makeText(mContext, responseObj.getReturnData(), Toast.LENGTH_SHORT).show();
+                                    Log.i("REST:%n %s", responseObj.toString());
                                 }
                             }, new Response.ErrorListener() {
 
                                 @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    Log.e("REST Error: ", error.getMessage());
+                                public void onErrorResponse(VolleyError e) {
+                                    Log.e("REST ERROR:",(e.getMessage() != null )? e.getMessage() : "Could not get error");
+                                    Toast.makeText(mContext, "Server error saving selected league", Toast.LENGTH_SHORT).show();
                                 }
                             });
 

@@ -42,7 +42,8 @@ public class MainActivity extends AppCompatActivity {
         Intent i = new Intent(this,RegistrationService.class);
         this.startService(i);
 
-        String url ="http://10.0.2.2:8080/livebasketball/leagues";
+        //String url ="http://10.0.2.2:8080/livebasketball/leagues";
+        String url ="http://ec2-34-211-119-222.us-west-2.compute.amazonaws.com/livebasketball/leagues";
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
