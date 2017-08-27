@@ -5,7 +5,7 @@ package="com.patrickmichaelsen.livebasketball"
 manifest="Manifest.mf"
 
 # carefully remove previous builds
-mkdir -p bin lib
+mkdir -p bin lib resources
 cd bin
 find . -type f -name "*.class" -delete
 rm -f *.jar
@@ -17,6 +17,20 @@ require=()
 while IFS=  read -r -d $'\0'; do
     require+=("$REPLY")
 done < <(find ../lib -name *.jar -print0) 
+
+# optional:
+# pack all libraries into this jra
+# to create a completely standalone
+# jar
+for req in "${require[@]}"
+do
+	# naively unpack the entire jar
+	jar xf "$req" 
+done
+# delete any non-class files 
+find . -type f -not -name "*.class" -delete 
+# remove any ghost directories
+find . -type d -empty -delete
 
 # determine os
 platform=-1
