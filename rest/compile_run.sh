@@ -1,19 +1,15 @@
 #!bin/bash
-rm -rf bin
-mkdir bin
 
-lib_path="./lib/"
-# mark java dependencies here:
+# get java dependencies
 require=()
-require+=("commons-lang3-3.5/*.jar") 
-require+=("commons-lang3-3.5/*.jar")
-require+=("*")
-require+=("jaxrs-ri/ext/*")
-require+=("jaxrs-ri/api/*")
-require+=("jaxrs-ri/lib/*")
-require+=("jetty-distribution-9.4.3.v20170317/lib/*")
-require+=("jetty-distribution-9.4.3.v20170317/modules/sessions/*.jar")
-require+=("gson-2.8.1.jar")
+while IFS=  read -r -d $'\0'; do
+    require+=("$REPLY")
+done < <(find ./lib/ -name *.jar -print0) 
+
+# mark package name here
+package="com.parm.server"
+
+mkdir -p bin lib
 
 # determine os
 platform=-1
@@ -26,39 +22,47 @@ if [[ "$unamestr" == 'Linux' ]]; then
    platform=$linux
 elif [[ "$unamestr" == 'MINGW32_NT-10.0-WOW' ]]; then
    platform=$windows
+elif [[ "$unamestr" == 'MINGW64_NT-10.0' ]]; then
+   platform=$windows 
 else
-	echo "Unsupported OS"
-	exit
+   echo "Unsupported OS"
+   exit
 fi
 
 # build class_path
 path_seperator=( ":" ";" ":" ) 
-class_path="."
+class_path=""
 for req in "${require[@]}"
 do
-	class_path="$class_path${path_seperator[$platform]}$lib_path$req"
+	class_path="$class_path${path_seperator[$platform]}$req"
 done
 
 # create Manifest.txt 
-for req in "${require[@]}"
-do
-	manifest_path="$manifest_path .$lib_path$req"
-done
 manifest="./bin/Manifest"
-echo "Main-Class: com.parm.server.Main" > $manifest
-printf "Class-Path:" >> $manifest
-printf "$manifest_path" >> $manifest
-echo >> $manifest 
+#echo "Main-Class: com.parm.server.Main" > $manifest
+#echo "Class-Path:" >> $manifest
+#for req in "${require[@]}"
+#do
+	#echo " $req" >> $manifest
+#done
+
+cd bin
+rm -f *.jar
+rm -f *.class
 
 echo Compiling
-find -name "*.java" > java
-javac -cp $class_path -d bin @java -Xlint:deprecation 
-rm -f java
+cd ..
+find -name "*.java" > sources
+javac -cp $class_path -d bin @sources -Xlint:deprecation -Xlint:unchecked
+rm -f sources
 
 echo Packaging Jar
 cd bin 
 find -name "*.class" > class
-jar cfm main.jar Manifest @class
+jar cmf Manifest main.jar .
+
+#echo Running
+#java -jar ./main.jar 
 
 echo Running 
 cd ..

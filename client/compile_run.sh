@@ -40,7 +40,7 @@ done
 # create Manifest.txt 
 for req in "${require[@]}"
 do
-	manifest_path="$manifest_path .$lib_path$req"
+	manifest_path="$manifest_path .$req"
 done
 manifest="./bin/Manifest"
 echo "Main-Class: $package.Main" > $manifest
