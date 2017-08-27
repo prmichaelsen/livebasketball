@@ -43,4 +43,4 @@ done
 
 #cd "./bin/com/parm/server/" 
 cd bin
-java -cp "$class_path" com.parm.server.Main
+java -cp "$class_path" com.patrickmichaelsen.livebasketball.Main

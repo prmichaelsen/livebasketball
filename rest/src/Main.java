@@ -1,4 +1,4 @@
-package com.parm.server;
+package com.patrickmichaelsen.livebasketball;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

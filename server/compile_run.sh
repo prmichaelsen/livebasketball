@@ -1,15 +1,22 @@
 #!bin/bash
 
+# mark package name here
+package="com.patrickmichaelsen.livebasketball"
+manifest="Manifest.mf"
+
+# carefully remove previous builds
+mkdir -p bin lib
+cd bin
+find . -type f -name "*.class" -delete
+rm -f *.jar
+rm -f "$manifest"
+find . -type d -empty -delete
+
 # get java dependencies
 require=()
 while IFS=  read -r -d $'\0'; do
     require+=("$REPLY")
-done < <(find ./lib/ -name *.jar -print0) 
-
-# mark package name here
-package="com.patrickmichaelsen.livebasketball"
-
-mkdir -p bin lib
+done < <(find ../lib -name *.jar -print0) 
 
 # determine os
 platform=-1
@@ -23,10 +30,10 @@ if [[ "$unamestr" == 'Linux' ]]; then
 elif [[ "$unamestr" == 'MINGW32_NT-10.0-WOW' ]]; then
    platform=$windows
 elif [[ "$unamestr" == 'MINGW64_NT-10.0' ]]; then
-   platform=$windows
+   platform=$windows 
 else
-	echo "Unsupported OS"
-	exit
+   echo "Unsupported OS"
+   exit
 fi
 
 # build class_path
@@ -34,35 +41,25 @@ path_seperator=( ":" ";" ":" )
 class_path="."
 for req in "${require[@]}"
 do
-	class_path="$class_path${path_seperator[$platform]}$lib_path$req"
+	class_path="$class_path${path_seperator[$platform]}$req"
 done
 
-# create Manifest.txt 
+# create Manifest
+echo "Main-Class: $package.Main" > $manifest
+echo "Class-Path: ." >> $manifest
 for req in "${require[@]}"
 do
-	manifest_path="$manifest_path .$lib_path$req"
+ echo "  $req" >> $manifest
 done
-manifest="./bin/Manifest"
-echo "Main-Class: $package.Main" > $manifest
-printf "Class-Path:" >> $manifest
-printf "$manifest_path" >> $manifest
-echo >> $manifest 
-
-
-cd bin 
-rm -f *.jar
-rm -f *.class
 
 echo Compiling
-cd ..
 # get source files
-find -name "*.java" > sources
-javac -cp "$class_path" @sources -d bin -Xlint:deprecation -Xlint:unchecked
+find .. -name "*.java" > sources
+javac -cp "$class_path" @sources -d . -Xlint:deprecation -Xlint:unchecked
 rm -f sources
 
 echo Packaging Jar
-cd bin
-jar cmf Manifest main.jar .
+jar cmf $manifest main.jar .
 
 echo Running
 java -jar ./main.jar 
