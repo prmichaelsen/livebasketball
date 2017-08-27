@@ -64,11 +64,17 @@ public class Main {
 	static JFrame frm;
 	static JTextArea matchesTextArea;
 	static int looking;
-	static Runtime mainRuntime;
-	//static MinimalServerRest server;
+	static Runtime mainRuntime; 
+	static String sport;
+	static String stage;
 
 	public static void main(String args[]){ 
-		//mainRuntime = Runtime.getRuntime();
+			//initialize program options
+			playSounds = true;
+			displayPopups = true;
+			sport = Constants.Sport.BASKETBALL;
+			stage = Constants.Stage.LIVE;
+
 		Thread.UncaughtExceptionHandler h = new Thread.UncaughtExceptionHandler() {
 			public void uncaughtException(Thread th, Throwable ex) {
 				System.out.println("Uncaught exception: " + ex);
@@ -120,16 +126,17 @@ public class Main {
 			Thread t = new Thread(scoreChecker, "Flashscores Live Basketball ScoreChecker"); 
 			t.setUncaughtExceptionHandler(h);
 			t.start();
-			ScoreNotifier scoreNotifier = new Main().new ScoreNotifier();
-			Thread scoreNotifierThread = new Thread(scoreNotifier, "Flashscores Live Basketball ScoreNotifier"); 
-			scoreNotifierThread.start();
+			NewClientListener newClientListener = new Main().new NewClientListener();
+			Thread newClientListenerThread = new Thread(newClientListener, "Flashscores Live Basketball NewClientListener"); 
+			newClientListenerThread.start();
 			try{
 				t.join();
 			}catch(InterruptedException e){ };
 		}
 	} 
 
-	public class ScoreNotifier implements Runnable {
+	// listens for new connections
+	public class NewClientListener implements Runnable {
 		public void run(){
 			//start tcp websocket
 			String clientSentence;
@@ -157,15 +164,11 @@ public class Main {
 		} 
 	}
 
+	// essentially the main class for this program
+	// handles scraping of webpage and sends notifications
+	// to any registered clients
 	public class ScoreChecker implements Runnable { 
 		public void run(){ 
-			//initialize program options
-			playSounds = true;
-			displayPopups = true;
-			String sport = "basketball";
-			String stage = "stage-live"; //can be stage-live, stage-finished, stage-interrupted, or stage-scheduled
-			int numRounds = 3; //the round to send alert when finishing that round
-
 			//set up driver
 			System.out.println("Initializing...");
 			driver = new PhantomJSDriver();
