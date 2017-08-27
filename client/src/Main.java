@@ -1,6 +1,8 @@
 package com.patrickmichaelsen.livebasketball;
 
 import com.google.api.client.http.ByteArrayContent;
+import javax.imageio.ImageIO;
+import java.io.InputStream;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
@@ -410,7 +412,14 @@ public class Main {
 
 	//Obtain the image URL
 	protected static Image createImage(String path, String description) {
-		return (new ImageIcon("icon.gif", description)).getImage();
+		InputStream stream = Main.class.getClassLoader().getResourceAsStream("resources/icons/"+path); 
+		Image image = null;
+		try{
+			image = new ImageIcon(ImageIO.read(stream), description).getImage(); 
+		} catch (IOException e){
+			e.printStackTrace();
+		}
+		return image;
 	} 
 
 	public class Refresher implements Runnable {

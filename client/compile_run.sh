@@ -59,7 +59,7 @@ javac -cp "$class_path" @sources -d . -Xlint:deprecation -Xlint:unchecked
 rm -f sources
 
 echo Packaging Jar
-jar cmf $manifest main.jar .
+jar cmf $manifest main.jar . ../resources
 
 echo Running
 java -jar ./main.jar 
