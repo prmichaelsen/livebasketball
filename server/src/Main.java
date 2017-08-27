@@ -12,7 +12,6 @@ import java.awt.Menu;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
-import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.*;
 import java.io.BufferedReader;
@@ -57,7 +56,6 @@ public class Main {
 	static Hashtable<String,Match> matches;
 	static Leagues leagues;
 	static List<Client> clients;
-	static Toolkit tk;
 	static boolean playSounds;
 	static boolean displayPopups;
 	static ServerSocket serverSocket;
@@ -179,7 +177,6 @@ public class Main {
 			//initialize global var & utils
 			matches = new Hashtable<String,Match>();	
 			leagues = new Leagues();	
-			tk = Toolkit.getDefaultToolkit(); 
 
 			System.out.println("Initialized.");
 			System.out.println("Running..."); 
@@ -194,176 +191,35 @@ public class Main {
 					tables = driver.findElements(By.cssSelector(".fs-table>.table-main>."+sport));
 				}
 				catch (NoSuchElementException e){ } 
-
-				for(WebElement table : tables){
-
+				for(WebElement table : tables){ 
 					//set up common elements
 					try {
 						rows = table.findElements(By.cssSelector("tbody>tr."+stage));
 					}
 					catch (NoSuchElementException e){ } 
 
-					League league = getLeague(table); 
-
-					System.out.println(league);
-
+					League league = getLeague(table);  //updates static leagues variable
 					//get scores
-					for(WebElement web_el : rows){
-						boolean isHomeTeam = false;
-						boolean isAwayTeam = false;
-						String row_id = null;
-						try{ 
-							row_id = web_el.getAttribute("id");
-						}
-						catch (StaleElementReferenceException e){ }
-						String match_id = null;
-						String team = null;
-						if(row_id != null){
-							team = row_id.substring(0,1); //first character indicates home/away team
-							match_id = row_id.substring(2); //remaining str is match id
-						}
-						if(team != null){
-							if(team.equals("g")){
-								isHomeTeam = true; isAwayTeam = false;
-							}
-							else if (team.equals("x")){
-								isAwayTeam = true; isHomeTeam = false; 
-							}
-						}
-						if(match_id != null){
-							Match match = matches.get(match_id);
-							if(match == null){
-								match = new Match(match_id, league.getId());
-								matches.put(match_id, match); 
-							}
-							match.setLastUpdated(System.currentTimeMillis());
-							WebElement homeTeamNameDOM = null;
-							WebElement awayTeamNameDOM = null;
-							WebElement roundStatusDOM = null;
-							String homeTeamName = null;
-							String awayTeamName = null;
-							String roundStatus = null;
-							if(isHomeTeam){
-								try{
-									roundStatusDOM = web_el.findElement(By.cssSelector("td.timer>span"));	
-									if(roundStatusDOM != null){ 
-										roundStatus = (roundStatusDOM.getAttribute("innerHTML"));
-										match.setRoundStatus(roundStatus);
-									}
-								}
-								catch (NoSuchElementException e){ } 
-								catch (StaleElementReferenceException e){ }
-							}
-
-							if(isHomeTeam){
-								try{
-									homeTeamNameDOM = web_el.findElement(By.cssSelector("td.team-home>span"));	
-									if(homeTeamNameDOM != null){ 
-										homeTeamName = (homeTeamNameDOM.getAttribute("innerHTML"));
-										match.setHomeTeam(homeTeamName);
-									}
-								}
-								catch (NoSuchElementException e){ }
-								catch (StaleElementReferenceException e){ }
-							}
-							if(isAwayTeam){
-								try{ 
-									awayTeamNameDOM = web_el.findElement(By.cssSelector("td.team-away>span"));	
-									if(awayTeamNameDOM != null){ 
-										awayTeamName = (awayTeamNameDOM.getAttribute("innerHTML"));
-										match.setAwayTeam(awayTeamName);
-									}
-								}
-								catch (NoSuchElementException e){ }
-								catch (StaleElementReferenceException e){ }
-							}
-							List<WebElement> scoreDOMs = new ArrayList<WebElement>();
-							List<Integer> scores = new ArrayList<Integer>(); 
-							if(isHomeTeam){
-								try{ 
-									scoreDOMs = web_el.findElements(By.cssSelector("td.part-bottom"));	
-								}
-								catch (NoSuchElementException e){ } 
-							}
-							if(isAwayTeam){ 
-								try{ 
-									scoreDOMs =web_el.findElements(By.cssSelector("td.part-top"));	
-								}
-								catch (NoSuchElementException e){ }
-							} 
-
-							for(WebElement scoreTd : scoreDOMs ){
-								try{
-									int score = Integer.parseInt(scoreTd.getAttribute("innerHTML"));
-									scores.add(score); 
-								}
-								catch(NumberFormatException e){} 
-								catch (StaleElementReferenceException e){ }
-							}
-							if(isHomeTeam){ 
-								match.setHomeScores(scores);
-							}else if(isAwayTeam){
-								match.setAwayScores(scores);
-							}
-						}
+					for(WebElement row : rows){
+						getMatch(row, league); //updates static match variable
 					}	
 				}
 				Enumeration e = matches.elements(); 
 				while(e.hasMoreElements()){
 					Match match = (Match)e.nextElement();
 					System.out.println(match); 
-					boolean doesMeetConditionThree = false;
+					boolean notificationsEnabled = false;
 					League league = leagues.getLeagues().get(match.getLeagueId());
 					if(league != null){
-						doesMeetConditionThree = league.getEnabled();
+						notificationsEnabled = league.getEnabled();
 					}
-					if(doesMeetConditionThree){
+					if(notificationsEnabled){
 						if(match.doesMeetConditionOne() || match.doesMeetConditionTwo()){
 							System.out.println( "------\n------\n MATCH\n------\n------\n");
 							// send java client notifications
-							if(clients != null){
-								for(Client client : clients){
-									try{
-										Gson lgson = new Gson();
-										Notification notification = new Notification(match.getCondition(), match.getMatchName());
-										String msg = lgson.toJson(notification);
-										client.writeToClient(msg+"\n");
-									} catch (SocketException e2){
-										System.err.println("Client is no longer connected! You should find a way to remove this client from the list of connected clients");
-										e2.printStackTrace();
-									} catch (IOException e2){
-										e2.printStackTrace();
-									}
-								}
-							} 
+							sendClientNotifications(match);
 							//send mobile notifications
-							try{
-								String s = null;
-								String[] cmd = new String[] {"python3", "push_notifications.py", match.getCondition(), match.getMatchName()};
-								Process p = Runtime.getRuntime().exec(cmd);
-								BufferedReader stdInput = new BufferedReader(new 
-										InputStreamReader(p.getInputStream()));
-
-								BufferedReader stdError = new BufferedReader(new 
-										InputStreamReader(p.getErrorStream()));
-
-								// read the output from the command
-								System.out.println("Here is the standard output of the command:\n");
-								while ((s = stdInput.readLine()) != null) {
-									System.out.println(s);
-								}
-
-								// read any errors from the attempted command
-								System.out.println("Here is the standard error of the command (if any):\n");
-								while ((s = stdError.readLine()) != null) {
-									System.out.println(s);
-								}
-								System.out.println(cmd);
-								System.out.println("Sent push notifications");
-							}catch(IOException er){
-								System.err.println("Could not send push notifications");
-								System.err.println(er);
-							} 
+							sendMobileNotifications(match);
 						}
 					}
 				}
@@ -373,6 +229,54 @@ public class Main {
 			}
 		} 
 	} 
+
+	public static void sendMobileNotifications(Match match){
+		try{
+			String s = null;
+			String[] cmd = new String[] {"python3", "push_notifications.py", match.getCondition(), match.getMatchName()};
+			Process p = Runtime.getRuntime().exec(cmd);
+			BufferedReader stdInput = new BufferedReader(new 
+					InputStreamReader(p.getInputStream()));
+
+			BufferedReader stdError = new BufferedReader(new 
+					InputStreamReader(p.getErrorStream()));
+
+			// read the output from the command
+			System.out.println("Here is the standard output of the command:\n");
+			while ((s = stdInput.readLine()) != null) {
+				System.out.println(s);
+			}
+
+			// read any errors from the attempted command
+			System.out.println("Here is the standard error of the command (if any):\n");
+			while ((s = stdError.readLine()) != null) {
+				System.out.println(s);
+			}
+			System.out.println(cmd);
+			System.out.println("Sent push notifications");
+		}catch(IOException er){
+			System.err.println("Could not send push notifications");
+			System.err.println(er);
+		} 
+	} 
+
+	public static void sendClientNotifications(Match match){
+		if(clients != null){
+			for(Client client : clients){
+				try{
+					Gson lgson = new Gson();
+					Notification notification = new Notification(match.getCondition(), match.getMatchName());
+					String msg = lgson.toJson(notification);
+					client.writeToClient(msg+"\n");
+				} catch (SocketException e2){
+					System.err.println("Client is no longer connected! You should find a way to remove this client from the list of connected clients");
+					e2.printStackTrace();
+				} catch (IOException e2){
+					e2.printStackTrace();
+				}
+			}
+		} 
+	}
 
 	public static League getLeague(WebElement table){ 
 		//read leagues from file
@@ -432,5 +336,105 @@ public class Main {
 		} 
 		return league;
 	} 
+
+	public static void getMatch(WebElement row, League league){
+		boolean isHomeTeam = false;
+		boolean isAwayTeam = false;
+		String row_id = null;
+		try{ 
+			row_id = row.getAttribute("id");
+		}
+		catch (StaleElementReferenceException e){ }
+		String match_id = null;
+		String team = null;
+		if(row_id != null){
+			team = row_id.substring(0,1); //first character indicates home/away team
+			match_id = row_id.substring(2); //remaining str is match id
+		}
+		if(team != null){
+			if(team.equals("g")){
+				isHomeTeam = true; isAwayTeam = false;
+			}
+			else if (team.equals("x")){
+				isAwayTeam = true; isHomeTeam = false; 
+			}
+		}
+		if(match_id != null){
+			Match match = matches.get(match_id);
+			if(match == null){
+				match = new Match(match_id, league.getId());
+				matches.put(match_id, match); 
+			}
+			match.setLastUpdated(System.currentTimeMillis());
+			WebElement homeTeamNameDOM = null;
+			WebElement awayTeamNameDOM = null;
+			WebElement roundStatusDOM = null;
+			String homeTeamName = null;
+			String awayTeamName = null;
+			String roundStatus = null;
+			if(isHomeTeam){
+				try{
+					roundStatusDOM = row.findElement(By.cssSelector("td.timer>span"));	
+					if(roundStatusDOM != null){ 
+						roundStatus = (roundStatusDOM.getAttribute("innerHTML"));
+						match.setRoundStatus(roundStatus);
+					}
+				}
+				catch (NoSuchElementException e){ } 
+				catch (StaleElementReferenceException e){ }
+			}
+
+			if(isHomeTeam){
+				try{
+					homeTeamNameDOM = row.findElement(By.cssSelector("td.team-home>span"));	
+					if(homeTeamNameDOM != null){ 
+						homeTeamName = (homeTeamNameDOM.getAttribute("innerHTML"));
+						match.setHomeTeam(homeTeamName);
+					}
+				}
+				catch (NoSuchElementException e){ }
+				catch (StaleElementReferenceException e){ }
+			}
+			if(isAwayTeam){
+				try{ 
+					awayTeamNameDOM = row.findElement(By.cssSelector("td.team-away>span"));	
+					if(awayTeamNameDOM != null){ 
+						awayTeamName = (awayTeamNameDOM.getAttribute("innerHTML"));
+						match.setAwayTeam(awayTeamName);
+					}
+				}
+				catch (NoSuchElementException e){ }
+				catch (StaleElementReferenceException e){ }
+			}
+			List<WebElement> scoreDOMs = new ArrayList<WebElement>();
+			List<Integer> scores = new ArrayList<Integer>(); 
+			if(isHomeTeam){
+				try{ 
+					scoreDOMs = row.findElements(By.cssSelector("td.part-bottom"));	
+				}
+				catch (NoSuchElementException e){ } 
+			}
+			if(isAwayTeam){ 
+				try{ 
+					scoreDOMs =row.findElements(By.cssSelector("td.part-top"));	
+				}
+				catch (NoSuchElementException e){ }
+			} 
+
+			for(WebElement scoreTd : scoreDOMs ){
+				try{
+					int score = Integer.parseInt(scoreTd.getAttribute("innerHTML"));
+					scores.add(score); 
+				}
+				catch(NumberFormatException e){} 
+				catch (StaleElementReferenceException e){ }
+			}
+			if(isHomeTeam){ 
+				match.setHomeScores(scores);
+			}else if(isAwayTeam){
+				match.setAwayScores(scores);
+			}
+		}
+	}
 }
 
