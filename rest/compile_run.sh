@@ -63,5 +63,3 @@ jar cmf $manifest main.jar .
 
 echo Running
 java -jar ./main.jar 
-cd ..
-bash run.sh 
