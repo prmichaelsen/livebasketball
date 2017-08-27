@@ -50,13 +50,17 @@ printf "Class-Path:" >> $manifest
 printf "$manifest_path" >> $manifest
 echo >> $manifest 
 
+
 cd bin 
 rm -f *.jar
 rm -f *.class
 
 echo Compiling
 cd ..
-javac -cp "$class_path" *.java -d bin -Xlint:deprecation 
+# get source files
+find -name "*.java" > sources
+javac -cp "$class_path" @sources -d bin -Xlint:deprecation 
+rm -f sources
 
 echo Packaging Jar
 cd bin
