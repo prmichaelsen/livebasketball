@@ -2,10 +2,10 @@
 
 # program defaults
 STANDALONE=false
-PACKAGE="com.patrickmichaelsen.livebasketball"
-NAME="Main"
 LIBPATH="lib"
 MANIFEST="Manifest.mf"
+HELP=false
+RUN=false
 
 # get options
 while [[ $# -gt 0 ]]
@@ -13,9 +13,12 @@ do
 	key="$1"
 
 	case $key in
+		-t|--target)
+			TARGET=$2
+			shift # past argument
+			;;
 		-s|--standalone)
 			STANDALONE=true
-			shift # past argument
 			;;
 		-p|--package)
 			PACKAGE="$2"
@@ -29,8 +32,11 @@ do
 			NAME="$2"
 			shift # past argument
 			;;
-		--default)
-			DEFAULT=YES
+		-r|--run)
+			RUN=true
+			;;
+		-h|--help)
+			HELP=true
 			;;
 		*)
 			# unknown option
@@ -38,6 +44,44 @@ do
 esac
 shift # past argument or value
 done 
+
+if ! [[ $TARGET ]]; then
+	echo "Error: No target main class found"
+	echo 
+	HELP=true
+fi
+
+if [[ $HELP == true ]]; then 
+	echo "This script will neatly package your java project."
+	echo "Recommended Project Structure"
+	echo ".. compile_run.sh bin lib src"
+	echo
+	echo "Options:"
+	echo "-t|--target [string] the fully qualified name of the main class"
+	echo "-s|--standalone [flag] compile all dependencies into the final jar"
+	echo "-l|--lib [string] path to all libraries, defaults to lib"
+	echo "-r|--run [flag] run the program upon compilation"
+	echo "-h|--help"
+	exit
+fi 
+
+# determine os
+platform=-1
+linux=0
+windows=1
+mac=2
+unamestr=`uname`
+echo "Detected OS is $unamestr"
+if [[ "$unamestr" == 'Linux' ]]; then
+   platform=$linux
+elif [[ "$unamestr" == 'MINGW32_NT-10.0-WOW' ]]; then
+   platform=$windows
+elif [[ "$unamestr" == 'MINGW64_NT-10.0' ]]; then
+   platform=$windows 
+else
+   echo "Unsupported OS"
+   exit
+fi
 
 # carefully remove previous builds
 mkdir -p bin lib resources
@@ -71,25 +115,7 @@ if [[ $STANDALONE == true ]]; then
 	find . -type f -not -name "*.class" -delete 
 	# remove any ghost directories
 	find . -type d -empty -delete
-fi
-
-# determine os
-platform=-1
-linux=0
-windows=1
-mac=2
-unamestr=`uname`
-echo "Detected OS is $unamestr"
-if [[ "$unamestr" == 'Linux' ]]; then
-   platform=$linux
-elif [[ "$unamestr" == 'MINGW32_NT-10.0-WOW' ]]; then
-   platform=$windows
-elif [[ "$unamestr" == 'MINGW64_NT-10.0' ]]; then
-   platform=$windows 
-else
-   echo "Unsupported OS"
-   exit
-fi
+fi 
 
 # build class_path
 path_seperator=( ":" ";" ":" ) 
@@ -100,7 +126,7 @@ do
 done
 
 # create Manifest
-echo "Main-Class: $PACKAGE.$NAME" > $MANIFEST
+echo "Main-Class: $TARGET" > $MANIFEST
 echo "Class-Path: ." >> $MANIFEST
 for req in "${require[@]}"
 do
@@ -114,7 +140,11 @@ javac -cp "$class_path" @sources -d . -Xlint:deprecation -Xlint:unchecked
 rm -f sources
 
 echo Packaging Jar
-jar cmf $MANIFEST $NAME.jar . ../resources 
+jar cmf $MANIFEST main.jar . ../resources 
 
-echo Running
-java -jar ./main.jar 
+if [[ $RUN == true ]]; then
+	echo Running
+	java -jar ./main.jar 
+else
+	echo Done
+fi
