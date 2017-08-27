@@ -110,11 +110,12 @@ public class Main {
 
 		//prevent additional instances of this app from running
 		try{
-			serverSocket = new ServerSocket(33133);
+			serverSocket = new ServerSocket(24156);
 		}catch(IOException e){
-			System.err.println("Could not listen on port: 33133");
+			System.err.println("Could not listen on port: 24156");
 			String msg =  "There is already an instance of Livebasketball running!";
 			System.err.println(msg);
+			JOptionPane.showMessageDialog(frm, msg); 
 			System.exit(0);
 		}
 
