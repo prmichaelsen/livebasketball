@@ -75,17 +75,6 @@ public class Main {
 				System.out.println("Quitting any existing drivers...");
 				if(driver != null){
 					driver.quit(); 
-				} else {
-					//kill any existing drivers
-					System.out.println("Killing any existing drivers...");
-					/*
-					try{
-						//Runtime.getRuntime().exec("taskkill /F /PID phantomjs.exe");
-					}catch(IOException e){
-						System.err.println("Could not kill headless drivers");
-						System.err.println(e);
-					} 
-					*/
 				}
 				System.out.println("Done.");
 				String msg =  "There was a non-fatal error in Flashscores Live Basketball. No user action is required as the application will resume normally. \n\nUncaught exception: \n" + ex ;
@@ -93,14 +82,6 @@ public class Main {
 				System.out.println("Exiting and restarting thread..."); 
 			}
 		};
-		//handle any init or clean up from prev instances
-		//Schedule a job for the event-dispatching thread:
-		//adding TrayIcon.
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				//createAndShowGUI();
-			}
-		});
 		//prevent additional instances of this app from running
 		try{
 			serverSocket = new ServerSocket(33533);
@@ -116,22 +97,8 @@ public class Main {
 				if(driver != null){
 					driver.quit(); 
 				}
-				//kill any existing drivers
-				//try{
-					//Runtime.getRuntime().exec("taskkill /F /PID phantomjs.exe");
-				//}catch(IOException e){
-					//System.err.println("Could not kill headless drivers");
-					//System.err.println(e);
-				//}
 			}
 		}));
-		//kill any existing drivers
-		//try{
-			//Runtime.getRuntime().exec("taskkill /F /PID phantomjs.exe");
-		//}catch(IOException e){
-			//System.err.println("Could not kill headless drivers");
-			//System.err.println(e);
-		//}
 
 		//config driver
 		String OS_name = System.getProperty("os.name");
@@ -162,7 +129,6 @@ public class Main {
 		}
 	} 
 
-
 	public class ScoreNotifier implements Runnable {
 		public void run(){
 			//start tcp websocket
@@ -191,8 +157,7 @@ public class Main {
 		} 
 	}
 
-	public class ScoreChecker implements Runnable {
-
+	public class ScoreChecker implements Runnable { 
 		public void run(){ 
 			//initialize program options
 			playSounds = true;
@@ -404,9 +369,7 @@ public class Main {
 				}catch(InterruptedException e2){};
 			}
 		} 
-	}
-
-
+	} 
 
 	public static League getLeague(WebElement table){ 
 		//read leagues from file
