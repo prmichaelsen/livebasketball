@@ -1,11 +1,46 @@
 #!bin/bash
 
-# mark package name here
-package="com.patrickmichaelsen.livebasketball"
-manifest="Manifest.mf"
+# program defaults
+STANDALONE=false
+PACKAGE="com.patrickmichaelsen.livebasketball"
+NAME="Main"
+LIBPATH="lib"
+MANIFEST="Manifest.mf"
+
+# get options
+while [[ $# -gt 0 ]]
+do
+	key="$1"
+
+	case $key in
+		-s|--standalone)
+			STANDALONE=true
+			shift # past argument
+			;;
+		-p|--package)
+			PACKAGE="$2"
+			shift # past argument
+			;;
+		-l|--lib)
+			LIBPATH="$2"
+			shift # past argument
+			;;
+		-n|--name)
+			NAME="$2"
+			shift # past argument
+			;;
+		--default)
+			DEFAULT=YES
+			;;
+		*)
+			# unknown option
+			;;
+esac
+shift # past argument or value
+done 
 
 # carefully remove previous builds
-mkdir -p bin lib
+mkdir -p bin lib resources
 cd bin
 find . -type f -name "*.class" -delete
 rm -f *.jar
@@ -16,7 +51,27 @@ find . -type d -empty -delete
 require=()
 while IFS=  read -r -d $'\0'; do
     require+=("$REPLY")
-done < <(find ../lib -name *.jar -print0) 
+done < <(find "../$LIBPATH" -name *.jar -print0) 
+
+# optional:
+# pack all libraries into this jra
+# to create a completely standalone
+# jar
+if [[ $STANDALONE == true ]]; then
+	for req in "${require[@]}"
+	do
+		# naively unpack the entire jar
+		echo "Unpacking $req..."
+		jar xf "$req" 
+	done
+	# delete any non-class files 
+	# if you need external files, 
+	# they belong in the resources folder
+	echo "Cleaning up..."
+	find . -type f -not -name "*.class" -delete 
+	# remove any ghost directories
+	find . -type d -empty -delete
+fi
 
 # determine os
 platform=-1
@@ -45,11 +100,11 @@ do
 done
 
 # create Manifest
-echo "Main-Class: $package.Main" > $manifest
-echo "Class-Path: ." >> $manifest
+echo "Main-Class: $PACKAGE.$NAME" > $MANIFEST
+echo "Class-Path: ." >> $MANIFEST
 for req in "${require[@]}"
 do
- echo "  $req" >> $manifest
+ echo "  $req" >> $MANIFEST
 done
 
 echo Compiling
@@ -59,7 +114,7 @@ javac -cp "$class_path" @sources -d . -Xlint:deprecation -Xlint:unchecked
 rm -f sources
 
 echo Packaging Jar
-jar cmf $manifest main.jar .
+jar cmf $MANIFEST $NAME.jar . ../resources 
 
 echo Running
 java -jar ./main.jar 
