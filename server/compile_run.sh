@@ -8,6 +8,11 @@ require+=("junit-4.12.jar")
 require+=("selenium-server-standalone-3.4.0.jar")
 require+=("gson-2.8.1.jar")
 
+# mark package name here
+package="com.patrickmichaelsen.livebasketball"
+
+mkdir -p bin lib
+
 # determine os
 platform=-1
 linux=0
@@ -18,6 +23,8 @@ echo "Detected OS is $unamestr"
 if [[ "$unamestr" == 'Linux' ]]; then
    platform=$linux
 elif [[ "$unamestr" == 'MINGW32_NT-10.0-WOW' ]]; then
+   platform=$windows
+elif [[ "$unamestr" == 'MINGW64_NT-10.0' ]]; then
    platform=$windows
 else
 	echo "Unsupported OS"
@@ -38,7 +45,7 @@ do
 	manifest_path="$manifest_path .$lib_path$req"
 done
 manifest="./bin/Manifest"
-echo "Main-Class: Main" > $manifest
+echo "Main-Class: $package.Main" > $manifest
 printf "Class-Path:" >> $manifest
 printf "$manifest_path" >> $manifest
 echo >> $manifest 
@@ -53,8 +60,7 @@ javac -cp "$class_path" *.java -d bin -Xlint:deprecation
 
 echo Packaging Jar
 cd bin
-jar cfm main.jar Manifest *.class 
+jar cmf Manifest main.jar .
 
 echo Running
-cd ../bin
 java -jar ./main.jar 

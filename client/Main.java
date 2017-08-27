@@ -178,7 +178,7 @@ public class Main {
 
 		public String getCountry(){ return country; }
 		public String getName(){ return name; }
-		public String getId(){ return (id != "" ) ? id : ( id = country + name ) ; }
+		public String getId(){ return id = country + name; }
 		public boolean getEnabled(){ return active; }
 
 		@Override
