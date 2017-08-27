@@ -4,6 +4,7 @@ mkdir bin
 
 lib_path="./lib/"
 # mark java dependencies here:
+require=()
 require+=("commons-lang3-3.5/*.jar") 
 require+=("commons-lang3-3.5/*.jar")
 require+=("*")
@@ -61,4 +62,4 @@ jar cfm main.jar Manifest @class
 
 echo Running 
 cd ..
-sh run.sh
+bash run.sh 
