@@ -1,5 +1,18 @@
 #!bin/bash
 
+HELPTEXT=`cat <<EOF 
+	This script will neatly package your java project.
+	Recommended Project Structure
+	.. compile_run.sh bin lib src
+	
+	Options:
+	-t|--target [string] the fully qualified name of the main class
+	-s|--standalone [flag] compile all dependencies into the final jar
+	-l|--lib [string] path to all libraries, defaults to lib
+	-r|--run [flag] run the program upon compilation
+	-h|--help
+EOF`
+
 # program defaults
 STANDALONE=false
 LIBPATH="lib"
@@ -52,16 +65,7 @@ if ! [[ $TARGET ]]; then
 fi
 
 if [[ $HELP == true ]]; then 
-	echo "This script will neatly package your java project."
-	echo "Recommended Project Structure"
-	echo ".. compile_run.sh bin lib src"
-	echo
-	echo "Options:"
-	echo "-t|--target [string] the fully qualified name of the main class"
-	echo "-s|--standalone [flag] compile all dependencies into the final jar"
-	echo "-l|--lib [string] path to all libraries, defaults to lib"
-	echo "-r|--run [flag] run the program upon compilation"
-	echo "-h|--help"
+	echo "$HELPTEXT"
 	exit
 fi 
 
