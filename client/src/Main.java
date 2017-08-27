@@ -68,22 +68,21 @@ import javax.swing.table.AbstractTableModel;
 
 public class Main {
 
-	//static Hashtable<String,Match> matches;
 	static BlockingQueue<Notification> notifications;
 	static Leagues leagues;
-	static JTable table;
-	static Toolkit tk;
-	static boolean playSounds;
-	static boolean displayPopups;
 	static ServerSocket serverSocket;
+	
+	static Toolkit tk;
+	static JTable table;
 	static JFrame frm;
-	static JTextArea matchesTextArea;
-	static int looking;
-
+	static JTextArea matchesTextArea; 
 	final static PopupMenu popup = new PopupMenu();
 	final static Image iconImage = createImage("icon.gif", "tray icon");
 	final static TrayIcon trayIcon = new TrayIcon(iconImage);
 	final static SystemTray tray = SystemTray.getSystemTray();
+
+	static boolean playSounds;
+	static boolean displayPopups;
 
 	public static void main(String args[]){ 
 		try{
@@ -157,59 +156,46 @@ public class Main {
 		client.start();
 	} 
 
-	public static class League implements Comparable<League>{
-		private String country;
-		private String name;
-		private String id;
-		private boolean active;
-
-		public League(){
-			country = "";
-			name = "";
-			id = "";
-			active = true; 
-		};
-
-		public void enable(){ this.active = true; };
-		public void disable(){ this.active = false; };
-
-		public void setCountry(String country){ this.country = country; };
-		public void setName(String name){ this.name = name; };
-		public void setId(String id){ this.id = id; };
-		public void setEnabled(boolean active){ this.active = active; };
-
-		public String getCountry(){ return country; }
-		public String getName(){ return name; }
-		public String getId(){ return id = country + name; }
-		public boolean getEnabled(){ return active; }
-
-		@Override
-		public int compareTo(League league){
-			int countryCompare = this.country.compareTo(league.country);
-			if(countryCompare == 0){
-				return this.name.compareTo(league.name);
+	public class Client implements Runnable {
+		public void run(){
+			//start tcp websocket
+			String msg = null;
+			notifications = new LinkedBlockingQueue<Notification>();
+			Server server = new Server("ec2-35-167-51-118.us-west-2.compute.amazonaws.com", 6789);
+			while(true){
+				server.connect();
+				while(server.isConnected()){ 
+					msg = server.readLine();
+					if(msg != null){
+						System.out.println("FROM SERVER: " + msg);
+						Gson lgson = new Gson(); 
+						Notification notification = lgson.fromJson(msg, Notification.class);  
+						if(notification != null){
+							notifications.offer(notification);
+						} 
+					}
+				}
+				server.close();
 			}
-			else{ 
-				return countryCompare;
-			}
-		}
-
-		@Override
-		public String toString(){
-			return this.getId();
-		}
+			//since the above is a json, we can use
+			//gson/json to get back our match objects
+			//exactly. Or, we can use a new object, for instance
+			//notification object, to just get pertintent info
+		} 
 	} 
 
-	public static class Leagues{ 
-		private Hashtable<String,League> leagues; 
-
-		public Leagues(){ 
-			leagues = new Hashtable<String,League>();
-		};
-
-		public Hashtable<String,League> getLeagues(){ return leagues; }
-		public void setLeagues(Hashtable<String,League> leagues){
-			this.leagues = leagues;
+	public class ScoreListener implements Runnable {
+		public void run(){ 
+			while(true){
+				if(notifications != null){
+					try{
+						Notification notification = notifications.take();
+						displayNotification(notification); 
+					} catch (InterruptedException e){
+						e.printStackTrace();
+					} 
+				} 
+			}
 		} 
 	}
 
@@ -447,54 +433,6 @@ public class Main {
 		}
 	}
 
-	public class Client implements Runnable {
-		public void run(){
-			//start tcp websocket
-			String msg = null;
-			notifications = new LinkedBlockingQueue<Notification>();
-			Server server = new Server("ec2-35-167-51-118.us-west-2.compute.amazonaws.com", 6789);
-			while(true){
-				server.connect();
-				while(server.isConnected()){ 
-					msg = server.readLine();
-					if(msg != null){
-						System.out.println("FROM SERVER: " + msg);
-						Gson lgson = new Gson(); 
-						Notification notification = lgson.fromJson(msg, Notification.class);  
-						if(notification != null){
-							notifications.offer(notification);
-						} 
-					}
-				}
-				server.close();
-			}
-			//since the above is a json, we can use
-			//gson/json to get back our match objects
-			//exactly. Or, we can use a new object, for instance
-			//notification object, to just get pertintent info
-
-			//clientSocket.close(); //we cannot close the socket bc of the for loop
-			//this needs fixing some day
-		} 
-	} 
-
-
-
-	public class ScoreListener implements Runnable {
-		public void run(){ 
-			while(true){
-				if(notifications != null){
-					try{
-						Notification notification = notifications.take();
-						displayNotification(notification); 
-					} catch (InterruptedException e){
-						e.printStackTrace();
-					} 
-				} 
-			}
-		} 
-	}
-
 	public static void displayNotification(Notification notification){
 		if(playSounds){
 			Thread beepThread = new Thread(new Runnable(){
@@ -519,23 +457,6 @@ public class Main {
 			popupThread.start();
 		} 
 	}
-
-	public class Notification{
-		private String matchName;
-		private String condition;
-
-		public Notification(){}
-
-		public void setMatchName(String matchName){ this.matchName = matchName; }
-		public void setCondition(String condition){ this.condition = condition; }
-
-		public String getCondition(String condition){ return condition; }
-		public String getMatchName(String matchName){ return matchName; } 
-
-		public String getMessage(){
-			return condition + ":\n" + matchName;
-		} 
-	} 
 
 	public static Leagues getLeagues() throws Exception {
 		HttpRequestFactory requestFactory =
@@ -569,13 +490,4 @@ public class Main {
 		System.out.println(response.getReturnData());
 		return response.getReturnData();
 	} 
-	
-	public class Response {
-		private String returnData;
-		public Response(String returnData){
-			this.returnData = returnData;
-		}
-		public String getReturnData(){return returnData;}
-		public void setReturnData(String returnData){this.returnData = returnData;}
-	}
 } 
