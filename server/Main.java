@@ -48,8 +48,8 @@ import java.net.URLEncoder;
 public class Main {
 
 	static WebDriver driver;
-	static WebElement tables;
 	static List<WebElement> rows;
+	static List<WebElement> tables;
 	static WebElement num2Field;
 	static WebElement submitBtn;
 	static Hashtable<String,Match> matches;
@@ -166,6 +166,7 @@ public class Main {
 		private List<Integer> homeScores;
 		private List<Integer> awayScores; 
 		private String key;
+		private String leagueId;
 		private String roundStatus;
 		private int time;
 		private boolean conditionOneMet;
@@ -173,8 +174,9 @@ public class Main {
 		private boolean potentialMatch;
 		private long lastUpdated;
 		
-		public Match(String key){
+		public Match(String key, String leagueId){
 			this.key = key;
+			this.leagueId = leagueId;
 			homeScores = new ArrayList<Integer>();
 			awayScores = new ArrayList<Integer>(); 
 			homeTeam = "";
@@ -201,6 +203,10 @@ public class Main {
 
 		public void setAwayTeam(String name){
 			this.awayTeam = name; 
+		}
+
+		public void setLeagueId(String leagueId){
+			this.leagueId = leagueId;
 		}
 
 		public void setRoundStatus(String status){
@@ -296,6 +302,14 @@ public class Main {
 			return false;
 		}
 
+		public boolean doesMeetConditionThree(){
+			League league = leagues.getLeagues().get(leagueId);
+			if(league == null){
+				return false;
+			}
+			return league.getEnabled();	
+		}
+
 		public String getMatchName(){
 			return homeTeam + " vs. " + awayTeam; 
 		}
@@ -323,21 +337,24 @@ public class Main {
 		public String toString(){
 			return 
 				((conditionOneMet | conditionTwoMet)? " * " : "") + 
-				//((potentialMatch & !(conditionOneMet || conditionTwoMet))? " + " : "") + 
 				this.getMatchName() + "\n" +
 				roundStatus + " - " + time + "'\n" +
 				homeTeam + ": " + homeScores + "\n" + 
-				awayTeam + ": " + awayScores + "\n"; 
+				awayTeam + ": " + awayScores + "\n" +
+				"League" + ": " + leagueId + "\n";
 		} 
 		
 		public long getLastUpdated(){ 
 			return lastUpdated;
 		}
 
+		public String getLeagueId(){ return leagueId; }
+
 		@Override
 		public int compareTo(Match match){ 
 			return (int) (this.lastUpdated - match.getLastUpdated());
 		}
+
 	} 
 
 	public class ScoreNotifier implements Runnable {
@@ -400,199 +417,174 @@ public class Main {
 
 				//set up common elements
 				try {
-					rows = driver.findElements(By.cssSelector(".fs-table>.table-main>."+sport+">tbody>tr."+stage));
+					tables = driver.findElements(By.cssSelector(".fs-table>.table-main>."+sport));
 				}
 				catch (NoSuchElementException e){ } 
 
-				//read leagues from file
-				Gson gson = new GsonBuilder().setPrettyPrinting().create(); 
-        try (Reader reader = new FileReader("../data/leagues.json")) { 
-					// Convert JSON to Java Object
-            leagues = gson.fromJson(reader, Leagues.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+				for(WebElement table : tables){
 
-				//update leagues
-				getLeagues();
-
-				//save leagues to file
-				try (FileWriter writer = new FileWriter("../data/leagues.json")) { 
-					gson.toJson(leagues, writer); 
-				} catch (IOException e) {
-					e.printStackTrace();
-				} 
-
-				//print saved leagues
-				if(leagues != null){
-					Enumeration leagues_e = leagues.getLeagues().elements(); 
-					while(leagues_e.hasMoreElements()){
-						League league = (League)leagues_e.nextElement();
-						System.out.println(league);
-					} 
-				} 
-
-				//get scores
-				for(WebElement web_el : rows){
-					boolean isHomeTeam = false;
-					boolean isAwayTeam = false;
-					String row_id = null;
-					try{ 
-						row_id = web_el.getAttribute("id");
+					//set up common elements
+					try {
+						rows = table.findElements(By.cssSelector("tbody>tr."+stage));
 					}
-					catch (StaleElementReferenceException e){ }
-					String match_id = null;
-					String team = null;
-					if(row_id != null){
-						team = row_id.substring(0,1); //first character indicates home/away team
-						match_id = row_id.substring(2); //remaining str is match id
-					}
-					if(team != null){
-						if(team.equals("g")){
-							isHomeTeam = true; isAwayTeam = false;
+					catch (NoSuchElementException e){ } 
+
+					League league = getLeague(table); 
+
+					System.out.println(league);
+
+					//get scores
+					for(WebElement web_el : rows){
+						boolean isHomeTeam = false;
+						boolean isAwayTeam = false;
+						String row_id = null;
+						try{ 
+							row_id = web_el.getAttribute("id");
 						}
-						else if (team.equals("x")){
-							isAwayTeam = true; isHomeTeam = false; 
+						catch (StaleElementReferenceException e){ }
+						String match_id = null;
+						String team = null;
+						if(row_id != null){
+							team = row_id.substring(0,1); //first character indicates home/away team
+							match_id = row_id.substring(2); //remaining str is match id
 						}
-					}
-					if(match_id != null){
-						Match match = matches.get(match_id);
-						if(match == null){
-							match = new Match(match_id);
-							matches.put(match_id, match); 
+						if(team != null){
+							if(team.equals("g")){
+								isHomeTeam = true; isAwayTeam = false;
+							}
+							else if (team.equals("x")){
+								isAwayTeam = true; isHomeTeam = false; 
+							}
 						}
-						match.setLastUpdated(System.currentTimeMillis());
-						WebElement homeTeamNameDOM = null;
-						WebElement awayTeamNameDOM = null;
-						WebElement roundStatusDOM = null;
-						String homeTeamName = null;
-						String awayTeamName = null;
-						String roundStatus = null;
-						if(isHomeTeam){
-							try{
-								roundStatusDOM = web_el.findElement(By.cssSelector("td.timer>span"));	
-								if(roundStatusDOM != null){ 
-									roundStatus = (roundStatusDOM.getAttribute("innerHTML"));
-									match.setRoundStatus(roundStatus);
+						if(match_id != null){
+							Match match = matches.get(match_id);
+							if(match == null){
+								match = new Match(match_id, league.getId());
+								matches.put(match_id, match); 
+							}
+							match.setLastUpdated(System.currentTimeMillis());
+							WebElement homeTeamNameDOM = null;
+							WebElement awayTeamNameDOM = null;
+							WebElement roundStatusDOM = null;
+							String homeTeamName = null;
+							String awayTeamName = null;
+							String roundStatus = null;
+							if(isHomeTeam){
+								try{
+									roundStatusDOM = web_el.findElement(By.cssSelector("td.timer>span"));	
+									if(roundStatusDOM != null){ 
+										roundStatus = (roundStatusDOM.getAttribute("innerHTML"));
+										match.setRoundStatus(roundStatus);
+									}
 								}
+								catch (NoSuchElementException e){ } 
+								catch (StaleElementReferenceException e){ }
 							}
-							catch (NoSuchElementException e){ } 
-							catch (StaleElementReferenceException e){ }
-						}
 
-						if(isHomeTeam){
-							try{
-								homeTeamNameDOM = web_el.findElement(By.cssSelector("td.team-home>span"));	
-								if(homeTeamNameDOM != null){ 
-									homeTeamName = (homeTeamNameDOM.getAttribute("innerHTML"));
-									match.setHomeTeam(homeTeamName);
+							if(isHomeTeam){
+								try{
+									homeTeamNameDOM = web_el.findElement(By.cssSelector("td.team-home>span"));	
+									if(homeTeamNameDOM != null){ 
+										homeTeamName = (homeTeamNameDOM.getAttribute("innerHTML"));
+										match.setHomeTeam(homeTeamName);
+									}
 								}
+								catch (NoSuchElementException e){ }
+								catch (StaleElementReferenceException e){ }
 							}
-							catch (NoSuchElementException e){ }
-							catch (StaleElementReferenceException e){ }
-						}
-						if(isAwayTeam){
-							try{ 
-								awayTeamNameDOM = web_el.findElement(By.cssSelector("td.team-away>span"));	
-								if(awayTeamNameDOM != null){ 
-									awayTeamName = (awayTeamNameDOM.getAttribute("innerHTML"));
-									match.setAwayTeam(awayTeamName);
+							if(isAwayTeam){
+								try{ 
+									awayTeamNameDOM = web_el.findElement(By.cssSelector("td.team-away>span"));	
+									if(awayTeamNameDOM != null){ 
+										awayTeamName = (awayTeamNameDOM.getAttribute("innerHTML"));
+										match.setAwayTeam(awayTeamName);
+									}
 								}
+								catch (NoSuchElementException e){ }
+								catch (StaleElementReferenceException e){ }
 							}
-							catch (NoSuchElementException e){ }
-							catch (StaleElementReferenceException e){ }
-						}
-						List<WebElement> scoreDOMs = new ArrayList<WebElement>();
-						List<Integer> scores = new ArrayList<Integer>(); 
-						if(isHomeTeam){
-							try{ 
-								scoreDOMs = web_el.findElements(By.cssSelector("td.part-bottom"));	
+							List<WebElement> scoreDOMs = new ArrayList<WebElement>();
+							List<Integer> scores = new ArrayList<Integer>(); 
+							if(isHomeTeam){
+								try{ 
+									scoreDOMs = web_el.findElements(By.cssSelector("td.part-bottom"));	
+								}
+								catch (NoSuchElementException e){ } 
 							}
-							catch (NoSuchElementException e){ } 
-						}
-						if(isAwayTeam){ 
-							try{ 
-								scoreDOMs =web_el.findElements(By.cssSelector("td.part-top"));	
-							}
-							catch (NoSuchElementException e){ }
-						} 
+							if(isAwayTeam){ 
+								try{ 
+									scoreDOMs =web_el.findElements(By.cssSelector("td.part-top"));	
+								}
+								catch (NoSuchElementException e){ }
+							} 
 
-						for(WebElement scoreTd : scoreDOMs ){
-							try{
-								int score = Integer.parseInt(scoreTd.getAttribute("innerHTML"));
-								scores.add(score); 
+							for(WebElement scoreTd : scoreDOMs ){
+								try{
+									int score = Integer.parseInt(scoreTd.getAttribute("innerHTML"));
+									scores.add(score); 
+								}
+								catch(NumberFormatException e){} 
+								catch (StaleElementReferenceException e){ }
 							}
-							catch(NumberFormatException e){} 
-							catch (StaleElementReferenceException e){ }
+							if(isHomeTeam){ 
+								match.setHomeScores(scores);
+							}else if(isAwayTeam){
+								match.setAwayScores(scores);
+							}
 						}
-						if(isHomeTeam){ 
-							match.setHomeScores(scores);
-						}else if(isAwayTeam){
-							match.setAwayScores(scores);
-						}
-					}
-				}	
+					}	
+				}
 				Enumeration e = matches.elements(); 
 				while(e.hasMoreElements()){
 					Match match = (Match)e.nextElement();
 					System.out.println(match); 
-					// send all match info to java client
-				  if(clients != null){
-						for(Client client : clients){
+					if(match.doesMeetConditionThree()){
+						if(match.doesMeetConditionOne() || match.doesMeetConditionTwo()){
+							System.out.println( "------\n------\n MATCH\n------\n------\n");
+							// send java client notifications
+							if(clients != null){
+								for(Client client : clients){
+									try{
+										Gson lgson = new Gson();
+										Notification notification = new Notification(match.getCondition(), match.getMatchName());
+										String msg = lgson.toJson(notification);
+										client.writeToClient(msg+"\n");
+									} catch (SocketException e2){
+										System.err.println("Client is no longer connected! You should find a way to remove this client from the list of connected clients");
+										e2.printStackTrace();
+									} catch (IOException e2){
+										e2.printStackTrace();
+									}
+								}
+							} 
+							//send mobile notifications
 							try{
-								Gson lgson = new Gson(); 
-								Notification notification = new Notification(match.getMatchName(), "Live");
-								String msg = lgson.toJson(notification);
-								client.writeToClient(msg+"\n"); 
-							} catch (SocketException e2){
-								System.err.println("Client is no longer connected! You should find a way to remove this client from the list of connected clients");
-								e2.printStackTrace();
-							} catch (IOException e2){
-								e2.printStackTrace();
-							}
-						}
-					}
-					if(match.doesMeetConditionOne() || match.doesMeetConditionTwo()){
-						System.out.println( "------\n------\n MATCH\n------\n------\n");
-						//send mobile notifications
-						try{
-							String s = null;
-							String[] cmd = new String[] {"python3", "push_notifications.py", match.getCondition(), match.getMatchName()};
-							Process p = Runtime.getRuntime().exec(cmd);
-							BufferedReader stdInput = new BufferedReader(new 
-									InputStreamReader(p.getInputStream()));
+								String s = null;
+								String[] cmd = new String[] {"python3", "push_notifications.py", match.getCondition(), match.getMatchName()};
+								Process p = Runtime.getRuntime().exec(cmd);
+								BufferedReader stdInput = new BufferedReader(new 
+										InputStreamReader(p.getInputStream()));
 
-							BufferedReader stdError = new BufferedReader(new 
-									InputStreamReader(p.getErrorStream()));
+								BufferedReader stdError = new BufferedReader(new 
+										InputStreamReader(p.getErrorStream()));
 
-							// read the output from the command
-							System.out.println("Here is the standard output of the command:\n");
-							while ((s = stdInput.readLine()) != null) {
-								System.out.println(s);
-							}
+								// read the output from the command
+								System.out.println("Here is the standard output of the command:\n");
+								while ((s = stdInput.readLine()) != null) {
+									System.out.println(s);
+								}
 
-							// read any errors from the attempted command
-							System.out.println("Here is the standard error of the command (if any):\n");
-							while ((s = stdError.readLine()) != null) {
-								System.out.println(s);
-							}
-							System.out.println(cmd);
-							System.out.println("Sent push notifications");
-						}catch(IOException er){
-							System.err.println("Could not send push notifications");
-							System.err.println(er);
-						} 
-						//send java client notifications
-						if(clients != null){
-							for(Client client : clients){
-								//try{
-									//Gson lgson = new Gson(); 
-									//String msg = lgson.toJson(match);  
-									//client.writeToClient(msg+"\n"); 
-								//} catch (IOException e2){
-									//e2.printStackTrace();
-								//}
-							}
+								// read any errors from the attempted command
+								System.out.println("Here is the standard error of the command (if any):\n");
+								while ((s = stdError.readLine()) != null) {
+									System.out.println(s);
+								}
+								System.out.println(cmd);
+								System.out.println("Sent push notifications");
+							}catch(IOException er){
+								System.err.println("Could not send push notifications");
+								System.err.println(er);
+							} 
 						}
 					}
 				}
@@ -626,6 +618,7 @@ public class Main {
 		public String getCountry(){ return country; }
 		public String getName(){ return name; }
 		public String getId(){ return id = country + name; }
+		public boolean getEnabled(){ return active; }
 
 		@Override
 		public int compareTo(League league){
@@ -644,11 +637,21 @@ public class Main {
 		}
 	}
 
-	public static void getLeagues(){ 
+	public static League getLeague(WebElement table){ 
+		//read leagues from file
+		Gson gson = new GsonBuilder().setPrettyPrinting().create(); 
+		try (Reader reader = new FileReader("../data/leagues.json")) { 
+			// Convert JSON to Java Object
+			leagues = gson.fromJson(reader, Leagues.class);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		List<WebElement> leaguesDOM = null;
+		League league = new Main().new League();
 
 		try {
-			leaguesDOM = driver.findElements(By.cssSelector("#fs > div > table > thead > tr > td.head_ab > span.country.left > span.name"));
+			leaguesDOM = table.findElements(By.cssSelector("thead > tr > td.head_ab > span.country.left > span.name"));
 		}
 		catch (NoSuchElementException e){ } 
 
@@ -657,7 +660,6 @@ public class Main {
 			for(WebElement leagueDOM : leaguesDOM){
 				WebElement countryDOM = null;
 				WebElement nameDOM = null;
-				League league = new Main().new League();
 				try{
 					countryDOM = leagueDOM.findElement(By.cssSelector("span.country_part"));
 					if(countryDOM != null){ 
@@ -678,11 +680,21 @@ public class Main {
 					League stored_league = leagues.getLeagues().get(league.getId());
 					if(stored_league == null){
 						leagues.getLeagues().put(league.getId(), league); 
-					}
+						//save leagues to file
+						try (FileWriter writer = new FileWriter("../data/leagues.json")) { 
+							gson.toJson(leagues, writer); 
+						} catch (IOException e) {
+							e.printStackTrace();
+						} 
+						return league;
+					} 
+					return stored_league;
+
 				} 
 			} 
 		} 
-	}
+		return league;
+	} 
 
 	public class Leagues{ 
 		private Hashtable<String,League> leagues; 

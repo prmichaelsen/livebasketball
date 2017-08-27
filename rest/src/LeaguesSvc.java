@@ -29,31 +29,24 @@ public class LeaguesSvc {
 		Leagues leagues = new Leagues();
 		//read leagues from file
 		Gson gson = new GsonBuilder().setPrettyPrinting().create(); 
-		try (Reader reader = new FileReader("../server/data/leagues.json")) { 
+		try (Reader reader = new FileReader("../../server/data/leagues.json")) { 
 			// Convert JSON to Java Object
 			leagues = gson.fromJson(reader, Leagues.class);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
-		//Response<Leagues> response = new Response<Leagues>();
-		//response.setReturnData(leagues);
 		return leagues;
 	}
 	
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response<String> postLeagues(League league) {
-		System.out.println("Output json server .... \n");
 		System.out.println(league);
 		Leagues leagues = new Leagues();
 
-		java.nio.file.Path currentRelativePath = java.nio.file.Paths.get("");
-		String s = currentRelativePath.toAbsolutePath().toString();
-		System.out.println("Current relative path is: " + s);
-
 		//read leagues from file
 		Gson gson = new GsonBuilder().setPrettyPrinting().create(); 
-		try (Reader reader = new FileReader("../server/data/leagues.json")) { 
+		try (Reader reader = new FileReader("../../server/data/leagues.json")) { 
 			// Convert JSON to Java Object
 			leagues = gson.fromJson(reader, Leagues.class);
 		} catch (IOException e) {
@@ -61,21 +54,21 @@ public class LeaguesSvc {
 		} 
 
 		//add or update new league
-		if(league.getId() != null){
+		if( league.getId() != null && !league.getId().equals("") ){
 			leagues.getLeagues().put(league.getId(), league); 
 		} 
+		else{
+			return new Response<String>("Could not update league settings because there was no valid league id");
+		}
 
 		//save leagues to file
-		try (FileWriter writer = new FileWriter("../server/data/leagues.json")) { 
+		try (FileWriter writer = new FileWriter("../../server/data/leagues.json")) { 
 			gson.toJson(leagues, writer); 
 		} catch (IOException e) {
 			e.printStackTrace(); 
 		} 
 
-		//print saved leagues
-		System.out.println(leagues);
-
-		return new Response<String>("Succesfully inserted league settings: " + league);
+		return new Response<String>("Succesfully updated league settings: " + league);
 	} 
 } 
 
