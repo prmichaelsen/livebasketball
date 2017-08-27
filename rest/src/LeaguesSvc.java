@@ -54,9 +54,12 @@ public class LeaguesSvc {
 		} 
 
 		//add or update new league
-		if(league.getId() != null){
+		if( league.getId() != null && !league.getId().equals("") ){
 			leagues.getLeagues().put(league.getId(), league); 
 		} 
+		else{
+			return new Response<String>("Could not update league settings because there was no valid league id");
+		}
 
 		//save leagues to file
 		try (FileWriter writer = new FileWriter("../../server/data/leagues.json")) { 

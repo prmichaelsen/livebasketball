@@ -26,7 +26,7 @@ public class League implements Comparable<League>{
 	public boolean getActive(){ return active; }
 	public String getCountry(){ return country; }
 	public String getName(){ return name; }
-	public String getId(){ return id = country + name; }
+	public String getId(){ return (id != "") ? id : country + name; }
 
 	@Override
 	public int compareTo(League league){
