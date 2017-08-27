@@ -1,12 +1,10 @@
 #!bin/bash
 
-lib_path="./lib/"
-# mark java dependencies here:
-require+=("client-combined-3.4.0-no-deps.jar")
-require+=("hamcrest-core-1.3.jar")
-require+=("junit-4.12.jar")
-require+=("selenium-server-standalone-3.4.0.jar")
-require+=("gson-2.8.1.jar")
+# get java dependencies
+require=()
+while IFS=  read -r -d $'\0'; do
+    require+=("$REPLY")
+done < <(find ./lib/ -name *.jar -print0) 
 
 # mark package name here
 package="com.patrickmichaelsen.livebasketball"
@@ -59,7 +57,7 @@ echo Compiling
 cd ..
 # get source files
 find -name "*.java" > sources
-javac -cp "$class_path" @sources -d bin -Xlint:deprecation 
+javac -cp "$class_path" @sources -d bin -Xlint:deprecation -Xlint:unchecked
 rm -f sources
 
 echo Packaging Jar

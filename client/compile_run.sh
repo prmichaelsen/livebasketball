@@ -6,6 +6,11 @@ while IFS=  read -r -d $'\0'; do
     require+=("$REPLY")
 done < <(find ./lib/ -name *.jar -print0) 
 
+# mark package name here
+package="com.patrickmichaelsen.livebasketball"
+
+mkdir -p bin lib
+
 # determine os
 platform=-1
 linux=0
@@ -29,7 +34,6 @@ path_seperator=( ":" ";" ":" )
 class_path=""
 for req in "${require[@]}"
 do
-	echo $req
 	class_path="$class_path${path_seperator[$platform]}$req"
 done
 
@@ -39,7 +43,7 @@ do
 	manifest_path="$manifest_path .$lib_path$req"
 done
 manifest="./bin/Manifest"
-echo "Main-Class: Main" > $manifest
+echo "Main-Class: $package.Main" > $manifest
 printf "Class-Path:" >> $manifest
 printf "$manifest_path" >> $manifest
 echo >> $manifest 
@@ -50,11 +54,14 @@ rm -f *.class
 
 echo Compiling
 cd ..
-javac -cp "$class_path" *.java -d bin -Xlint:deprecation 
+# get source files
+find -name "*.java" > sources
+javac -cp "$class_path" @sources -d bin -Xlint:deprecation -Xlint:unchecked
+rm -f sources
 
 echo Packaging Jar
 cd bin
-jar cfm main.jar Manifest *.class 
+jar cmf Manifest main.jar .
 
 echo Running
 cd ../bin
