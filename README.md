@@ -7,3 +7,4 @@ it should be noted that this codebase is beyond terrible and, while, functional,
 * technical debt
   * seperate classes out of main.java
   * integrate rest and scraper into one program
+  * reduce code duplication, possibly by creating a core module
