@@ -1,6 +1,10 @@
 package com.patrickmichaelsen.livebasketball;
 
 import com.google.gson.Gson;
+import java.io.File;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.FileOutputStream;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import java.awt.AWTException;
@@ -66,12 +70,15 @@ public class Main {
 	static String sport;
 	static String stage;
 
-	public static void main(String args[]){ 
-			//initialize program options
-			playSounds = true;
-			displayPopups = true;
-			sport = Constants.Sport.BASKETBALL;
-			stage = Constants.Stage.LIVE;
+	public static void main(String args[]){
+		//initialize program options
+		playSounds = true;
+		displayPopups = true;
+		sport = Constants.Sport.BASKETBALL;
+		stage = Constants.Stage.LIVE;
+
+		//load resources
+		exploadResource("push_notifications.py");
 
 		Thread.UncaughtExceptionHandler h = new Thread.UncaughtExceptionHandler() {
 			public void uncaughtException(Thread th, Throwable ex) {
@@ -115,6 +122,7 @@ public class Main {
 		}else if(OS_name.startsWith("Linux")){
 			driver_path = "phantomjs"; 
 		}
+		exploadResource(driver_path);
 		File file = new File(driver_path);
 		System.setProperty("phantomjs.binary.path", file.getAbsolutePath());
 
@@ -434,6 +442,24 @@ public class Main {
 			}else if(isAwayTeam){
 				match.setAwayScores(scores);
 			}
+		}
+	}
+
+	// voodoo magic
+	// extracts the file located at path
+	// from the jar and places it in
+	// the working directory
+	public static void exploadResource(String path){
+		try{
+			OutputStream out = new FileOutputStream(new File(path));
+			InputStream in = Main.class.getClassLoader().getResourceAsStream(path);
+			byte[] buffer = new byte[1024*100];
+			int len;
+			while ((len = in.read(buffer)) != -1) {
+				out.write(buffer, 0, len);
+			}
+		} catch (Exception e){
+			e.printStackTrace();
 		}
 	}
 }
