@@ -1,5 +1,10 @@
 package com.patrickmichaelsen.livebasketball;
 
+import java.util.Set;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.Path;
+import java.nio.file.attribute.PosixFilePermission;
 import com.google.gson.Gson;
 import java.io.File;
 import java.io.InputStream;
@@ -78,7 +83,7 @@ public class Main {
 		stage = Constants.Stage.LIVE;
 
 		//load resources
-		exploadResource("push_notifications.py");
+		explodeExecutableResource("push_notifications.py");
 
 		Thread.UncaughtExceptionHandler h = new Thread.UncaughtExceptionHandler() {
 			public void uncaughtException(Thread th, Throwable ex) {
@@ -122,7 +127,7 @@ public class Main {
 		}else if(OS_name.startsWith("Linux")){
 			driver_path = "phantomjs"; 
 		}
-		exploadResource(driver_path);
+		explodeExecutableResource(driver_path);
 		File file = new File(driver_path);
 		System.setProperty("phantomjs.binary.path", file.getAbsolutePath());
 
@@ -449,7 +454,8 @@ public class Main {
 	// extracts the file located at path
 	// from the jar and places it in
 	// the working directory
-	public static void exploadResource(String path){
+	// and makes it executable
+	public static void explodeExecutableResource(String path){
 		try{
 			OutputStream out = new FileOutputStream(new File(path));
 			InputStream in = Main.class.getClassLoader().getResourceAsStream(path);
@@ -458,6 +464,12 @@ public class Main {
 			while ((len = in.read(buffer)) != -1) {
 				out.write(buffer, 0, len);
 			}
+			Path path_ = Paths.get(path);
+			Set<PosixFilePermission> permissions = Files.getPosixFilePermissions(path_);
+			permissions.add(PosixFilePermission.GROUP_EXECUTE);
+			permissions.add(PosixFilePermission.OWNER_EXECUTE);
+			permissions.add(PosixFilePermission.OTHERS_EXECUTE);
+			Files.setPosixFilePermissions(path_, permissions);
 		} catch (Exception e){
 			e.printStackTrace();
 		}

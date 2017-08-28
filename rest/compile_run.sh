@@ -101,26 +101,6 @@ while IFS=  read -r -d $'\0'; do
     require+=("$REPLY")
 done < <(find "../$LIBPATH" -name *.jar -print0) 
 
-# optional:
-# pack all libraries into this jra
-# to create a completely standalone
-# jar
-if [[ $STANDALONE == true ]]; then
-	for req in "${require[@]}"
-	do
-		# naively unpack the entire jar
-		echo "Unpacking $req..."
-		jar xf "$req" 
-	done
-	# delete any non-class files 
-	# if you need external files, 
-	# they belong in the resources folder
-	echo "Cleaning up..."
-	find . -type f -not -name "*.class" -delete 
-	# remove any ghost directories
-	find . -type d -empty -delete
-fi 
-
 # build class_path
 path_seperator=( ":" ";" ":" ) 
 class_path="."
@@ -142,6 +122,26 @@ echo Compiling
 find .. -name "*.java" > sources
 javac -cp "$class_path" @sources -d . -Xlint:deprecation -Xlint:unchecked
 rm -f sources
+
+# optional:
+# pack all libraries into this jra
+# to create a completely standalone
+# jar
+if [[ $STANDALONE == true ]]; then
+	for req in "${require[@]}"
+	do
+		# naively unpack the entire jar
+		echo "Unpacking $req..."
+		jar xf "$req" 
+	done
+	# delete any non-class files 
+	# if you need external files, 
+	# they belong in the resources folder
+	echo "Cleaning up..."
+	find . -type f ! \( -name "*.class" -o -name "$MANIFEST" \) -delete 
+	# remove any ghost directories
+	find . -type d -empty -delete
+fi 
 
 echo Packaging Jar
 jar cmf $MANIFEST main.jar . ../resources 
