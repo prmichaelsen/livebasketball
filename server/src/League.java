@@ -10,7 +10,7 @@ public class League implements Comparable<League>{
 		country = "";
 		name = "";
 		id = "";
-		active = true; 
+		active = false; 
 	};
 
 	public void enable(){ this.active = true; };

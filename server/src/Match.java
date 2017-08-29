@@ -8,7 +8,7 @@ public class Match implements Comparable<Match>{
 	private String awayTeam;
 	private List<Integer> homeScores;
 	private List<Integer> awayScores; 
-	private String key;
+	private String id;
 	private String leagueId;
 	private String roundStatus;
 	private int time;
@@ -17,8 +17,8 @@ public class Match implements Comparable<Match>{
 	private boolean potentialMatch;
 	private long lastUpdated;
 
-	public Match(String key, String leagueId){
-		this.key = key;
+	public Match(String id, String leagueId){
+		this.id = id;
 		this.leagueId = leagueId;
 		homeScores = new ArrayList<Integer>();
 		awayScores = new ArrayList<Integer>(); 
@@ -31,6 +31,8 @@ public class Match implements Comparable<Match>{
 		potentialMatch = true;
 		lastUpdated = 0;
 	}
+
+	public void setId(String id){ this.id = id; }
 
 	public void setHomeScores(List<Integer> scores){
 		this.homeScores = scores; 
@@ -92,6 +94,17 @@ public class Match implements Comparable<Match>{
 	public void setLastUpdated(long timeInMillis){
 		this.lastUpdated = timeInMillis;
 	} 
+
+	public String getHomeTeam(){ return homeTeam; }
+	public String getAwayTeam(){ return awayTeam; }
+
+	public long getLastUpdated(){ 
+		return lastUpdated;
+	}
+
+	public String getId(){ return id; }
+
+	public String getLeagueId(){ return leagueId; }
 
 	public boolean doesMeetConditionOne(){
 		boolean hasPositive = false;
@@ -179,11 +192,6 @@ public class Match implements Comparable<Match>{
 			"League" + ": " + leagueId + "\n";
 	} 
 
-	public long getLastUpdated(){ 
-		return lastUpdated;
-	}
-
-	public String getLeagueId(){ return leagueId; }
 
 	@Override
 	public int compareTo(Match match){ 

@@ -13,4 +13,14 @@ public class Leagues{
 	public void setLeagues(Hashtable<String,League> leagues){
 		this.leagues = leagues;
 	} 
+
+	public League get(String leagueId){ 
+		return leagues.get(leagueId);
+	}
+	public League add(League league){ 
+		return leagues.put(league.getId(), league); 
+	}
+	public boolean containsLeague(League league){
+		return leagues.contains(league.getId());
+	}
 }
