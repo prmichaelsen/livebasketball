@@ -227,14 +227,14 @@ public class Main {
 						Match match = getMatch(row, league, matches);
 						matches.put(match.getId(), match);
 					}	
+				}
 
-					//save leagues to file
-					Gson gson = new GsonBuilder().setPrettyPrinting().create(); 
-					try (FileWriter writer = new FileWriter("../data/leagues.json")) { 
-						gson.toJson(leagues, writer); 
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+				//save leagues to file
+				Gson gson = new GsonBuilder().setPrettyPrinting().create(); 
+				try (FileWriter writer = new FileWriter("../data/leagues.json")) { 
+					gson.toJson(leagues, writer); 
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
 				
 				//send out notifications
