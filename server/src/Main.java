@@ -168,7 +168,6 @@ public class Main {
 			while(true){ 
 				Client client = new Client(welcomeSocket);
 				try{
-					System.out.println("Waiting for new connection...");
 					if(client.waitForConnection()){
 						System.out.println("New client connected to server!");
 						clients.add(client); 
@@ -376,8 +375,10 @@ public class Main {
 		} 
 
 		//check to see if league is saved
-		if(leagues.containsLeague(league)){
-			return leagues.get(league.getId());
+		if(leagues != null){
+			if(leagues.containsLeague(league)){
+				return leagues.get(league.getId());
+			}
 		}
 
 		//otherwise return new league
