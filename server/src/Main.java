@@ -1,5 +1,11 @@
 package com.patrickmichaelsen.livebasketball;
 
+import java.text.DateFormat;
+import java.util.Locale;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.TimeZone;
+import java.util.Calendar; 
 import java.util.Set;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -196,6 +202,33 @@ public class Main {
 
 			//matches are initialized once
 			Hashtable<String,Match> matches = new Hashtable<String,Match>();	
+			
+			//set the timezone
+			WebElement tzDropdownDOM = null;
+			try{
+				tzDropdownDOM = driver.findElement(By.cssSelector("#tzactual"));
+				if(tzDropdownDOM != null){ 
+					tzDropdownDOM.click();
+				}
+			}
+			catch(NoSuchElementException e){}
+			catch(StaleElementReferenceException e){}
+			try{
+				TimeUnit.SECONDS.sleep(3); 
+			}catch(InterruptedException e2){};
+			WebElement tzDOM = null;
+			try{
+				tzDOM = driver.findElement(By.cssSelector("#tzcontent > li:nth-child(13) > a"));
+				if(tzDOM != null){ 
+					tzDOM.click();
+				}
+			}
+			catch(NoSuchElementException e){}
+			catch(StaleElementReferenceException e){}
+
+			//timestamp league last forever
+			League timestamp = new League();
+
 			while(true){
 				//leagues are intialized every loop
 				Leagues leagues = new Leagues();	
@@ -229,8 +262,36 @@ public class Main {
 					}	
 				}
 
+				//get timestamp league from file if it exists
+				Leagues l = null;
+				Gson gson = new Gson();
+				try (Reader reader = new FileReader("../data/leagues.json")) { 
+					// Convert JSON to Java Object
+					l = (Leagues) gson.fromJson(reader, Leagues.class);
+				} catch (IOException e) { 
+					e.printStackTrace();
+				} 
+				Iterator<League> it1 = l.getLeagues().values().iterator();	
+				while(it1.hasNext()){
+					League league = it1.next();
+					if(league.getId().indexOf('#') != -1){
+						timestamp = league;
+						it1.remove();
+					}
+					//last ditch effort to update leagues
+					if(leagues.get(league.getId()) != null){
+						leagues.get(league.getId()).setEnabled(league.getEnabled());
+					}
+				}
+				timestamp.setCountry("# Select All (Last Updated): ");
+				TimeZone tz = java.util.TimeZone.getTimeZone("Europe/Warsaw");
+				Calendar c = java.util.Calendar.getInstance(tz);
+				c.setTimeZone(tz);
+				timestamp.setName(c.get(Calendar.DAY_OF_MONTH)+" "+c.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + " " + c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE));
+				timestamp.setId(timestamp.getCountry()+timestamp.getName());
+				leagues.add(timestamp); 
+
 				//save leagues to file
-				Gson gson = new GsonBuilder().setPrettyPrinting().create(); 
 				try (FileWriter writer = new FileWriter("../data/leagues.json")) { 
 					gson.toJson(leagues, writer); 
 				} catch (IOException e) {

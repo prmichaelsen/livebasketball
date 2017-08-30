@@ -18,6 +18,8 @@ public class League implements Comparable<League>{
 
 	public void setCountry(String country){ this.country = country; };
 	public void setName(String name){ this.name = name; };
+	public void setId(String id){ this.id = id; }
+	public void setEnabled(boolean active){ this.active = active; }
 
 	public String getCountry(){ return country; }
 	public String getName(){ return name; }

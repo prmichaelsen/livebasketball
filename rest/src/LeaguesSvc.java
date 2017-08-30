@@ -1,24 +1,22 @@
 package rest;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import dto.League;
+import dto.Leagues;
+import dto.Response;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader; 
+import java.io.Reader; 
+import java.util.Iterator; 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-
-import dto.Response;
-import dto.Leagues;
-import dto.League;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader; 
-import java.io.Reader; 
 
 @Path("/leagues")
 public class LeaguesSvc {
@@ -56,10 +54,29 @@ public class LeaguesSvc {
 		//add or update new league
 		if( league.getId() != null && !league.getId().equals("") ){
 			leagues.getLeagues().put(league.getId(), league); 
+			if( league.getId().indexOf('#') != -1 ){
+				boolean active = league.getActive();
+				Iterator<League> it = leagues.getLeagues().values().iterator();	
+				while(it.hasNext()){ 
+					it.next().setActive(active);		
+				}
+				//save leagues to file
+				try (FileWriter writer = new FileWriter("../../server/data/leagues.json")) { 
+					gson.toJson(leagues, writer); 
+				} catch (IOException e) {
+					e.printStackTrace(); 
+				} 
+				if(active){ 
+					return new Response<String>("Succesfully enabled notifications for all leagues");
+				}
+				else{ 
+					return new Response<String>("Succesfully disabled notifications for all leagues");
+				}
+			}
 		} 
 		else{
 			return new Response<String>("Could not update league settings because there was no valid league id");
-		}
+		} 
 
 		//save leagues to file
 		try (FileWriter writer = new FileWriter("../../server/data/leagues.json")) { 

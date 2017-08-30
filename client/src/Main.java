@@ -86,6 +86,9 @@ public class Main {
 	static boolean playSounds;
 	static boolean displayPopups;
 
+	final static String HOST = System.getenv("HOST");
+	final static String URI = System.getenv("URI");
+
 	public static void main(String args[]){ 
 		try{
 			getLeagues();
@@ -163,7 +166,7 @@ public class Main {
 			//start tcp websocket
 			String msg = null;
 			notifications = new LinkedBlockingQueue<Notification>();
-			Server server = new Server("ec2-35-167-51-118.us-west-2.compute.amazonaws.com", 6789);
+			Server server = new Server(HOST, 6789);
 			while(true){
 				server.connect();
 				while(server.isConnected()){ 
@@ -475,7 +478,7 @@ public class Main {
 					request.setParser(new JsonObjectParser(new GsonFactory()));
 				}
 			});
-		GenericUrl url = new GenericUrl("http://ec2-35-167-51-118.us-west-2.compute.amazonaws.com/livebasketball/leagues");
+		GenericUrl url = new GenericUrl(URI+"/livebasketball/leagues");
 		HttpRequest request = requestFactory.buildGetRequest(url);
 		Leagues leagues = new Gson().fromJson(request.execute().parseAsString(), Leagues.class);
 		if(leagues != null){
@@ -493,7 +496,7 @@ public class Main {
 					request.setParser(new JsonObjectParser(new GsonFactory()));
 				}
 			});
-		GenericUrl url = new GenericUrl("http://ec2-35-167-51-118.us-west-2.compute.amazonaws.com/livebasketball/leagues");
+		GenericUrl url = new GenericUrl(URI+"/livebasketball/leagues");
 		HttpRequest request = requestFactory.buildPostRequest(url, ByteArrayContent.fromString("application/json", requestBody));
 		Response response = new Gson().fromJson(request.execute().parseAsString(), Response.class);
 		System.out.println(response.getReturnData());
