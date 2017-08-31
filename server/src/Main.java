@@ -287,7 +287,7 @@ public class Main {
 				TimeZone tz = java.util.TimeZone.getTimeZone("Europe/Warsaw");
 				Calendar c = java.util.Calendar.getInstance(tz);
 				c.setTimeZone(tz);
-				timestamp.setName("(Last Updated: " + c.get(Calendar.DAY_OF_MONTH)+" "+c.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + " " + c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE)+")");
+				timestamp.setName("(Last Updated: " + c.get(Calendar.DAY_OF_MONTH)+" "+c.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + " " + c.get(Calendar.HOUR_OF_DAY)+":"+String.format("%1$02d",c.get(Calendar.MINUTE))+")");
 				timestamp.setId(timestamp.getCountry()+timestamp.getName());
 				leagues.add(timestamp); 
 
