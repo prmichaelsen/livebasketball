@@ -438,7 +438,7 @@ public class Main {
 					e.printStackTrace();
 				}
 				try{
-					TimeUnit.SECONDS.sleep(60);
+					TimeUnit.SECONDS.sleep(5);
 				} catch(InterruptedException e){
 					e.printStackTrace();
 				}; 
