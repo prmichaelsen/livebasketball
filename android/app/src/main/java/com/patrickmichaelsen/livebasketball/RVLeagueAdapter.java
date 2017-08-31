@@ -94,7 +94,7 @@ public class RVLeagueAdapter extends RecyclerView.Adapter<RVLeagueAdapter.League
                     }catch(Exception e){
                         Log.e("ERROR:",(e.getMessage() != null )? e.getMessage() : "Could not get error");
                     }
-                    String url ="http://ec2-34-211-119-222.us-west-2.compute.amazonaws.com/livebasketball/leagues";
+                    String url ="http://ec2-35-167-51-118.us-west-2.compute.amazonaws.com/livebasketball/leagues";
                     if(jsonObject == null){
                         Log.e("Error: ", "Could not parse JSON");
                         Toast.makeText(mContext, "Error saving selected league", Toast.LENGTH_SHORT).show();

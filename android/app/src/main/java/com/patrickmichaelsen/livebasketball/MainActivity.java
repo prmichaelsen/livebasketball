@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         this.startService(i);
 
         //String url ="http://10.0.2.2:8080/livebasketball/leagues";
-        String url ="http://ec2-34-211-119-222.us-west-2.compute.amazonaws.com/livebasketball/leagues";
+        String url ="http://ec2-35-167-51-118.us-west-2.compute.amazonaws.com/livebasketball/leagues";
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("REST", (error.getMessage() != null)? error.getMessage() : "Error not found");
+                Toast.makeText(getApplicationContext(), "Could not connect with server", Toast.LENGTH_LONG);
             }
 
         });
