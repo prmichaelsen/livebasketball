@@ -1,4 +1,4 @@
-package com.parm.server;
+package com.patrickmichaelsen.livebasketball;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -19,7 +19,7 @@ public class Main {
 		sh.setInitParameter("com.sun.jersey.config.property.packages", "rest");//Set the package where the services reside
 		sh.setInitParameter("com.sun.jersey.api.json.POJOMappingFeature", "true");
 
-		Server server = new Server(8080);
+		Server server = new Server(8081);
 		ServletContextHandler context = new ServletContextHandler(server, "/livebasketball", ServletContextHandler.SESSIONS);
 		context.addServlet(sh, "/*");
 		server.start();

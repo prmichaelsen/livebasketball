@@ -1,9 +1,5 @@
-package dto;
+package com.patrickmichaelsen.livebasketball;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
-@XmlRootElement
 public class League implements Comparable<League>{
 	private String country;
 	private String name;
@@ -22,13 +18,13 @@ public class League implements Comparable<League>{
 
 	public void setCountry(String country){ this.country = country; };
 	public void setName(String name){ this.name = name; };
-	public void setActive(boolean active){ this.active = active; }
-
-	public boolean getActive(){ return active; }
+	public void setId(String id){ this.id = id; };
+	public void setEnabled(boolean active){ this.active = active; };
 
 	public String getCountry(){ return country; }
 	public String getName(){ return name; }
-	public String getId(){ return (id != "") ? id : country + name; }
+	public String getId(){ return id = country + name; }
+	public boolean getEnabled(){ return active; }
 
 	@Override
 	public int compareTo(League league){
@@ -43,6 +39,6 @@ public class League implements Comparable<League>{
 
 	@Override
 	public String toString(){
-		return this.getId() + ": " + ((active)? "Enabled" : "Disabled");
+		return this.getId();
 	}
-}
+} 

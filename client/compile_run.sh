@@ -1,10 +1,73 @@
 #!bin/bash
 
-# get java dependencies
-require=()
-while IFS=  read -r -d $'\0'; do
-    require+=("$REPLY")
-done < <(find ./lib/ -name *.jar -print0) 
+HELPTEXT=`cat <<EOF 
+	This script will neatly package your java project.
+	Recommended Project Structure
+	.. compile_run.sh bin lib src
+	
+	Options:
+	-t|--target [string] the fully qualified name of the main class
+	-s|--standalone [flag] compile all dependencies into the final jar
+	-l|--lib [string] path to all libraries, defaults to lib
+	-r|--run [flag] run the program upon compilation
+	-h|--help
+EOF`
+
+# program defaults
+STANDALONE=false
+LIBPATH="lib"
+MANIFEST="Manifest.mf"
+HELP=false
+RUN=false
+
+# get options
+while [[ $# -gt 0 ]]
+do
+	key="$1"
+
+	case $key in
+		-t|--target)
+			TARGET=$2
+			shift # past argument
+			;;
+		-s|--standalone)
+			STANDALONE=true
+			;;
+		-p|--package)
+			PACKAGE="$2"
+			shift # past argument
+			;;
+		-l|--lib)
+			LIBPATH="$2"
+			shift # past argument
+			;;
+		-n|--name)
+			NAME="$2"
+			shift # past argument
+			;;
+		-r|--run)
+			RUN=true
+			;;
+		-h|--help)
+			HELP=true
+			;;
+		*)
+			# unknown option
+			;;
+esac
+shift # past argument or value
+done 
+
+if ! [[ $TARGET ]]; then
+	echo "Error: No target main class found"
+	echo 
+	HELP=true
+fi
+
+if [[ $HELP == true ]]; then 
+	echo "$HELPTEXT"
+	exit
+fi 
 
 # determine os
 platform=-1
@@ -24,38 +87,68 @@ else
    exit
 fi
 
+# carefully remove previous builds
+mkdir -p bin lib resources
+cd bin
+find . -type f -name "*.class" -delete
+rm -f *.jar
+rm -f "$manifest"
+find . -type d -empty -delete
+
+# get java dependencies
+require=()
+while IFS=  read -r -d $'\0'; do
+    require+=("$REPLY")
+done < <(find "../$LIBPATH" -name *.jar -print0) 
+
 # build class_path
 path_seperator=( ":" ";" ":" ) 
-class_path=""
+class_path="."
 for req in "${require[@]}"
 do
-	echo $req
 	class_path="$class_path${path_seperator[$platform]}$req"
 done
 
-# create Manifest.txt 
+# create Manifest
+echo "Main-Class: $TARGET" > $MANIFEST
+echo "Class-Path: ." >> $MANIFEST
 for req in "${require[@]}"
 do
-	manifest_path="$manifest_path .$lib_path$req"
+ echo "  $req" >> $MANIFEST
 done
-manifest="./bin/Manifest"
-echo "Main-Class: Main" > $manifest
-printf "Class-Path:" >> $manifest
-printf "$manifest_path" >> $manifest
-echo >> $manifest 
-
-cd bin
-rm -f *.jar
-rm -f *.class
 
 echo Compiling
-cd ..
-javac -cp "$class_path" *.java -d bin -Xlint:deprecation 
+# get source files
+find .. -name "*.java" > sources
+javac -cp "$class_path" @sources -d . -Xlint:deprecation -Xlint:unchecked
+rm -f sources
+
+# optional:
+# pack all libraries into this jra
+# to create a completely standalone
+# jar
+if [[ $STANDALONE == true ]]; then
+	for req in "${require[@]}"
+	do
+		# naively unpack the entire jar
+		echo "Unpacking $req..."
+		jar xf "$req" 
+	done
+	# delete any non-class files 
+	# if you need external files, 
+	# they belong in the resources folder
+	echo "Cleaning up..."
+	find . -type f ! \( -name "*.class" -o -name "$MANIFEST" \) -delete 
+	# remove any ghost directories
+	find . -type d -empty -delete
+fi 
 
 echo Packaging Jar
-cd bin
-jar cfm main.jar Manifest *.class 
+jar cmf $MANIFEST main.jar . ../resources 
 
-echo Running
-cd ../bin
-java -jar ./main.jar 
+if [[ $RUN == true ]]; then
+	echo Running
+	java -jar ./main.jar 
+else
+	echo Done
+fi

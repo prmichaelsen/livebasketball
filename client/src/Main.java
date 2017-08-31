@@ -1,3 +1,8 @@
+package com.patrickmichaelsen.livebasketball;
+
+import com.google.api.client.http.ByteArrayContent;
+import javax.imageio.ImageIO;
+import java.io.InputStream;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
@@ -65,17 +70,24 @@ import javax.swing.table.AbstractTableModel;
 
 public class Main {
 
-	//static Hashtable<String,Match> matches;
 	static BlockingQueue<Notification> notifications;
 	static Leagues leagues;
-	//static Server server;
+	static ServerSocket serverSocket;
+	
 	static Toolkit tk;
+	static JTable table;
+	static JFrame frm;
+	static JTextArea matchesTextArea; 
+	final static PopupMenu popup = new PopupMenu();
+	final static Image iconImage = createImage("icon.gif", "tray icon");
+	final static TrayIcon trayIcon = new TrayIcon(iconImage);
+	final static SystemTray tray = SystemTray.getSystemTray();
+
 	static boolean playSounds;
 	static boolean displayPopups;
-	static ServerSocket serverSocket;
-	static JFrame frm;
-	static JTextArea matchesTextArea;
-	static int looking;
+
+	final static String HOST = System.getenv("HOST");
+	final static String URI = System.getenv("URI");
 
 	public static void main(String args[]){ 
 		try{
@@ -104,30 +116,22 @@ public class Main {
 
 		//prevent additional instances of this app from running
 		try{
-			serverSocket = new ServerSocket(33133);
+			serverSocket = new ServerSocket(24156);
 		}catch(IOException e){
-			System.err.println("Could not listen on port: 33133");
+			System.err.println("Could not listen on port: 24156");
 			String msg =  "There is already an instance of Livebasketball running!";
 			System.err.println(msg);
+			JOptionPane.showMessageDialog(frm, msg); 
 			System.exit(0);
 		}
 
 		//add shutdown hook
 		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 			public void run() {
-				//add any program clean up here
-				
-
-				//TODO nice to have: should be removed from tray in the event of a
-				//non graceful exit
-				/*
-				try {
+				//add any program clean up here 
+				if(tray != null){ 
 					tray.remove(trayIcon);
-				} catch (AWTException e) {
-					System.out.println("TrayIcon could not be added.");
-					return;
-				} 
-				*/
+				}
 			}
 		}));
 
@@ -148,62 +152,55 @@ public class Main {
 		scoreListener.setUncaughtExceptionHandler(h);
 		scoreListener.start();
 
+		Thread refresher = new Thread(new Main().new Refresher(), "Livebasketball Refresher");
+		refresher.setUncaughtExceptionHandler(h);
+		refresher.start();
+
 		Thread client = new Thread(new Main().new Client(), "Livebasketball Client");
 		client.setUncaughtExceptionHandler(h);
 		client.start();
 	} 
 
-	public class League implements Comparable<League>{
-		private String country;
-		private String name;
-		private String id;
-		private boolean active;
-
-		public League(){
-			country = "";
-			name = "";
-			id = "";
-			active = true; 
-		};
-
-		public void enable(){ this.active = true; };
-		public void disable(){ this.active = false; };
-
-		public void setCountry(String country){ this.country = country; };
-		public void setName(String name){ this.name = name; };
-
-		public String getCountry(){ return country; }
-		public String getName(){ return name; }
-		public String getId(){ return id = country + name; }
-		public boolean getEnabled(){ return active; }
-
-		@Override
-		public int compareTo(League league){
-			int countryCompare = this.country.compareTo(league.country);
-			if(countryCompare == 0){
-				return this.name.compareTo(league.name);
+	public class Client implements Runnable {
+		public void run(){
+			//start tcp websocket
+			String msg = null;
+			notifications = new LinkedBlockingQueue<Notification>();
+			Server server = new Server(HOST, 6789);
+			while(true){
+				server.connect();
+				while(server.isConnected()){ 
+					msg = server.readLine();
+					if(msg != null){
+						System.out.println("FROM SERVER: " + msg);
+						Gson lgson = new Gson(); 
+						Notification notification = lgson.fromJson(msg, Notification.class);  
+						if(notification != null){
+							notifications.offer(notification);
+						} 
+					}
+				}
+				server.close();
 			}
-			else{ 
-				return countryCompare;
-			}
-		}
-
-		@Override
-		public String toString(){
-			return this.getId() + ": " + ((active)? "Enabled" : "Disabled");
-		}
+			//since the above is a json, we can use
+			//gson/json to get back our match objects
+			//exactly. Or, we can use a new object, for instance
+			//notification object, to just get pertintent info
+		} 
 	} 
 
-	public static class Leagues{ 
-		private Hashtable<String,League> leagues; 
-
-		public Leagues(){ 
-			leagues = new Hashtable<String,League>();
-		};
-
-		public Hashtable<String,League> getLeagues(){ return leagues; }
-		public void setLeagues(Hashtable<String,League> leagues){
-			this.leagues = leagues;
+	public class ScoreListener implements Runnable {
+		public void run(){ 
+			while(true){
+				if(notifications != null){
+					try{
+						Notification notification = notifications.take();
+						displayNotification(notification); 
+					} catch (InterruptedException e){
+						e.printStackTrace();
+					} 
+				} 
+			}
 		} 
 	}
 
@@ -213,10 +210,6 @@ public class Main {
 			System.out.println("SystemTray is not supported");
 			return;
 		}
-		final PopupMenu popup = new PopupMenu();
-		final Image iconImage = createImage("icon.gif", "tray icon");
-		final TrayIcon trayIcon = new TrayIcon(iconImage);
-		final SystemTray tray = SystemTray.getSystemTray();
 
 		// Create a popup menu components
 		CheckboxMenuItem cb1 = new CheckboxMenuItem("Display Popups", true);
@@ -274,29 +267,10 @@ public class Main {
 
 		frm = new JFrame("Livebasketball");
 		frm.setIconImage(iconImage);
-		String msg = "Starting Up...";
-		//matchesTextArea = new JTextArea(msg); 
-		//JScrollPane scrollPane = new JScrollPane(matchesTextArea);  
-		//matchesTextArea.setLineWrap(true);  
-		//matchesTextArea.setWrapStyleWord(true); 
-		//matchesTextArea.setEditable(false); 
-		//matchesTextArea.setMargin( new Insets(10,10,10,10) );
-		//scrollPane.setPreferredSize( new Dimension( 500, 300 ) );
-		//frm.getContentPane().add(scrollPane);
 		try{ 
 			//Create and set up the content pane.
-			JTable table = new JTable(new LeagueTableModel(getLeagues()));
-			table.getModel().addTableModelListener(new TableModelListener() { 
-				@Override
-				public void tableChanged(TableModelEvent e) {
-					if(e.getColumn() == 0 && e.getFirstRow()>-1){
-						System.out.println(
-								"Row : " + e.getFirstRow() +
-								" value :" + table.getValueAt(e.getFirstRow(), e.getColumn()));
-					}
-				}
-			});
-			//table.setPreferredScrollableViewportSize(new Dimension(500, 500));
+			table = new JTable(new LeagueTableModel(leagues = getLeagues()));
+			//table.getModel().			//table.setPreferredScrollableViewportSize(new Dimension(500, 500));
 			table.setFillsViewportHeight(true); 
 			//table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); 
 			table.getColumnModel().getColumn(0).setMaxWidth(20);
@@ -339,18 +313,37 @@ public class Main {
 
 		public LeagueTableModel(Leagues leagues){
 			Collection<League> collection = leagues.getLeagues().values();
-			List<League> list = new ArrayList(collection);
+			List<League> list = new ArrayList<League>(collection);
 			Collections.sort(list); 
 			Object[][] array = new Object[list.size()][];
 			for (int i = 0; i < list.size(); i++) {
 				League league = list.get(i);
 				Object[] row = { 
 					league.getEnabled(),
-					league.getId()
+					league
 				};
 				array[i] = row;
 			}
 			data = array;
+			this.addTableModelListener(new TableModelListener() { 
+				@Override
+				public void tableChanged(TableModelEvent e) {
+					LeagueTableModel table = (LeagueTableModel) e.getSource();
+					if(e.getColumn() == 0 && e.getFirstRow()>-1){
+						System.out.println(
+								"Row : " + e.getFirstRow() +
+								" value :" + table.getValueAt(e.getFirstRow(), e.getColumn()));
+						boolean active = (boolean) table.getValueAt(e.getFirstRow(), 0);
+						League league = (League) table.getValueAt(e.getFirstRow(), 1);
+						league.setEnabled(active);
+						try{
+							postLeague(league);
+						} catch (Exception e2){
+							e2.printStackTrace();
+						}
+					}
+				}
+			}); 
 		}
 
 		public int getColumnCount() { return columnNames.length; } 
@@ -422,74 +415,34 @@ public class Main {
 
 	//Obtain the image URL
 	protected static Image createImage(String path, String description) {
-		return (new ImageIcon("icon.gif", description)).getImage();
+		InputStream stream = Main.class.getClassLoader().getResourceAsStream("resources/icons/"+path); 
+		Image image = null;
+		try{
+			image = new ImageIcon(ImageIO.read(stream), description).getImage(); 
+		} catch (IOException e){
+			e.printStackTrace();
+		}
+		return image;
 	} 
 
-	public class Client implements Runnable {
+	public class Refresher implements Runnable {
 		public void run(){
-			//start tcp websocket
-			String msg = null;
-			notifications = new LinkedBlockingQueue<Notification>();
-			BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
-			Socket clientSocket = null; 
-			try{
-				clientSocket = new Socket("ec2-34-213-227-13.us-west-2.compute.amazonaws.com", 6789);
-			System.out.println("connected!");
-			} catch ( UnknownHostException e){
-				e.printStackTrace();
-			} catch ( IOException e){
-				e.printStackTrace();
-			}
-			DataOutputStream outToServer = null;
-			BufferedReader inFromServer = null;
-			if(clientSocket != null){
-				try{
-					outToServer = new DataOutputStream(clientSocket.getOutputStream());
-					inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-				} catch ( IOException e){
-					e.printStackTrace();
-				} 
-			} 
-			while(true){ 
-				if(inFromServer != null){
-					try{
-						msg = inFromServer.readLine();
-					} catch ( IOException e){
-						e.printStackTrace();
-					}
-					if(msg != null){
-						System.out.println("FROM SERVER: " + msg);
-						Gson lgson = new Gson(); 
-						Notification notification = lgson.fromJson(msg, Notification.class);  
-						if(notification != null){
-							notifications.offer(notification);
-						} 
-					}
-				}
-			}
-			//since the above is a json, we can use
-			//gson/json to get back our match objects
-			//exactly. Or, we can use a new object, for instance
-			//notification object, to just get pertintent info
-
-			//clientSocket.close(); //we cannot close the socket bc of the for loop
-			//this needs fixing some day
-		} 
-	} 
-
-	public class ScoreListener implements Runnable {
-		public void run(){ 
 			while(true){
-				if(notifications != null){
-					try{
-						Notification notification = notifications.take();
-						displayNotification(notification); 
-					} catch (InterruptedException e){
-						e.printStackTrace();
-					} 
-				} 
+				try{
+					if(table != null){ 
+						table.setModel(new LeagueTableModel(getLeagues()));
+						table.getColumnModel().getColumn(0).setMaxWidth(20);
+					}
+				} catch (Exception e){
+					e.printStackTrace();
+				}
+				try{
+					TimeUnit.SECONDS.sleep(60);
+				} catch(InterruptedException e){
+					e.printStackTrace();
+				}; 
 			}
-		} 
+		}
 	}
 
 	public static void displayNotification(Notification notification){
@@ -517,23 +470,6 @@ public class Main {
 		} 
 	}
 
-	public class Notification{
-		private String matchName;
-		private String condition;
-
-		public Notification(){}
-
-		public void setMatchName(String matchName){ this.matchName = matchName; }
-		public void setCondition(String condition){ this.condition = condition; }
-
-		public String getCondition(String condition){ return condition; }
-		public String getMatchName(String matchName){ return matchName; } 
-
-		public String getMessage(){
-			return condition + ":\n" + matchName;
-		} 
-	} 
-
 	public static Leagues getLeagues() throws Exception {
 		HttpRequestFactory requestFactory =
 			new NetHttpTransport().createRequestFactory(new HttpRequestInitializer() {
@@ -542,13 +478,28 @@ public class Main {
 					request.setParser(new JsonObjectParser(new GsonFactory()));
 				}
 			});
-		GenericUrl url = new GenericUrl("http://ec2-34-211-119-222.us-west-2.compute.amazonaws.com/livebasketball/leagues");
+		GenericUrl url = new GenericUrl(URI+"/livebasketball/leagues");
 		HttpRequest request = requestFactory.buildGetRequest(url);
 		Leagues leagues = new Gson().fromJson(request.execute().parseAsString(), Leagues.class);
 		if(leagues != null){
-			System.out.println(leagues);
-			System.out.println(leagues.getLeagues());
+			System.out.println("GET leagues successful.");
 		}
 		return leagues;
+	} 
+
+	public static String postLeague(League league) throws Exception {
+		String requestBody = new Gson().toJson(league, League.class);
+		HttpRequestFactory requestFactory =
+			new NetHttpTransport().createRequestFactory(new HttpRequestInitializer() {
+				@Override
+				public void initialize(HttpRequest request) {
+					request.setParser(new JsonObjectParser(new GsonFactory()));
+				}
+			});
+		GenericUrl url = new GenericUrl(URI+"/livebasketball/leagues");
+		HttpRequest request = requestFactory.buildPostRequest(url, ByteArrayContent.fromString("application/json", requestBody));
+		Response response = new Gson().fromJson(request.execute().parseAsString(), Response.class);
+		System.out.println(response.getReturnData());
+		return response.getReturnData();
 	} 
 } 
