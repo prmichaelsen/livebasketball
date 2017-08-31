@@ -64,9 +64,11 @@ TARGET=com.patrickmichaelsen.livebasketball.Main
 if [[ $DEV == true ]]; then 
 	export URI="http://localhost:8081"
 	export HOST=localhost
+	export PORT=6789
 else
 	export URI="http://ec2-35-167-51-118.us-west-2.compute.amazonaws.com"
 	export HOST="ec2-35-167-51-118.us-west-2.compute.amazonaws.com"
+	export PORT=6789
 fi
 
 if [[ $HELP == true ]]; then 

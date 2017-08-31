@@ -88,6 +88,7 @@ public class Main {
 
 	final static String HOST = System.getenv("HOST");
 	final static String URI = System.getenv("URI");
+	final static int PORT = Integer.parseInt(System.getenv("PORT"));
 
 	public static void main(String args[]){ 
 		try{
@@ -166,7 +167,7 @@ public class Main {
 			//start tcp websocket
 			String msg = null;
 			notifications = new LinkedBlockingQueue<Notification>();
-			Server server = new Server(HOST, 6789);
+			Server server = new Server(HOST, PORT);
 			while(true){
 				server.connect();
 				while(server.isConnected()){ 
