@@ -271,25 +271,27 @@ public class Main {
 				} catch (IOException e) { 
 					e.printStackTrace();
 				} 
-				Iterator<League> it1 = l.getLeagues().values().iterator();	
-				while(it1.hasNext()){
-					League league = it1.next();
-					if(league.getId().indexOf('#') != -1){
-						timestamp = league;
-						it1.remove();
+				if(l != null){
+					Iterator<League> it1 = l.getLeagues().values().iterator();	
+					while(it1.hasNext()){
+						League league = it1.next();
+						if(league.getId().indexOf('#') != -1){
+							timestamp = league;
+							it1.remove();
+						}
+						//last ditch effort to update leagues
+						if(leagues.get(league.getId()) != null){
+							leagues.get(league.getId()).setEnabled(league.getEnabled());
+						}
 					}
-					//last ditch effort to update leagues
-					if(leagues.get(league.getId()) != null){
-						leagues.get(league.getId()).setEnabled(league.getEnabled());
-					}
+					timestamp.setCountry("# Select All ");
+					TimeZone tz = java.util.TimeZone.getTimeZone("Europe/Warsaw");
+					Calendar c = java.util.Calendar.getInstance(tz);
+					c.setTimeZone(tz);
+					timestamp.setName("(Last Updated: " + c.get(Calendar.DAY_OF_MONTH)+" "+c.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + " " + c.get(Calendar.HOUR_OF_DAY)+":"+String.format("%1$02d",c.get(Calendar.MINUTE))+")");
+					timestamp.setId(timestamp.getCountry()+timestamp.getName());
+					leagues.add(timestamp); 
 				}
-				timestamp.setCountry("# Select All ");
-				TimeZone tz = java.util.TimeZone.getTimeZone("Europe/Warsaw");
-				Calendar c = java.util.Calendar.getInstance(tz);
-				c.setTimeZone(tz);
-				timestamp.setName("(Last Updated: " + c.get(Calendar.DAY_OF_MONTH)+" "+c.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + " " + c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE)+")");
-				timestamp.setId(timestamp.getCountry()+timestamp.getName());
-				leagues.add(timestamp); 
 
 				//save leagues to file
 				try (FileWriter writer = new FileWriter("../data/leagues.json")) { 

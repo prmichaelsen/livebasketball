@@ -86,8 +86,9 @@ public class Main {
 	static boolean playSounds;
 	static boolean displayPopups;
 
-	final static String HOST = System.getenv("HOST");
-	final static String URI = System.getenv("URI");
+	final static String HOST = "ec2-35-167-51-118.us-west-2.compute.amazonaws.com";
+	final static String URI = "http://ec2-35-167-51-118.us-west-2.compute.amazonaws.com";
+	final static int PORT = 6789;
 
 	public static void main(String args[]){ 
 		try{
@@ -166,7 +167,7 @@ public class Main {
 			//start tcp websocket
 			String msg = null;
 			notifications = new LinkedBlockingQueue<Notification>();
-			Server server = new Server(HOST, 6789);
+			Server server = new Server(HOST, PORT);
 			while(true){
 				server.connect();
 				while(server.isConnected()){ 
@@ -437,7 +438,7 @@ public class Main {
 					e.printStackTrace();
 				}
 				try{
-					TimeUnit.SECONDS.sleep(60);
+					TimeUnit.SECONDS.sleep(1);
 				} catch(InterruptedException e){
 					e.printStackTrace();
 				}; 

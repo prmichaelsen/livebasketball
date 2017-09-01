@@ -1,15 +1,15 @@
 {
   "leagues": {
-    "PHILIPPINES: Governors Cup": {
-      "country": "PHILIPPINES: ",
-      "name": "Governors Cup",
-      "id": "PHILIPPINES: Governors Cup",
-      "active": true
-    },
-    "WORLD: Club Friendly": {
+    "WORLD: World Tour Debrecen 3x3": {
       "country": "WORLD: ",
-      "name": "Club Friendly",
-      "id": "WORLD: Club Friendly",
+      "name": "World Tour Debrecen 3x3",
+      "id": "WORLD: World Tour Debrecen 3x3",
+      "active": false
+    },
+    "# Select All (Last Updated: 31 Aug 6:00": {
+      "country": "# Select All ",
+      "name": "(Last Updated: 31 Aug 6:00",
+      "id": "# Select All (Last Updated: 31 Aug 6:00",
       "active": true
     },
     "WORLD: AmeriCup": {
@@ -18,16 +18,16 @@
       "id": "WORLD: AmeriCup",
       "active": true
     },
+    "EUROPE: EuroBasket": {
+      "country": "EUROPE: ",
+      "name": "EuroBasket",
+      "id": "EUROPE: EuroBasket",
+      "active": false
+    },
     "USA: WNBA": {
       "country": "USA: ",
       "name": "WNBA",
       "id": "USA: WNBA",
-      "active": true
-    },
-    "# Select All (Last Updated): 30 Aug 6:52": {
-      "country": "# Select All (Last Updated): ",
-      "name": "30 Aug 6:52",
-      "id": "# Select All (Last Updated): 30 Aug 6:52",
       "active": true
     }
   }
