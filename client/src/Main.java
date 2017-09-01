@@ -86,9 +86,9 @@ public class Main {
 	static boolean playSounds;
 	static boolean displayPopups;
 
-	final static String HOST = System.getenv("HOST");
-	final static String URI = System.getenv("URI");
-	final static int PORT = Integer.parseInt(System.getenv("PORT"));
+	final static String HOST = "ec2-35-167-51-118.us-west-2.compute.amazonaws.com";
+	final static String URI = "http://ec2-35-167-51-118.us-west-2.compute.amazonaws.com";
+	final static int PORT = 6789;
 
 	public static void main(String args[]){ 
 		try{
