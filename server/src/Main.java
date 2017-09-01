@@ -1,5 +1,6 @@
 package com.patrickmichaelsen.livebasketball;
 
+import java.time.LocalDateTime;
 import java.text.DateFormat;
 import java.util.Locale;
 import java.text.SimpleDateFormat;
@@ -204,12 +205,16 @@ public class Main {
 			driver.manage().timeouts().implicitlyWait(500, TimeUnit.MILLISECONDS);
 			//start driver
 			System.out.println("Initialized.");
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+			System.out.println(dtf.format(LocalDateTime.now()) + ": Driver starting...");
 			System.out.println("Running..."); 
-			while(true){
-				driver.get("http://www.flashscore.com/"+sport+"/");
 
-				//matches are initialized once
-				Hashtable<String,Match> matches = new Hashtable<String,Match>();	
+			//matches are initialized once
+			Hashtable<String,Match> matches = new Hashtable<String,Match>();	
+			//timestamp league last forever
+			League timestamp = new League();
+			while(true){
+				driver.get("http://www.flashscore.com/"+sport+"/"); 
 
 				//set the timezone
 				WebElement tzDropdownDOM = null;
@@ -226,17 +231,15 @@ public class Main {
 				}catch(InterruptedException e2){};
 				WebElement tzDOM = null;
 				try{
-					tzDOM = driver.findElement(By.cssSelector("#tzcontent > li:nth-child(13) > a"));
+					tzDOM = driver.findElement(By.cssSelector("#tzcontent > li:nth-child(14) > a"));
 					if(tzDOM != null){ 
 						tzDOM.click();
 					}
 				}
 				catch(NoSuchElementException e){}
-				catch(StaleElementReferenceException e){}
+				catch(StaleElementReferenceException e){} 
 
-				//timestamp league last forever
-				League timestamp = new League();
-
+				// 30 i = about five minutes
 				for(int i = 0; i < 30 ; i++){
 					//leagues are intialized every loop
 					Leagues leagues = new Leagues();	
@@ -336,7 +339,7 @@ public class Main {
 						TimeUnit.SECONDS.sleep(5); 
 					}catch(InterruptedException e2){};
 				}
-				System.out.println("Driver reseting...");
+				System.out.println(dtf.format(LocalDateTime.now()) + ": Driver resetting...");
 			} 
 		} 
 	}
