@@ -2,6 +2,8 @@ package com.patrickmichaelsen.livebasketball;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -25,13 +27,15 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import static com.patrickmichaelsen.livebasketball.R.id.rv;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Leagues leagues;
+    private static RVLeagueAdapter adapter;
+    private static List<League> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,36 +47,23 @@ public class MainActivity extends AppCompatActivity {
         Intent i = new Intent(this,RegistrationService.class);
         this.startService(i);
 
-        //String url ="http://10.0.2.2:8080/livebasketball/leagues";
-        String url ="http://ec2-35-167-51-118.us-west-2.compute.amazonaws.com/livebasketball/leagues";
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        // Display the first 500 characters of the response string.
-                        Gson gson = new Gson();
-                        leagues = gson.fromJson(response, Leagues.class);
-                        RecyclerView rv = (RecyclerView)findViewById(R.id.rv);
-                        LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
-                        rv.setLayoutManager(llm);
-                        Collection collection = leagues.getLeagues().values();
-                        List list = new ArrayList(collection);
-                        Collections.sort(list);
-                        RVLeagueAdapter adapter = new RVLeagueAdapter(list, getApplicationContext());
-                        rv.setAdapter(adapter);
-                        Log.e("REST", response.substring(0,500));
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("REST", (error.getMessage() != null)? error.getMessage() : "Error not found");
-                Toast.makeText(getApplicationContext(), "Could not connect with server", Toast.LENGTH_LONG);
-            }
+        list = new ArrayList<League>();
+        RecyclerView rv = (RecyclerView)findViewById(R.id.rv);
+        LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
+        rv.setLayoutManager(llm);
+        adapter = new RVLeagueAdapter(list, getApplicationContext());
+        rv.setAdapter(adapter);
+        getLeagues();
 
-        });
-        // Add the request to the RequestQueue.
-        ApplicationContext.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
+        final Handler handler = new Handler();
+        final int delay = 1000;
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getLeagues();
+                handler.postDelayed(this, delay);
+            }
+        }, delay);
 
         /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -84,6 +75,40 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         */
+    }
+
+    public void getLeagues(){
+        Log.e("TIME", String.valueOf(SystemClock.currentThreadTimeMillis()));
+        //String url ="http://10.0.2.2:8080/livebasketball/leagues";
+        String url ="http://ec2-35-167-51-118.us-west-2.compute.amazonaws.com/livebasketball/leagues";
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        parseResponse(response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("REST", (error.getMessage() != null)? error.getMessage() : "Error not found");
+                Toast.makeText(getApplicationContext(), "Could not connect with server", Toast.LENGTH_LONG);
+            }
+
+        });
+        // Add the request to the RequestQueue.
+        ApplicationContext.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
+    }
+
+    public void parseResponse(String response){
+        // Display the first 500 characters of the response string.
+        Gson gson = new Gson();
+        Leagues leagues = gson.fromJson(response, Leagues.class);
+        Collection<League> collection = leagues.getLeagues().values();
+        list = new ArrayList<League>(collection);
+        Collections.sort(list);
+        adapter.setDataSet(list);
+        Log.e("REST", response.substring(0,500));
     }
 
     @Override

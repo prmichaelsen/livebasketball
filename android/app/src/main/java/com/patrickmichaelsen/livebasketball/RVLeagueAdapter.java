@@ -1,6 +1,7 @@
 package com.patrickmichaelsen.livebasketball;
 
 import android.content.Context;
+import android.os.Handler;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -31,10 +32,27 @@ import java.util.List;
 public class RVLeagueAdapter extends RecyclerView.Adapter<RVLeagueAdapter.LeagueViewHolder> {
     List<League> leagues;
     Context mContext;
+    static boolean busy = false;
 
     RVLeagueAdapter(List<League> leagues, Context mContext){
         this.leagues = leagues;
         this.mContext = mContext;
+    }
+
+    public void setDataSet(List<League> data)
+    {
+        if(busy){
+            return;
+        }
+        if(data == null || data.size()==0) {
+            return;
+        }
+        if (leagues != null && leagues.size()>0) {
+            leagues.clear();
+        }
+        leagues.addAll(data);
+        notifyDataSetChanged();
+
     }
 
     @Override
@@ -62,6 +80,7 @@ public class RVLeagueAdapter extends RecyclerView.Adapter<RVLeagueAdapter.League
         return leagues.size();
     }
 
+
     public static class LeagueViewHolder extends RecyclerView.ViewHolder {
         League league;
         CardView cv;
@@ -78,11 +97,22 @@ public class RVLeagueAdapter extends RecyclerView.Adapter<RVLeagueAdapter.League
             leagueIsEnabledCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
                 @Override
                 public void onCheckedChanged(CompoundButton v, boolean isChecked) {
+                    busy = true;
+                    postLeague(v);
+                    new Handler().postDelayed(new Runnable(){
+                        @Override
+                        public void run() {
+                            busy = false;
+                        }
+                    },2000);
+                }
+
+                public void postLeague(CompoundButton v){
                     //android calls this method every time this view is rendered
                     //to prevent useless rest calls, make sure this
                     // was actually pressed, not just rendered
                     if(!v.isPressed()){
-                       return;
+                        return;
                     }
                     league.setEnabled(v.isChecked());
                     Log.i("CHECKBOX", String.format("checkbox onClick, name: %s%s, isSelected: %s, identityHashCode: %s", leagueCountry, leagueName, v.isChecked(), System.identityHashCode(leagueIsEnabledCheckbox)));
@@ -93,16 +123,16 @@ public class RVLeagueAdapter extends RecyclerView.Adapter<RVLeagueAdapter.League
                         jsonObject = new JSONObject(params);
                     }catch(Exception e){
                         Log.e("ERROR:",(e.getMessage() != null )? e.getMessage() : "Could not get error");
+                        Toast.makeText(mContext, "Error creating the request!", Toast.LENGTH_SHORT).show();
                     }
                     String url ="http://ec2-35-167-51-118.us-west-2.compute.amazonaws.com/livebasketball/leagues";
                     if(jsonObject == null){
                         Log.e("Error: ", "Could not parse JSON");
-                        Toast.makeText(mContext, "Error saving selected league", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, "Error saving selected league!", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     JsonObjectRequest jsObjRequest = new JsonObjectRequest
                             (Request.Method.POST, url, jsonObject, new Response.Listener<JSONObject>() {
-
                                 @Override
                                 public void onResponse(JSONObject response) {
                                     Log.i("REST:%n %s", response.toString());
@@ -112,19 +142,19 @@ public class RVLeagueAdapter extends RecyclerView.Adapter<RVLeagueAdapter.League
                                     Log.i("REST:%n %s", responseObj.toString());
                                 }
                             }, new Response.ErrorListener() {
-
                                 @Override
                                 public void onErrorResponse(VolleyError e) {
                                     Log.e("REST ERROR:",(e.getMessage() != null )? e.getMessage() : "Could not get error");
                                     Toast.makeText(mContext, "Server error saving selected league", Toast.LENGTH_SHORT).show();
                                 }
                             });
-
                     // Access the RequestQueue through your singleton class.
                     ApplicationContext.getInstance(mContext.getApplicationContext()).addToRequestQueue(jsObjRequest);
                 }
             });
+
         }
+
 
     }
 }
