@@ -86,10 +86,13 @@ public class Main {
 	static boolean playSounds;
 	static boolean displayPopups;
 
+	//PROD settings
 	final static String HOST = "ec2-35-167-51-118.us-west-2.compute.amazonaws.com";
 	final static String URI = "http://ec2-35-167-51-118.us-west-2.compute.amazonaws.com";
 	final static int PORT = 6789;
-	/* DEV setting
+
+	/* 
+	//DEV setting
 	final static String HOST = "localhost";
 	final static String URI = "http://localhost:8081";
 	final static int PORT = 6789;
