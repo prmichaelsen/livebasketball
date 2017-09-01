@@ -83,6 +83,7 @@ public class Main {
 	static boolean Windows, Linux, Mac = false;
 	static File push_notifications_py = null;
 	static NewClientListener newClientListener;
+	static ScoreChecker scoreChecker;
 
 	public static void main(String args[]){
 		//initialize program options
@@ -118,6 +119,9 @@ public class Main {
 				if(newClientListener != null){
 					newClientListener.stop();
 				}
+				if(scoreChecker != null){
+					scoreChecker.stop();
+				}
 				System.exit(1);
 			}
 		};
@@ -133,8 +137,18 @@ public class Main {
 		//add shutdown hook
 		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 			public void run() {
-				if(driver != null){
+				System.out.println("Shutting down!");
+				if(driver != null){ 
 					driver.quit(); 
+					//need to stop all threads
+					if(newClientListener != null){
+						newClientListener.stop();
+					}
+					if(scoreChecker != null){
+						scoreChecker.stop();
+					}
+					System.out.println("Main thread stopped!");
+					System.exit(1);
 				}
 			}
 		}));
@@ -157,7 +171,8 @@ public class Main {
 		Thread newClientListenerThread = new Thread(newClientListener, "Flashscores Live Basketball NewClientListener"); 
 		newClientListenerThread.start();
 
-		Thread scoreCheckerThread = new Thread(new Main().new ScoreChecker(), "Flashscores Live Basketball ScoreChecker"); 
+		scoreChecker = new Main().new ScoreChecker();
+		Thread scoreCheckerThread = new Thread(scoreChecker, "Flashscores Live Basketball ScoreChecker"); 
 		scoreCheckerThread.setUncaughtExceptionHandler(h);
 		scoreCheckerThread.start();
 	} 
@@ -178,7 +193,7 @@ public class Main {
 				e.printStackTrace();
 			}
 
-			while(run){ 
+			while(run && scoreChecker != null){ 
 				Client client = new Client(welcomeSocket);
 				try{
 					if(client.waitForConnection()){
@@ -189,6 +204,7 @@ public class Main {
 					e.printStackTrace();
 				} 
 			} 
+			System.out.println("Client thread stopped!");
 		}
 	} 
 	
@@ -197,6 +213,8 @@ public class Main {
 	// handles scraping of webpage and sends notifications
 	// to any registered clients
 	public class ScoreChecker implements Runnable { 
+		private volatile boolean run = true;
+		public void stop() { run = false; }
 		public void run(){ 
 
 			//set up driver
@@ -213,7 +231,7 @@ public class Main {
 			Hashtable<String,Match> matches = new Hashtable<String,Match>();	
 			//timestamp league last forever
 			League timestamp = new League();
-			while(true){
+			while(run){
 				driver.get("http://www.flashscore.com/"+sport+"/"); 
 
 				//set the timezone
@@ -341,6 +359,7 @@ public class Main {
 				}
 				System.out.println(dtf.format(LocalDateTime.now()) + ": Driver resetting...");
 			} 
+			System.out.println("ScoreChecker thread stopped!");
 		} 
 	}
 
