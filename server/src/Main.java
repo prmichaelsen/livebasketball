@@ -82,8 +82,8 @@ public class Main {
 	static String stage;
 	static boolean Windows, Linux, Mac = false;
 	static File push_notifications_py = null;
-	static NewClientListener newClientListener;
 	static ScoreChecker scoreChecker;
+	static boolean run = true;
 
 	public static void main(String args[]){
 		//initialize program options
@@ -116,13 +116,12 @@ public class Main {
 				e.printStackTrace();
 				System.err.println("Exiting..."); 
 				//need to stop all threads
-				if(newClientListener != null){
-					newClientListener.stop();
-				}
 				if(scoreChecker != null){
 					scoreChecker.stop();
+					System.out.println("ScoreChecker stopped from exception handler!");
 				}
-				System.exit(1);
+				run = false;
+				System.exit(1); 
 			}
 		};
 		//prevent additional instances of this app from running
@@ -141,12 +140,11 @@ public class Main {
 				if(driver != null){ 
 					driver.quit(); 
 					//need to stop all threads
-					if(newClientListener != null){
-						newClientListener.stop();
-					}
 					if(scoreChecker != null){
 						scoreChecker.stop();
+						System.out.println("ScoreChecker stopped from shutdown hook!");
 					}
+					run = false;
 					System.out.println("Main thread stopped!");
 					System.exit(1);
 				}
@@ -164,57 +162,50 @@ public class Main {
 			driver_path = "phantomjs"; 
 		}
 		File phantom_driver = explodeExecutableResource(driver_path);
-		System.setProperty("phantomjs.binary.path", phantom_driver.getAbsolutePath());
-
-		//start threads 
-		newClientListener = new Main().new NewClientListener();
-		Thread newClientListenerThread = new Thread(newClientListener, "Flashscores Live Basketball NewClientListener"); 
-		newClientListenerThread.start();
+		System.setProperty("phantomjs.binary.path", phantom_driver.getAbsolutePath()); 
 
 		scoreChecker = new Main().new ScoreChecker();
 		Thread scoreCheckerThread = new Thread(scoreChecker, "Flashscores Live Basketball ScoreChecker"); 
 		scoreCheckerThread.setUncaughtExceptionHandler(h);
 		scoreCheckerThread.start();
-	} 
 
-	// listens for new connections
-	public class NewClientListener implements Runnable {
-		private volatile boolean run = true;
-		public void stop() { run = false; }
-		public void run(){
-			//start tcp websocket
-			String clientSentence;
-			String capitalizedSentence;
-			ServerSocket welcomeSocket = null;
-			clients = new ArrayList<Client>();
+		//start tcp websocket
+		String clientSentence;
+		String capitalizedSentence;
+		ServerSocket welcomeSocket = null;
+		clients = new ArrayList<Client>();
+		try{
+			welcomeSocket = new ServerSocket(6789);
+		} catch (IOException e){
+			e.printStackTrace();
+		}
+
+		while(run){ 
+			Client client = new Client(welcomeSocket);
 			try{
-				welcomeSocket = new ServerSocket(6789);
-			} catch (IOException e){
+				if(client.waitForConnection()){
+					System.out.println("New client connected to server!");
+					clients.add(client); 
+				}
+			}catch(IOException e){
+				System.out.println("Client disconnected!");
 				e.printStackTrace();
-			}
-
-			while(run && scoreChecker != null){ 
-				Client client = new Client(welcomeSocket);
-				try{
-					if(client.waitForConnection()){
-						System.out.println("New client connected to server!");
-						clients.add(client); 
-					}
-				}catch(IOException e){
-					e.printStackTrace();
-				} 
 			} 
-			System.out.println("Client thread stopped!");
+		} 
+		System.out.println("Client thread stopped!");
+
+		if(scoreChecker != null){
+			scoreChecker.stop();
+			System.out.println("Scorechecker thread stopped!"); 
 		}
 	} 
-	
 
 	// essentially the main class for this program
 	// handles scraping of webpage and sends notifications
 	// to any registered clients
 	public class ScoreChecker implements Runnable { 
 		private volatile boolean run = true;
-		public void stop() { run = false; }
+		public void stop() { this.run = false; }
 		public void run(){ 
 
 			//set up driver
@@ -231,7 +222,7 @@ public class Main {
 			Hashtable<String,Match> matches = new Hashtable<String,Match>();	
 			//timestamp league last forever
 			League timestamp = new League();
-			while(run){
+			while(this.run){
 				driver.get("http://www.flashscore.com/"+sport+"/"); 
 
 				//set the timezone

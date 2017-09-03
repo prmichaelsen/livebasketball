@@ -22,9 +22,9 @@ public class Server {
 
 	public void connect(){
 		try{
+			this.close();
 			clientSocket = new Socket(host, port);
 			isConnected = true;
-			System.out.println("Connected to TCP server!");
 		} catch ( UnknownHostException e){
 			e.printStackTrace();
 		} catch ( IOException e){
@@ -34,10 +34,13 @@ public class Server {
 			try{
 				outToServer = new DataOutputStream(clientSocket.getOutputStream());
 				inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+				System.out.println("Connected to TCP server!");
 			} catch ( IOException e){
 				e.printStackTrace();
 			} 
-		} 
+		} else{
+				System.out.println("Could not connect to TCP server!"); 
+		}
 	}
 
 	public boolean isConnected(){ return isConnected; }
@@ -48,11 +51,9 @@ public class Server {
 			try{
 				line = inFromServer.readLine();
 			} catch ( IOException e ){
+				isConnected = false; 
 				e.printStackTrace(); 
 			}
-		}
-		if( line == null ){
-			isConnected = false; 
 		}
 		return line;
 	}
@@ -60,6 +61,7 @@ public class Server {
 	public void close(){
 		if(clientSocket != null){
 			try{
+				System.out.println("Closing connection...");
 				clientSocket.close();
 			} catch (IOException e){
 				e.printStackTrace();
