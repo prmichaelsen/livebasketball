@@ -13,7 +13,7 @@ public class League implements Comparable<League>{
 		enabled = false; 
 	};
 
-	public String hashId(){ return id = name + country; }
+	public String hashId(){ return id = country + name; }
 
 	public void setCountry(String country){ this.country = country; };
 	public void setName(String name){ this.name = name; };
