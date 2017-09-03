@@ -5,6 +5,10 @@ public class Notification{
 	private String condition;
 
 	public Notification(){}
+	public Notification( String matchName, String condition){
+		this.matchName = matchName;
+		this.condition = condition;
+	}
 
 	public void setMatchName(String matchName){ this.matchName = matchName; }
 	public void setCondition(String condition){ this.condition = condition; }
@@ -16,3 +20,5 @@ public class Notification{
 		return condition + ":\n" + matchName;
 	} 
 } 
+
+// Hey

@@ -13,12 +13,8 @@ public class Response<T> {
 		this.returnData = returnData;
 	}
 
-	public T getReturnData() {
-		return returnData;
-	}
-	public void setReturnData(T returnData) {
-		this.returnData = returnData;
-	}
+	public T getReturnData() { return returnData; }
+	public void setReturnData(T returnData) { this.returnData = returnData; }
 	@Override
 	public String toString() {
 		return "Response [returnData =" + returnData.toString()

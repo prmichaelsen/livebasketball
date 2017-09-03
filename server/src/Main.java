@@ -456,7 +456,7 @@ public class Main {
 			return null;
 		}
 
-		if(league.getId() == null){
+		if(league.hashId() == null){
 			return null;
 		} 
 
