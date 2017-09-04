@@ -155,20 +155,18 @@ public class Main {
 		System.out.println("Initializing...");
 		driver = new PhantomJSDriver();
 		driver.manage().timeouts().implicitlyWait(500, TimeUnit.MILLISECONDS);
+		driver.get("http://www.flashscore.com/"+sport+"/"); 
 
 		//start driver
 		System.out.println("Initialized.");
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-		System.out.println(dtf.format(LocalDateTime.now()) + ": Driver starting...");
 		System.out.println("Running..."); 
 
 		//start main program
-		//matches are initialized once
 		Hashtable<String,Match> matches = new Hashtable<String,Match>();	
-		//timestamp league last forever
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+		System.out.println(dtf.format(LocalDateTime.now()) + ": Driver starting...");
 		League timestamp = new League();
 		while(true){
-			driver.get("http://www.flashscore.com/"+sport+"/"); 
 
 			//set the timezone
 			WebElement tzDropdownDOM = null;
@@ -287,11 +285,14 @@ public class Main {
 					it.remove();
 				}
 			}
-			try{
-				TimeUnit.SECONDS.sleep(5); 
-			}catch(InterruptedException e2){};
 
 			System.out.println(dtf.format(LocalDateTime.now()) + ": Driver resetting...");
+			driver.get("http://www.flashscore.com/"+sport+"/"); 
+			try{
+				TimeUnit.SECONDS.sleep(5); 
+			}catch(InterruptedException e){
+				e.printStackTrace();
+			} 
 		} 
 	} 
 
