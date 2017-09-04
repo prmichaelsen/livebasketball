@@ -2,8 +2,8 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import dto.League;
-import dto.Leagues;
+import com.patrickmichaelsen.livebasketball.League;
+import com.patrickmichaelsen.livebasketball.Leagues;
 import dto.Response;
 import java.io.FileNotFoundException;
 import java.io.FileReader;

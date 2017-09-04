@@ -472,7 +472,7 @@ public class Main {
 			Thread popupThread = new Thread(new Runnable(){
 				public void run(){
 					JOptionPane.showMessageDialog(frm,
-							notification.getMessage()); 
+							notification.toMessage()); 
 				}
 			});
 			popupThread.start();

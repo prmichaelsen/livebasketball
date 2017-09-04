@@ -1,22 +1,30 @@
 package com.patrickmichaelsen.livebasketball; 
 
-import java.util.List;
-import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 import java.lang.StringBuilder;
 import java.util.Iterator;
 
 public class Notifications{ 
-	private List<Notification> notifications; 
-	public Notifications(){ notifications = new ArrayList<Notification>(); }; 
-	public List<Notification> getNotifications(){ return notifications; }
-	public void setNotifications(List<Notification> notifications){ this.notifications = notifications; } 
-	public Notification add(Notification notification){ return notifications.add(notification); }
+	private Map<String, Notification> notifications; 
+	public Notifications(){ notifications = new HashMap<String, Notification>(); }; 
+	public Map<String, Notification> getNotifications(){ return notifications; }
+	public void setNotifications(Map<String, Notification> notifications){ this.notifications = notifications; } 
+
+	public Notification add(Notification notification){ 
+		String id = notification.hashId();
+		return notifications.put(id, notification); 
+	}
+
+	public Notification remove(Notification notification){ 
+		return notifications.remove(notification.getId()); 
+	}
 
 	@Override
 	public String toString(){ 
 		StringBuilder sb = new StringBuilder();
 		if(notifications != null){
-			Iterator<Notification> it = notifications.iterator();
+			Iterator<Notification> it = notifications.values().iterator();
 			while(it.hasNext()){
 				Notification notification = (Notification)it.next();
 				sb.append(notification.toString());
