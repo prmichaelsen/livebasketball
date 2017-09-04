@@ -293,7 +293,6 @@ public class Main {
 
 			System.out.println(dtf.format(LocalDateTime.now()) + ": Driver resetting...");
 		} 
-		System.out.println("ScoreChecker thread stopped!");
 	} 
 
 	public static void sendMobileNotifications(Match match){

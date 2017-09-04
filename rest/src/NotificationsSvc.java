@@ -13,7 +13,7 @@ import java.io.InputStreamReader;
 import java.io.Reader; 
 import java.util.Iterator; 
 import javax.ws.rs.GET;
-import javax.ws.rs.DELETE;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -36,7 +36,7 @@ public class NotificationsSvc {
 		return notifications;
 	}
 	
-	@DELETE
+	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response<String> deleteNotifications(Notification notification) {
 		System.out.println(notification);
