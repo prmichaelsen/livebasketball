@@ -155,6 +155,8 @@ public class Main {
 		System.out.println("Initializing...");
 		driver = new PhantomJSDriver();
 		driver.manage().timeouts().implicitlyWait(500, TimeUnit.MILLISECONDS);
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+		System.out.println(dtf.format(LocalDateTime.now()) + ": Driver starting...");
 		driver.get("http://www.flashscore.com/"+sport+"/"); 
 
 		//start driver
@@ -163,8 +165,6 @@ public class Main {
 
 		//start main program
 		Hashtable<String,Match> matches = new Hashtable<String,Match>();	
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-		System.out.println(dtf.format(LocalDateTime.now()) + ": Driver starting...");
 		League timestamp = new League();
 		while(true){
 
@@ -175,9 +175,9 @@ public class Main {
 				if(tzDropdownDOM != null){ 
 					tzDropdownDOM.click();
 				}
+			} catch(Exception e){
+				e.printStackTrace();
 			}
-			catch(NoSuchElementException e){}
-			catch(StaleElementReferenceException e){}
 			try{
 				TimeUnit.SECONDS.sleep(3); 
 			}catch(InterruptedException e2){};
@@ -187,9 +187,9 @@ public class Main {
 				if(tzDOM != null){ 
 					tzDOM.click();
 				}
+			} catch(Exception e){
+				e.printStackTrace();
 			}
-			catch(NoSuchElementException e){}
-			catch(StaleElementReferenceException e){} 
 
 			//leagues are intialized every loop
 			Leagues leagues = new Leagues();	
@@ -202,9 +202,10 @@ public class Main {
 
 			//get the league tables scheduled for today
 			try {
-				tables = driver.findElements(By.cssSelector(".fs-table>.table-main>."+sport));
+				tables = driver.findElements(By.cssSelector(".fs-table>.table-main>."+sport)); 
+			} catch(Exception e){
+				e.printStackTrace();
 			}
-			catch (NoSuchElementException e){ } 
 			for(WebElement table : tables){ 
 				//get the league for this table
 				League league = getLeague(table); 
@@ -213,8 +214,9 @@ public class Main {
 				//get the match rows in this league table
 				try {
 					rows = table.findElements(By.cssSelector("tbody>tr."+stage));
+				} catch(Exception e){
+					e.printStackTrace();
 				}
-				catch (NoSuchElementException e){ } 
 
 				//get matches
 				for(WebElement row : rows){
@@ -286,7 +288,7 @@ public class Main {
 				}
 			}
 
-			System.out.println(dtf.format(LocalDateTime.now()) + ": Driver resetting...");
+			System.out.println(dtf.format(LocalDateTime.now()) + ": Refreshing webpage...");
 			driver.get("http://www.flashscore.com/"+sport+"/"); 
 			try{
 				TimeUnit.SECONDS.sleep(5); 
@@ -375,7 +377,9 @@ public class Main {
 		try {
 			leaguesDOM = table.findElements(By.cssSelector("thead > tr > td.head_ab > span.country.left > span.name"));
 		}
-		catch (NoSuchElementException e){ } 
+		catch (NoSuchElementException e){
+			e.printStackTrace();
+		} 
 
 		if(leaguesDOM == null){
 			return null;
@@ -390,16 +394,24 @@ public class Main {
 					league.setCountry(countryDOM.getAttribute("innerHTML"));
 				}
 			}
-			catch(NoSuchElementException e){}
-			catch(StaleElementReferenceException e){}
+			catch(NoSuchElementException e){
+				e.printStackTrace();
+			}
+			catch(StaleElementReferenceException e){
+				e.printStackTrace();
+			}
 			try{
 				nameDOM = leagueDOM.findElement(By.cssSelector("span.tournament_part"));
 				if(nameDOM != null){ 
 					league.setName(nameDOM.getAttribute("innerHTML"));
 				}
 			}
-			catch(NoSuchElementException e){}
-			catch(StaleElementReferenceException e){}
+			catch(NoSuchElementException e){
+				e.printStackTrace();
+			}
+			catch(StaleElementReferenceException e){
+				e.printStackTrace();
+			}
 		} 
 
 		if(league == null){
@@ -430,8 +442,9 @@ public class Main {
 		String row_id = null;
 		try{ 
 			row_id = row.getAttribute("id");
+		} catch(StaleElementReferenceException e){
+			e.printStackTrace();
 		}
-		catch (StaleElementReferenceException e){ }
 		String match_id = null;
 		String team = null;
 		if(row_id != null){
@@ -467,9 +480,11 @@ public class Main {
 					roundStatus = (roundStatusDOM.getAttribute("innerHTML"));
 					match.setRoundStatus(roundStatus);
 				}
+			} catch (NoSuchElementException e){
+				e.printStackTrace();
+			} catch (StaleElementReferenceException e){
+				e.printStackTrace();
 			}
-			catch (NoSuchElementException e){ } 
-			catch (StaleElementReferenceException e){ }
 		}
 
 		if(isHomeTeam && match.getHomeTeam().isEmpty()){
@@ -479,9 +494,11 @@ public class Main {
 					homeTeamName = (homeTeamNameDOM.getAttribute("innerHTML"));
 					match.setHomeTeam(homeTeamName);
 				}
+			} catch (NoSuchElementException e){
+				e.printStackTrace();
+			} catch (StaleElementReferenceException e){
+				e.printStackTrace();
 			}
-			catch (NoSuchElementException e){ }
-			catch (StaleElementReferenceException e){ }
 		}
 		if(isAwayTeam && match.getAwayTeam().isEmpty()){
 			try{ 
@@ -490,32 +507,44 @@ public class Main {
 					awayTeamName = (awayTeamNameDOM.getAttribute("innerHTML"));
 					match.setAwayTeam(awayTeamName);
 				}
+			} catch (NoSuchElementException e){
+				e.printStackTrace();
+			} catch (StaleElementReferenceException e){
+				e.printStackTrace();
 			}
-			catch (NoSuchElementException e){ }
-			catch (StaleElementReferenceException e){ }
 		}
 		List<WebElement> scoreDOMs = new ArrayList<WebElement>();
 		List<Integer> scores = new ArrayList<Integer>(); 
 		if(isHomeTeam){
 			try{ 
 				scoreDOMs = row.findElements(By.cssSelector("td.part-bottom"));	
+			} catch (NoSuchElementException e){
+				e.printStackTrace();
+			} catch (StaleElementReferenceException e){
+				e.printStackTrace();
 			}
-			catch (NoSuchElementException e){ } 
 		}
 		if(isAwayTeam){ 
 			try{ 
 				scoreDOMs =row.findElements(By.cssSelector("td.part-top"));	
+			} catch (NoSuchElementException e){
+				e.printStackTrace();
+			} catch (StaleElementReferenceException e){
+				e.printStackTrace();
 			}
-			catch (NoSuchElementException e){ }
 		} 
 
 		for(WebElement scoreTd : scoreDOMs ){
 			try{
 				int score = Integer.parseInt(scoreTd.getAttribute("innerHTML"));
 				scores.add(score); 
+			} catch (NoSuchElementException e){
+				e.printStackTrace();
+			} catch (StaleElementReferenceException e){
+				e.printStackTrace();
+			} catch(NumberFormatException e){
+				e.printStackTrace();
 			}
-			catch(NumberFormatException e){} 
-			catch (StaleElementReferenceException e){ }
 		}
 		if(isHomeTeam){ 
 			match.setHomeScores(scores);
