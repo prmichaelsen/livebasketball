@@ -10,6 +10,7 @@ public class Notifications{
 	public Notifications(){ notifications = new HashMap<String, Notification>(); }; 
 	public Map<String, Notification> getNotifications(){ return notifications; }
 	public void setNotifications(Map<String, Notification> notifications){ this.notifications = notifications; } 
+	public Iterator<Notification> iterator(){ return notifications.values().iterator(); }
 
 	public Notification add(Notification notification){ 
 		String id = notification.hashId();
