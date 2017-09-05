@@ -2,8 +2,8 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import dto.League;
-import dto.Leagues;
+import com.patrickmichaelsen.livebasketball.League;
+import com.patrickmichaelsen.livebasketball.Leagues;
 import dto.Response;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -55,10 +55,10 @@ public class LeaguesSvc {
 		if( league.getId() != null && !league.getId().equals("") ){
 			leagues.getLeagues().put(league.getId(), league); 
 			if( league.getId().indexOf('#') != -1 ){
-				boolean active = league.getActive();
+				boolean active = league.getEnabled();
 				Iterator<League> it = leagues.getLeagues().values().iterator();	
 				while(it.hasNext()){ 
-					it.next().setActive(active);		
+					it.next().setEnabled(active);		
 				}
 				//save leagues to file
 				try (FileWriter writer = new FileWriter("../../server/data/leagues.json")) { 

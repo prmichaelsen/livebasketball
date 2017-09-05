@@ -1,5 +1,6 @@
 package com.patrickmichaelsen.livebasketball;
 
+import java.time.LocalDateTime;
 import java.text.DateFormat;
 import java.util.Locale;
 import java.text.SimpleDateFormat;
@@ -69,7 +70,6 @@ public class Main {
 	static WebElement num2Field;
 	static WebElement submitBtn;
 	static Hashtable<String,Match> matches;
-	static List<Client> clients;
 	static boolean playSounds;
 	static boolean displayPopups;
 	static ServerSocket serverSocket;
@@ -81,12 +81,11 @@ public class Main {
 	static String stage;
 	static boolean Windows, Linux, Mac = false;
 	static File push_notifications_py = null;
-	static NewClientListener newClientListener;
+	static ScoreChecker scoreChecker;
+	static boolean run = true;
 
 	public static void main(String args[]){
 		//initialize program options
-		playSounds = true;
-		displayPopups = true;
 		sport = Constants.Sport.BASKETBALL;
 		stage = Constants.Stage.LIVE;
 
@@ -114,10 +113,12 @@ public class Main {
 				e.printStackTrace();
 				System.err.println("Exiting..."); 
 				//need to stop all threads
-				if(newClientListener != null){
-					newClientListener.stop();
+				if(scoreChecker != null){
+					scoreChecker.stop();
+					System.out.println("ScoreChecker stopped from exception handler!");
 				}
-				System.exit(1);
+				run = false;
+				System.exit(1); 
 			}
 		};
 		//prevent additional instances of this app from running
@@ -132,8 +133,17 @@ public class Main {
 		//add shutdown hook
 		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 			public void run() {
-				if(driver != null){
+				System.out.println("Shutting down!");
+				if(driver != null){ 
 					driver.quit(); 
+					//need to stop all threads
+					if(scoreChecker != null){
+						scoreChecker.stop();
+						System.out.println("ScoreChecker stopped from shutdown hook!");
+					}
+					run = false;
+					System.out.println("Main thread stopped!");
+					System.exit(1);
 				}
 			}
 		}));
@@ -149,53 +159,21 @@ public class Main {
 			driver_path = "phantomjs"; 
 		}
 		File phantom_driver = explodeExecutableResource(driver_path);
-		System.setProperty("phantomjs.binary.path", phantom_driver.getAbsolutePath());
+		System.setProperty("phantomjs.binary.path", phantom_driver.getAbsolutePath()); 
 
-		//start threads 
-		newClientListener = new Main().new NewClientListener();
-		Thread newClientListenerThread = new Thread(newClientListener, "Flashscores Live Basketball NewClientListener"); 
-		newClientListenerThread.start();
-
-		Thread scoreCheckerThread = new Thread(new Main().new ScoreChecker(), "Flashscores Live Basketball ScoreChecker"); 
+		//start main program
+		scoreChecker = new Main().new ScoreChecker();
+		Thread scoreCheckerThread = new Thread(scoreChecker, "Flashscores Live Basketball ScoreChecker"); 
 		scoreCheckerThread.setUncaughtExceptionHandler(h);
 		scoreCheckerThread.start();
-	} 
-
-	// listens for new connections
-	public class NewClientListener implements Runnable {
-		private volatile boolean run = true;
-		public void stop() { run = false; }
-		public void run(){
-			//start tcp websocket
-			String clientSentence;
-			String capitalizedSentence;
-			ServerSocket welcomeSocket = null;
-			clients = new ArrayList<Client>();
-			try{
-				welcomeSocket = new ServerSocket(6789);
-			} catch (IOException e){
-				e.printStackTrace();
-			}
-
-			while(run){ 
-				Client client = new Client(welcomeSocket);
-				try{
-					if(client.waitForConnection()){
-						System.out.println("New client connected to server!");
-						clients.add(client); 
-					}
-				}catch(IOException e){
-					e.printStackTrace();
-				} 
-			} 
-		}
-	} 
-	
+	}
 
 	// essentially the main class for this program
 	// handles scraping of webpage and sends notifications
 	// to any registered clients
 	public class ScoreChecker implements Runnable { 
+		private volatile boolean run = true;
+		public void stop() { this.run = false; }
 		public void run(){ 
 
 			//set up driver
@@ -204,12 +182,22 @@ public class Main {
 			driver.manage().timeouts().implicitlyWait(500, TimeUnit.MILLISECONDS);
 			//start driver
 			System.out.println("Initialized.");
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+			System.out.println(dtf.format(LocalDateTime.now()) + ": Driver starting...");
 			System.out.println("Running..."); 
-			while(true){
-				driver.get("http://www.flashscore.com/"+sport+"/");
 
-				//matches are initialized once
-				Hashtable<String,Match> matches = new Hashtable<String,Match>();	
+			//matches are initialized once
+			Hashtable<String,Match> matches = new Hashtable<String,Match>();	
+			//timestamp league last forever
+			League timestamp = new League();
+			while(this.run){
+				//ensure driver is connected
+				if(driver == null){
+					System.err.println("No driver found. Exiting...");
+					System.exit(0); 
+				} 
+
+				driver.get("http://www.flashscore.com/"+sport+"/"); 
 
 				//set the timezone
 				WebElement tzDropdownDOM = null;
@@ -219,125 +207,131 @@ public class Main {
 						tzDropdownDOM.click();
 					}
 				}
-				catch(NoSuchElementException e){}
-				catch(StaleElementReferenceException e){}
+				catch(NoSuchElementException e){
+					e.printStackTrace();
+				}
+				catch(StaleElementReferenceException e){
+					e.printStackTrace();
+				}
 				try{
 					TimeUnit.SECONDS.sleep(3); 
-				}catch(InterruptedException e2){};
+				}catch(InterruptedException e){
+					e.printStackTrace();
+				};
 				WebElement tzDOM = null;
 				try{
-					tzDOM = driver.findElement(By.cssSelector("#tzcontent > li:nth-child(13) > a"));
+					tzDOM = driver.findElement(By.cssSelector("#tzcontent > li:nth-child(14) > a"));
 					if(tzDOM != null){ 
 						tzDOM.click();
 					}
 				}
-				catch(NoSuchElementException e){}
-				catch(StaleElementReferenceException e){}
-
-				//timestamp league last forever
-				League timestamp = new League();
-
-				for(int i = 0; i < 30 ; i++){
-					//leagues are intialized every loop
-					Leagues leagues = new Leagues();	
-
-					//ensure driver is connected
-					if(driver == null){
-						System.err.println("No driver found. Exiting...");
-						System.exit(0); 
-					} 
-
-					//get the league tables scheduled for today
-					try {
-						tables = driver.findElements(By.cssSelector(".fs-table>.table-main>."+sport));
-					}
-					catch (NoSuchElementException e){ } 
-					for(WebElement table : tables){ 
-						//get the league for this table
-						League league = getLeague(table); 
-						leagues.add(league);
-
-						//get the match rows in this league table
-						try {
-							rows = table.findElements(By.cssSelector("tbody>tr."+stage));
-						}
-						catch (NoSuchElementException e){ } 
-
-						//get matches
-						for(WebElement row : rows){
-							Match match = getMatch(row, league, matches);
-							matches.put(match.getId(), match);
-						}	
-					}
-
-					//get timestamp league from file if it exists
-					Leagues l = null;
-					Gson gson = new Gson();
-					try (Reader reader = new FileReader("../data/leagues.json")) { 
-						// Convert JSON to Java Object
-						l = (Leagues) gson.fromJson(reader, Leagues.class);
-					} catch (IOException e) { 
-						e.printStackTrace();
-					} 
-					if(l != null){
-						Iterator<League> it1 = l.getLeagues().values().iterator();	
-						while(it1.hasNext()){
-							League league = it1.next();
-							if(league.getId().indexOf('#') != -1){
-								timestamp = league;
-								it1.remove();
-							}
-							//last ditch effort to update leagues
-							if(leagues.get(league.getId()) != null){
-								leagues.get(league.getId()).setEnabled(league.getEnabled());
-							}
-						}
-						timestamp.setCountry("# Select All ");
-						TimeZone tz = java.util.TimeZone.getTimeZone("Europe/Warsaw");
-						Calendar c = java.util.Calendar.getInstance(tz);
-						c.setTimeZone(tz);
-						timestamp.setName("(Last Updated: " + c.get(Calendar.DAY_OF_MONTH)+" "+c.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + " " + c.get(Calendar.HOUR_OF_DAY)+":"+String.format("%1$02d",c.get(Calendar.MINUTE))+")");
-						timestamp.setId(timestamp.getCountry()+timestamp.getName());
-						leagues.add(timestamp); 
-					}
-
-					//save leagues to file
-					try (FileWriter writer = new FileWriter("../data/leagues.json")) { 
-						gson.toJson(leagues, writer); 
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-
-					//send out notifications
-					Iterator<Match> it = matches.values().iterator(); 
-					while(it.hasNext()){
-						Match match = it.next();
-						System.out.println(match); 
-						boolean notificationsEnabled = false;
-						League league = leagues.get(match.getLeagueId());
-						if(league != null){
-							notificationsEnabled = league.getEnabled();
-						}
-						if(notificationsEnabled){
-							if(match.doesMeetConditionOne() || match.doesMeetConditionTwo()){
-								System.out.println( "------\n------\n MATCH\n------\n------\n");
-								// send java client notifications
-								sendClientNotifications(match);
-								//send mobile notifications
-								sendMobileNotifications(match);
-							}
-						}
-						//remove a match if it is more than 4 hours old
-						if(match.getLastUpdated() < ( System.currentTimeMillis() - 1000*60*60*4) ){ 
-							it.remove();
-						}
-					}
-					try{
-						TimeUnit.SECONDS.sleep(5); 
-					}catch(InterruptedException e2){};
+				catch(NoSuchElementException e){
+					e.printStackTrace();
 				}
-				System.out.println("Driver reseting...");
+				catch(StaleElementReferenceException e){
+					e.printStackTrace();
+				} 
+
+				//get the league tables scheduled for today
+				try {
+					tables = driver.findElements(By.cssSelector(".fs-table>.table-main>."+sport)); 
+				} catch(Exception e){
+					e.printStackTrace();
+				}
+
+				//leagues are intialized every loop
+				Leagues leagues = new Leagues();	
+
+				for(WebElement table : tables){ 
+					//get the league for this table
+					League league = getLeague(table); 
+					leagues.add(league);
+
+					//get the match rows in this league table
+					try {
+						rows = table.findElements(By.cssSelector("tbody>tr."+stage));
+					} catch (NoSuchElementException e){
+						e.printStackTrace();	
+					} 
+
+					//get matches
+					for(WebElement row : rows){
+						Match match = getMatch(row, league, matches);
+						matches.put(match.getId(), match);
+					}	
+				}
+
+				//get timestamp league from file if it exists
+				Leagues l = null;
+				Gson gson = new Gson();
+				try (Reader reader = new FileReader("../data/leagues.json")) { 
+					// Convert JSON to Java Object
+					l = (Leagues) gson.fromJson(reader, Leagues.class);
+				} catch (IOException e) { 
+					e.printStackTrace();
+				} 
+				if(l != null){
+					Iterator<League> it1 = l.getLeagues().values().iterator();	
+					while(it1.hasNext()){
+						League league = it1.next();
+						if(league.getId().indexOf('#') != -1){
+							timestamp = league;
+							it1.remove();
+						}
+						//last ditch effort to update leagues
+						if(leagues.get(league.getId()) != null){
+							leagues.get(league.getId()).setEnabled(league.getEnabled());
+						}
+					}
+					timestamp.setCountry("# Select All ");
+					TimeZone tz = java.util.TimeZone.getTimeZone("Europe/Warsaw");
+					Calendar c = java.util.Calendar.getInstance(tz);
+					c.setTimeZone(tz);
+					timestamp.setName("(Last Updated: " + c.get(Calendar.DAY_OF_MONTH)+" "+c.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + " " + c.get(Calendar.HOUR_OF_DAY)+":"+String.format("%1$02d",c.get(Calendar.MINUTE))+")");
+					timestamp.setId(timestamp.getCountry()+timestamp.getName());
+					leagues.add(timestamp); 
+				}
+
+				//save leagues to file
+				try (FileWriter writer = new FileWriter("../data/leagues.json")) { 
+					gson.toJson(leagues, writer); 
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+				//send out notifications
+				Iterator<Match> it = matches.values().iterator(); 
+				while(it.hasNext()){
+					Match match = it.next();
+					System.out.println(match); 
+					boolean notificationsEnabled = false;
+					League league = leagues.get(match.getLeagueId());
+					if(league != null){
+						notificationsEnabled = league.getEnabled();
+					}
+					if(notificationsEnabled){
+						if(match.doesMeetConditionOne() || match.doesMeetConditionTwo()){
+							System.out.println( "------\n------\n MATCH\n------\n------\n");
+							// send java client notifications
+							sendClientNotifications(match);
+							//send mobile notifications
+							sendMobileNotifications(match);
+						}
+					}
+					//remove a match if it is more than 4 hours old
+					if(match.getLastUpdated() < ( System.currentTimeMillis() - 1000*60*60*4) ){ 
+						it.remove();
+					}
+				}
+				try{
+					TimeUnit.SECONDS.sleep(5); 
+				}catch(InterruptedException e){
+					e.printStackTrace();
+				};
+
+				System.out.println(dtf.format(LocalDateTime.now()) + ": Refreshing webpage...");
 			} 
+			System.out.println("ScoreChecker thread stopped!");
 		} 
 	}
 
@@ -377,21 +371,29 @@ public class Main {
 	} 
 
 	public static void sendClientNotifications(Match match){
-		if(clients != null){
-			for(Client client : clients){
-				try{
-					Gson lgson = new Gson();
-					Notification notification = new Notification(match.getCondition(), match.getMatchName());
-					String msg = lgson.toJson(notification);
-					client.writeToClient(msg+"\n");
-				} catch (SocketException e2){
-					System.err.println("Client is no longer connected! You should find a way to remove this client from the list of connected clients");
-					e2.printStackTrace();
-				} catch (IOException e2){
-					e2.printStackTrace();
-				}
-			}
+		Gson gson = new Gson();
+		Notifications notifications = null;
+
+		// read notifs
+		try (Reader reader = new FileReader("../data/notifications.json")) { 
+			notifications = (Notifications) gson.fromJson(reader, Notifications.class);
+		} catch (IOException e) { 
+			e.printStackTrace();
 		} 
+
+		if(notifications == null){
+			notifications = new Notifications();
+		}
+
+		Notification notification = new Notification(match.getCondition(), match.getMatchName());
+		notifications.add(notification);
+
+		// save notifs
+		try (FileWriter writer = new FileWriter("../data/notifications.json")) { 
+			gson.toJson(notifications, writer); 
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static League getLeague(WebElement table){ 
@@ -412,7 +414,9 @@ public class Main {
 		try {
 			leaguesDOM = table.findElements(By.cssSelector("thead > tr > td.head_ab > span.country.left > span.name"));
 		}
-		catch (NoSuchElementException e){ } 
+		catch (NoSuchElementException e){
+			e.printStackTrace();
+		} 
 
 		if(leaguesDOM == null){
 			return null;
@@ -427,23 +431,31 @@ public class Main {
 					league.setCountry(countryDOM.getAttribute("innerHTML"));
 				}
 			}
-			catch(NoSuchElementException e){}
-			catch(StaleElementReferenceException e){}
+			catch(NoSuchElementException e){
+				e.printStackTrace();
+			}
+			catch(StaleElementReferenceException e){
+				e.printStackTrace();
+			}
 			try{
 				nameDOM = leagueDOM.findElement(By.cssSelector("span.tournament_part"));
 				if(nameDOM != null){ 
 					league.setName(nameDOM.getAttribute("innerHTML"));
 				}
 			}
-			catch(NoSuchElementException e){}
-			catch(StaleElementReferenceException e){}
+			catch(NoSuchElementException e){
+				e.printStackTrace();
+			}
+			catch(StaleElementReferenceException e){
+				e.printStackTrace();
+			}
 		} 
 
 		if(league == null){
 			return null;
 		}
 
-		if(league.getId() == null){
+		if(league.hashId() == null){
 			return null;
 		} 
 
@@ -467,8 +479,9 @@ public class Main {
 		String row_id = null;
 		try{ 
 			row_id = row.getAttribute("id");
+		} catch(StaleElementReferenceException e){
+			e.printStackTrace();
 		}
-		catch (StaleElementReferenceException e){ }
 		String match_id = null;
 		String team = null;
 		if(row_id != null){
@@ -504,9 +517,11 @@ public class Main {
 					roundStatus = (roundStatusDOM.getAttribute("innerHTML"));
 					match.setRoundStatus(roundStatus);
 				}
+			} catch (NoSuchElementException e){
+				e.printStackTrace();
+			} catch (StaleElementReferenceException e){
+				e.printStackTrace();
 			}
-			catch (NoSuchElementException e){ } 
-			catch (StaleElementReferenceException e){ }
 		}
 
 		if(isHomeTeam && match.getHomeTeam().isEmpty()){
@@ -516,9 +531,11 @@ public class Main {
 					homeTeamName = (homeTeamNameDOM.getAttribute("innerHTML"));
 					match.setHomeTeam(homeTeamName);
 				}
+			} catch (NoSuchElementException e){
+				e.printStackTrace();
+			} catch (StaleElementReferenceException e){
+				e.printStackTrace();
 			}
-			catch (NoSuchElementException e){ }
-			catch (StaleElementReferenceException e){ }
 		}
 		if(isAwayTeam && match.getAwayTeam().isEmpty()){
 			try{ 
@@ -527,32 +544,44 @@ public class Main {
 					awayTeamName = (awayTeamNameDOM.getAttribute("innerHTML"));
 					match.setAwayTeam(awayTeamName);
 				}
+			} catch (NoSuchElementException e){
+				e.printStackTrace();
+			} catch (StaleElementReferenceException e){
+				e.printStackTrace();
 			}
-			catch (NoSuchElementException e){ }
-			catch (StaleElementReferenceException e){ }
 		}
 		List<WebElement> scoreDOMs = new ArrayList<WebElement>();
 		List<Integer> scores = new ArrayList<Integer>(); 
 		if(isHomeTeam){
 			try{ 
 				scoreDOMs = row.findElements(By.cssSelector("td.part-bottom"));	
+			} catch (NoSuchElementException e){
+				e.printStackTrace();
+			} catch (StaleElementReferenceException e){
+				e.printStackTrace();
 			}
-			catch (NoSuchElementException e){ } 
 		}
 		if(isAwayTeam){ 
 			try{ 
 				scoreDOMs =row.findElements(By.cssSelector("td.part-top"));	
+			} catch (NoSuchElementException e){
+				e.printStackTrace();
+			} catch (StaleElementReferenceException e){
+				e.printStackTrace();
 			}
-			catch (NoSuchElementException e){ }
 		} 
 
 		for(WebElement scoreTd : scoreDOMs ){
 			try{
 				int score = Integer.parseInt(scoreTd.getAttribute("innerHTML"));
 				scores.add(score); 
+			} catch (NoSuchElementException e){
+				e.printStackTrace();
+			} catch (StaleElementReferenceException e){
+				e.printStackTrace();
+			} catch(NumberFormatException e){
+				e.printStackTrace();
 			}
-			catch(NumberFormatException e){} 
-			catch (StaleElementReferenceException e){ }
 		}
 		if(isHomeTeam){ 
 			match.setHomeScores(scores);

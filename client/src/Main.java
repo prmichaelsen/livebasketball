@@ -53,6 +53,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.BlockingQueue;
@@ -70,7 +71,6 @@ import javax.swing.table.AbstractTableModel;
 
 public class Main {
 
-	static BlockingQueue<Notification> notifications;
 	static Leagues leagues;
 	static ServerSocket serverSocket;
 	
@@ -86,8 +86,16 @@ public class Main {
 	static boolean playSounds;
 	static boolean displayPopups;
 
+	//PROD settings
+	/* 
 	final static String HOST = "ec2-35-167-51-118.us-west-2.compute.amazonaws.com";
 	final static String URI = "http://ec2-35-167-51-118.us-west-2.compute.amazonaws.com";
+	final static int PORT = 6789;
+	*/
+
+	//DEV setting
+	final static String HOST = "localhost";
+	final static String URI = "http://localhost:8081";
 	final static int PORT = 6789;
 
 	public static void main(String args[]){ 
@@ -148,62 +156,11 @@ public class Main {
 		System.out.println("Initialized.");
 		System.out.println("Running..."); 
 
-		//start worker threads
-		Thread scoreListener = new Thread(new Main().new ScoreListener(), "Livebasketball ScoreListener");
-		scoreListener.setUncaughtExceptionHandler(h);
-		scoreListener.start();
-
+		//start worker thread
 		Thread refresher = new Thread(new Main().new Refresher(), "Livebasketball Refresher");
 		refresher.setUncaughtExceptionHandler(h);
 		refresher.start();
-
-		Thread client = new Thread(new Main().new Client(), "Livebasketball Client");
-		client.setUncaughtExceptionHandler(h);
-		client.start();
 	} 
-
-	public class Client implements Runnable {
-		public void run(){
-			//start tcp websocket
-			String msg = null;
-			notifications = new LinkedBlockingQueue<Notification>();
-			Server server = new Server(HOST, PORT);
-			while(true){
-				server.connect();
-				while(server.isConnected()){ 
-					msg = server.readLine();
-					if(msg != null){
-						System.out.println("FROM SERVER: " + msg);
-						Gson lgson = new Gson(); 
-						Notification notification = lgson.fromJson(msg, Notification.class);  
-						if(notification != null){
-							notifications.offer(notification);
-						} 
-					}
-				}
-				server.close();
-			}
-			//since the above is a json, we can use
-			//gson/json to get back our match objects
-			//exactly. Or, we can use a new object, for instance
-			//notification object, to just get pertintent info
-		} 
-	} 
-
-	public class ScoreListener implements Runnable {
-		public void run(){ 
-			while(true){
-				if(notifications != null){
-					try{
-						Notification notification = notifications.take();
-						displayNotification(notification); 
-					} catch (InterruptedException e){
-						e.printStackTrace();
-					} 
-				} 
-			}
-		} 
-	}
 
 	private static void createAndShowGUI() {
 		//Check the SystemTray support
@@ -409,8 +366,7 @@ public class Main {
 				System.out.println();
 			}
 			System.out.println("--------------------------");
-		}
-
+		} 
 	}
 
 
@@ -429,6 +385,28 @@ public class Main {
 	public class Refresher implements Runnable {
 		public void run(){
 			while(true){
+				//handle notifications
+				Notifications notifications = null;
+				try{
+					notifications = getNotifications();
+				}
+				catch( Exception e ){
+					e.printStackTrace();
+				}
+				if(notifications != null){
+					Iterator<Notification> it = notifications.iterator();	
+					while(it.hasNext()){
+						Notification notification = it.next();
+						displayNotification(notification);
+						try{
+							deleteNotification(notification);
+						}
+						catch( Exception e ){
+							e.printStackTrace();
+						}
+					}
+				}
+				//handle leagues
 				try{
 					if(table != null){ 
 						table.setModel(new LeagueTableModel(getLeagues()));
@@ -437,6 +415,7 @@ public class Main {
 				} catch (Exception e){
 					e.printStackTrace();
 				}
+				//space out requests
 				try{
 					TimeUnit.SECONDS.sleep(1);
 				} catch(InterruptedException e){
@@ -464,7 +443,7 @@ public class Main {
 			Thread popupThread = new Thread(new Runnable(){
 				public void run(){
 					JOptionPane.showMessageDialog(frm,
-							notification.getMessage()); 
+							notification.toMessage()); 
 				}
 			});
 			popupThread.start();
@@ -498,6 +477,39 @@ public class Main {
 				}
 			});
 		GenericUrl url = new GenericUrl(URI+"/livebasketball/leagues");
+		HttpRequest request = requestFactory.buildPostRequest(url, ByteArrayContent.fromString("application/json", requestBody));
+		Response response = new Gson().fromJson(request.execute().parseAsString(), Response.class);
+		System.out.println(response.getReturnData());
+		return response.getReturnData();
+	} 
+
+	public static Notifications getNotifications() throws Exception {
+		HttpRequestFactory requestFactory =
+			new NetHttpTransport().createRequestFactory(new HttpRequestInitializer() {
+				@Override
+				public void initialize(HttpRequest request) {
+					request.setParser(new JsonObjectParser(new GsonFactory()));
+				}
+			});
+		GenericUrl url = new GenericUrl(URI+"/livebasketball/notifications");
+		HttpRequest request = requestFactory.buildGetRequest(url);
+		Notifications notifications = new Gson().fromJson(request.execute().parseAsString(), Notifications.class);
+		if(notifications != null){
+			System.out.println("GET notifications successful.");
+		}
+		return notifications;
+	} 
+
+	public static String deleteNotification(Notification notification) throws Exception {
+		String requestBody = new Gson().toJson(notification, Notification.class);
+		HttpRequestFactory requestFactory =
+			new NetHttpTransport().createRequestFactory(new HttpRequestInitializer() {
+				@Override
+				public void initialize(HttpRequest request) {
+					request.setParser(new JsonObjectParser(new GsonFactory()));
+				}
+			});
+		GenericUrl url = new GenericUrl(URI+"/livebasketball/notifications");
 		HttpRequest request = requestFactory.buildPostRequest(url, ByteArrayContent.fromString("application/json", requestBody));
 		Response response = new Gson().fromJson(request.execute().parseAsString(), Response.class);
 		System.out.println(response.getReturnData());
