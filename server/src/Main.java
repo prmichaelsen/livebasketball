@@ -118,7 +118,7 @@ public class Main {
 					System.out.println("ScoreChecker stopped from exception handler!");
 				}
 				run = false;
-				System.exit(1); 
+				System.exit(0); 
 			}
 		};
 		//prevent additional instances of this app from running
@@ -136,15 +136,15 @@ public class Main {
 				System.out.println("Shutting down!");
 				if(driver != null){ 
 					driver.quit(); 
-					//need to stop all threads
-					if(scoreChecker != null){
-						scoreChecker.stop();
-						System.out.println("ScoreChecker stopped from shutdown hook!");
-					}
-					run = false;
-					System.out.println("Main thread stopped!");
-					System.exit(1);
 				}
+				//need to stop all threads
+				if(scoreChecker != null){
+					scoreChecker.stop();
+					System.out.println("ScoreChecker stopped from shutdown hook!");
+				}
+				run = false;
+				System.out.println("Main thread stopped!");
+				System.exit(0);
 			}
 		}));
 
