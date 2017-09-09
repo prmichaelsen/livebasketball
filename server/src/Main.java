@@ -146,7 +146,6 @@ public class Main {
 		//start main program
 		scoreChecker = new Main().new ScoreChecker();
 		Thread scoreCheckerThread = new Thread(scoreChecker, "Flashscores Live Basketball ScoreChecker"); 
-		scoreCheckerThread.setUncaughtExceptionHandler(h);
 		scoreCheckerThread.start();
 	}
 
