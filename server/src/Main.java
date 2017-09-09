@@ -103,24 +103,6 @@ public class Main {
 		//load resources
 		push_notifications_py = explodeExecutableResource("push_notifications.py");
 
-		Thread.UncaughtExceptionHandler h = new Thread.UncaughtExceptionHandler() {
-			public void uncaughtException(Thread th, Throwable e) {
-				if(driver != null){
-					driver.quit(); 
-				}
-				String msg =  "There was a fatal error in Flashscores Live Basketball. No user action is required as the application will resume normally. \n\nUncaught exception: \n"; 
-				System.err.println(msg);
-				e.printStackTrace();
-				System.err.println("Exiting..."); 
-				//need to stop all threads
-				if(scoreChecker != null){
-					scoreChecker.stop();
-					System.out.println("ScoreChecker stopped from exception handler!");
-				}
-				run = false;
-				System.exit(0); 
-			}
-		};
 		//prevent additional instances of this app from running
 		try{
 			serverSocket = new ServerSocket(33533);
