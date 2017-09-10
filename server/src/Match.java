@@ -164,20 +164,10 @@ public class Match implements Comparable<Match>{
 
 	public String getCondition(){
 		if(conditionTwoMet){ 
-			return "Round 4 Starting with 3-Round-Favor";
+			return "Q4";
 		}
 		else if(conditionOneMet){
-			return "Round 3 Ending with 3-Round-Favor";
-		}
-		return "";
-	} 
-
-	public String getMessage(){
-		if(conditionTwoMet){ 
-			return "Round 4 Starting with 3-Round-Favor:\n"+this.getMatchName();
-		}
-		else if(conditionOneMet){
-			return "Round 3 Ending with 3-Round-Favor:\n"+this.getMatchName();
+			return "Q3";
 		}
 		return "";
 	} 

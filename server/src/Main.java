@@ -293,10 +293,12 @@ public class Main {
 					if(notificationsEnabled){
 						if(match.doesMeetConditionOne() || match.doesMeetConditionTwo()){
 							System.out.println( "------\n------\n MATCH\n------\n------\n");
+							String title = league.getCountry() + ": " + league.getName();
+							String body = match.getCondition() + ": " + match.getMatchName();
 							// send java client notifications
-							sendClientNotifications(match);
+							sendClientNotifications(title, body);
 							//send mobile notifications
-							sendMobileNotifications(match);
+							sendMobileNotifications(title, body);
 						}
 					}
 					//remove a match if it is more than 4 hours old
@@ -316,14 +318,14 @@ public class Main {
 		} 
 	}
 
-	public static void sendMobileNotifications(Match match){
+	public static void sendMobileNotifications(String title, String body){
 		try{
 			String s = null;
 			String[] cmd = new String[] {
 				"python3", 
 				push_notifications_py.getAbsolutePath(), 
-				match.getCondition(), 
-				match.getMatchName()
+				title,
+				body
 			};
 			Process p = Runtime.getRuntime().exec(cmd);
 			BufferedReader stdInput = new BufferedReader(new 
@@ -351,7 +353,7 @@ public class Main {
 		} 
 	} 
 
-	public static void sendClientNotifications(Match match){
+	public static void sendClientNotifications(String title, String body){
 		Gson gson = new Gson();
 		Notifications notifications = null;
 
@@ -366,7 +368,7 @@ public class Main {
 			notifications = new Notifications();
 		}
 
-		Notification notification = new Notification(match.getCondition(), match.getMatchName());
+		Notification notification = new Notification(title, body);
 		notifications.add(notification);
 
 		// save notifs
