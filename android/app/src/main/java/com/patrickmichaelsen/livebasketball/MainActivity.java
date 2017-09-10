@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
         list = new ArrayList<League>(collection);
         Collections.sort(list);
         adapter.setDataSet(list);
-        Log.e("REST", response.substring(0,500));
+        Log.e("REST", response.substring(0,(response.length() > 500)? 500 : response.length() - 1));
     }
 
     @Override
