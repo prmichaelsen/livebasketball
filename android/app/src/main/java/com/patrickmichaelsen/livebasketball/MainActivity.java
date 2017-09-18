@@ -104,12 +104,17 @@ public class MainActivity extends AppCompatActivity {
 
     public void parseResponse(String response){
         // Display the first 500 characters of the response string.
-        Gson gson = new Gson();
-        Leagues leagues = gson.fromJson(response, Leagues.class);
-        Collection<League> collection = leagues.getLeagues().values();
-        list = new ArrayList<League>(collection);
-        Collections.sort(list);
-        adapter.setDataSet(list);
+        try{
+            Gson gson = new Gson();
+            Leagues leagues = gson.fromJson(response, Leagues.class);
+            Collection<League> collection = leagues.getLeagues().values();
+            list = new ArrayList<League>(collection);
+            Collections.sort(list);
+            adapter.setDataSet(list);
+        } catch (Exception e){
+            Toast.makeText(getApplicationContext(), "Error parsing the response from server", Toast.LENGTH_LONG);
+            Log.e("Error", "Error parsing the response");
+        }
         Log.e("REST", response.substring(0,(response.length() > 500)? 500 : response.length() - 1));
     }
 

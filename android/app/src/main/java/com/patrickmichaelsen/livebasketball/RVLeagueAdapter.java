@@ -118,7 +118,17 @@ public class RVLeagueAdapter extends RecyclerView.Adapter<RVLeagueAdapter.League
                     league.setEnabled(v.isChecked());
                     Log.i("CHECKBOX", String.format("checkbox onClick, name: %s%s, isSelected: %s, identityHashCode: %s", leagueCountry, leagueName, v.isChecked(), System.identityHashCode(leagueIsEnabledCheckbox)));
                     Gson gson = new Gson();
-                    String params = gson.toJson(league, League.class);
+                    String params = null;
+                    try{
+                       params = gson.toJson(league, League.class);
+                    }catch(Exception e){
+                        Log.e("ERROR:",(e.getMessage() != null )? e.getMessage() : "Could not get error");
+                        Toast.makeText(mContext, "Error building the request!", Toast.LENGTH_SHORT).show();
+                    }
+                    if(params == null){
+                        Toast.makeText(mContext, "Request parameters could not be found!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     JSONObject jsonObject = null;
                     try{
                         jsonObject = new JSONObject(params);
@@ -138,7 +148,17 @@ public class RVLeagueAdapter extends RecyclerView.Adapter<RVLeagueAdapter.League
                                 public void onResponse(JSONObject response) {
                                     Log.i("REST:%n %s", response.toString());
                                     Gson gson = new Gson();
-                                    com.patrickmichaelsen.livebasketball.Response responseObj = gson.fromJson(response.toString(), com.patrickmichaelsen.livebasketball.Response.class);
+                                    com.patrickmichaelsen.livebasketball.Response responseObj = null;
+                                    try {
+                                        responseObj = gson.fromJson(response.toString(), com.patrickmichaelsen.livebasketball.Response.class);
+                                    }catch(Exception e){
+                                        Log.e("ERROR:",(e.getMessage() != null )? e.getMessage() : "Could not get error");
+                                        Toast.makeText(mContext, "Error parsing the server response!", Toast.LENGTH_SHORT).show();
+                                    }
+                                    if(responseObj == null){
+                                        Toast.makeText(mContext, "Parsed response was empty!", Toast.LENGTH_SHORT).show();
+                                        return;
+                                    }
                                     Toast.makeText(mContext, responseObj.getReturnData(), Toast.LENGTH_SHORT).show();
                                     Log.i("REST:%n %s", responseObj.toString());
                                 }
