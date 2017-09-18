@@ -2,8 +2,8 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.patrickmichaelsen.livebasketball.League;
-import com.patrickmichaelsen.livebasketball.Leagues;
+import com.patrickmichaelsen.livebasketball.core.League;
+import com.patrickmichaelsen.livebasketball.core.Leagues;
 import dto.Response;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -19,7 +19,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 @Path("/leagues")
-public class LeaguesSvc {
+public class LeagueService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Leagues getLeagues() { 

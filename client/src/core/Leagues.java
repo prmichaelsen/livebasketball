@@ -1,4 +1,4 @@
-package com.patrickmichaelsen.livebasketball; 
+package com.patrickmichaelsen.livebasketball.core; 
 
 import java.util.Hashtable;
 import java.lang.StringBuilder;

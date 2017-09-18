@@ -2,8 +2,8 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.patrickmichaelsen.livebasketball.Notification;
-import com.patrickmichaelsen.livebasketball.Notifications;
+import com.patrickmichaelsen.livebasketball.core.Notification;
+import com.patrickmichaelsen.livebasketball.core.Notifications;
 import dto.Response;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -19,7 +19,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 @Path("/notifications")
-public class NotificationsSvc {
+public class NotificationService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Notifications getNotifications() { 

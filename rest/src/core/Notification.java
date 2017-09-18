@@ -1,4 +1,4 @@
-package com.patrickmichaelsen.livebasketball;
+package com.patrickmichaelsen.livebasketball.core;
 
 public class Notification{
 	private String matchName;
