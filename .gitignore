@@ -16,3 +16,15 @@ android/.externalNativeBuild
 */lib/* 
 *.class 
 *.exe
+
+client/bin/
+
+client/lib/
+
+rest/bin/
+
+rest/lib/
+
+server/bin/
+
+server/lib/
