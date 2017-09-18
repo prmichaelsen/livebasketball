@@ -10,16 +10,9 @@ android/.DS_Store
 android/build
 android/captures
 android/.externalNativeBuild
-
-client/bin/* 
-server/bin/*
-rest/bin/*
-
 *.apk
 
-*.class
-
+*/bin/* 
+*/lib/* 
+*.class 
 *.exe
-
-client/bin/
-*/lib/*
