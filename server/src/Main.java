@@ -1,88 +1,51 @@
 package com.patrickmichaelsen.livebasketball;
 
-import com.patrickmichaelsen.livebasketball.core.*;
-import java.time.LocalDateTime;
-import java.text.DateFormat;
-import java.util.Locale;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
-import java.util.TimeZone;
-import java.util.Calendar; 
-import java.util.Set;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.Path;
-import java.nio.file.attribute.PosixFilePermission;
 import com.google.gson.Gson;
-import java.io.File;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.FileOutputStream;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-import java.awt.AWTException;
-import java.awt.CheckboxMenuItem;
-import java.awt.Dimension;
-import java.awt.Image;
-import java.awt.Insets;
-import java.awt.Menu;
-import java.awt.MenuItem;
-import java.awt.PopupMenu;
-import java.awt.SystemTray;
-import java.awt.TrayIcon;
-import java.awt.event.*;
+import com.patrickmichaelsen.livebasketball.core.*;
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.lang.InterruptedException;
-import java.lang.Thread;
-import java.net.ServerSocket;
-import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.attribute.PosixFilePermission;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
+import java.util.Calendar; 
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
+import java.util.Locale;
+import java.util.Set;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
-import javax.swing.*;
-import org.openqa.selenium.*;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.htmlunit.*;
-import org.openqa.selenium.phantomjs.*;
-import org.openqa.selenium.support.ui.*;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.SocketException;
-import java.io.DataOutputStream;
-import java.net.URLEncoder;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.By;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
 
 public class Main {
 
 	static WebDriver driver;
 	static List<WebElement> rows;
 	static List<WebElement> tables;
-	static WebElement num2Field;
-	static WebElement submitBtn;
 	static Hashtable<String,Match> matches;
-	static boolean playSounds;
-	static boolean displayPopups;
-	static ServerSocket serverSocket;
-	static JFrame frm;
-	static JTextArea matchesTextArea;
-	static int looking;
-	static Runtime mainRuntime; 
 	static String sport;
 	static String stage;
 	static boolean Windows, Linux, Mac = false;
 	static File push_notifications_py = null;
-	static ScoreChecker scoreChecker;
 	static boolean run = true;
 
 	public static void main(String args[]){
@@ -102,34 +65,7 @@ public class Main {
 		}
 
 		//load resources
-		push_notifications_py = explodeExecutableResource("push_notifications.py");
-
-		//prevent additional instances of this app from running
-		try{
-			serverSocket = new ServerSocket(33533);
-		}catch(IOException e){
-			System.err.println("Could not listen on port: 33533");
-			String msg =  "Could not start Flashscores Live Basketball on port 33133.\nIs the port in use? Please close any processes that may be using this port. Other processes that may be using this port may include, for example, other instances of Flashscores Live Basketball.";
-			System.err.println(msg);
-			System.exit(0);
-		}
-		//add shutdown hook
-		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-			public void run() {
-				System.out.println("Shutting down!");
-				if(driver != null){ 
-					driver.quit(); 
-				}
-				//need to stop all threads
-				if(scoreChecker != null){
-					scoreChecker.stop();
-					System.out.println("ScoreChecker stopped from shutdown hook!");
-				}
-				run = false;
-				System.out.println("Main thread stopped!");
-				System.exit(0);
-			}
-		}));
+		push_notifications_py = explodeExecutableResource("push_notifications.py"); 
 
 		//config driver
 		String driver_path = "";
@@ -144,180 +80,165 @@ public class Main {
 		File phantom_driver = explodeExecutableResource(driver_path);
 		System.setProperty("phantomjs.binary.path", phantom_driver.getAbsolutePath()); 
 
-		//start main program
-		scoreChecker = new Main().new ScoreChecker();
-		Thread scoreCheckerThread = new Thread(scoreChecker, "Flashscores Live Basketball ScoreChecker"); 
-		scoreCheckerThread.start();
-	}
+		//set up driver
+		System.out.println("Initializing...");
+		driver = new PhantomJSDriver();
+		driver.manage().timeouts().implicitlyWait(500, TimeUnit.MILLISECONDS);
+		//start driver
+		System.out.println("Initialized.");
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+		System.out.println(dtf.format(LocalDateTime.now()) + ": Driver starting...");
+		System.out.println("Running..."); 
 
-	// essentially the main class for this program
-	// handles scraping of webpage and sends notifications
-	// to any registered clients
-	public class ScoreChecker implements Runnable { 
-		private volatile boolean run = true;
-		public void stop() { this.run = false; }
-		public void run(){ 
-
-			//set up driver
-			System.out.println("Initializing...");
-			driver = new PhantomJSDriver();
-			driver.manage().timeouts().implicitlyWait(500, TimeUnit.MILLISECONDS);
-			//start driver
-			System.out.println("Initialized.");
-			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-			System.out.println(dtf.format(LocalDateTime.now()) + ": Driver starting...");
-			System.out.println("Running..."); 
-
-			//matches are initialized once
-			Hashtable<String,Match> matches = new Hashtable<String,Match>();	
-			//timestamp league last forever
-			League timestamp = new League();
-			while(this.run){
-				//ensure driver is connected
-				if(driver == null){
-					System.err.println("No driver found. Exiting...");
-					System.exit(0); 
-				} 
-
-				driver.get("http://www.flashscore.com/"+sport+"/"); 
-
-				//set the timezone
-				WebElement tzDropdownDOM = null;
-				try{
-					tzDropdownDOM = driver.findElement(By.cssSelector("#tzactual"));
-					if(tzDropdownDOM != null){ 
-						tzDropdownDOM.click();
-					}
-				}
-				catch(NoSuchElementException e){
-					e.printStackTrace();
-				}
-				catch(StaleElementReferenceException e){
-					e.printStackTrace();
-				}
-				try{
-					TimeUnit.SECONDS.sleep(3); 
-				}catch(InterruptedException e){
-					e.printStackTrace();
-				};
-				WebElement tzDOM = null;
-				try{
-					tzDOM = driver.findElement(By.cssSelector("#tzcontent > li:nth-child(14) > a"));
-					if(tzDOM != null){ 
-						tzDOM.click();
-					}
-				}
-				catch(NoSuchElementException e){
-					e.printStackTrace();
-				}
-				catch(StaleElementReferenceException e){
-					e.printStackTrace();
-				} 
-
-				//get the league tables scheduled for today
-				try {
-					tables = driver.findElements(By.cssSelector(".fs-table>.table-main>."+sport)); 
-				} catch(Exception e){
-					e.printStackTrace();
-				}
-
-				//leagues are intialized every loop
-				Leagues leagues = new Leagues();	
-
-				for(WebElement table : tables){ 
-					//get the league for this table
-					League league = getLeague(table); 
-					leagues.add(league);
-
-					//get the match rows in this league table
-					try {
-						rows = table.findElements(By.cssSelector("tbody>tr."+stage));
-					} catch (NoSuchElementException e){
-						e.printStackTrace();	
-					} 
-
-					//get matches
-					for(WebElement row : rows){
-						Match match = getMatch(row, league, matches);
-						matches.put(match.getId(), match);
-					}	
-				}
-
-				//get timestamp league from file if it exists
-				Leagues l = null;
-				Gson gson = new Gson();
-				try (Reader reader = new FileReader("../data/leagues.json")) { 
-					// Convert JSON to Java Object
-					l = (Leagues) gson.fromJson(reader, Leagues.class);
-				} catch (IOException e) { 
-					e.printStackTrace();
-				} 
-				if(l != null){
-					Iterator<League> it1 = l.getLeagues().values().iterator();	
-					while(it1.hasNext()){
-						League league = it1.next();
-						if(league.getId().indexOf('#') != -1){
-							timestamp = league;
-							it1.remove();
-						}
-						//last ditch effort to update leagues
-						if(leagues.get(league.getId()) != null){
-							leagues.get(league.getId()).setEnabled(league.getEnabled());
-						}
-					}
-					timestamp.setCountry("# Select All ");
-					TimeZone tz = java.util.TimeZone.getTimeZone("Europe/Warsaw");
-					Calendar c = java.util.Calendar.getInstance(tz);
-					c.setTimeZone(tz);
-					timestamp.setName("(Last Updated: " + c.get(Calendar.DAY_OF_MONTH)+" "+c.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + " " + c.get(Calendar.HOUR_OF_DAY)+":"+String.format("%1$02d",c.get(Calendar.MINUTE))+")");
-					timestamp.setId(timestamp.getCountry()+timestamp.getName());
-					leagues.add(timestamp); 
-				}
-
-				//save leagues to file
-				try (FileWriter writer = new FileWriter("../data/leagues.json")) { 
-					gson.toJson(leagues, writer); 
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
-				//send out notifications
-				Iterator<Match> it = matches.values().iterator(); 
-				while(it.hasNext()){
-					Match match = it.next();
-					System.out.println(match); 
-					boolean notificationsEnabled = false;
-					League league = leagues.get(match.getLeagueId());
-					if(league != null){
-						notificationsEnabled = league.getEnabled();
-					}
-					if(notificationsEnabled){
-						if(match.doesMeetConditionOne() || match.doesMeetConditionTwo()){
-							System.out.println( "------\n------\n MATCH\n------\n------\n");
-							String title = league.getCountry() + ": " + league.getName();
-							String body = match.getCondition() + ": " + match.getMatchName();
-							// send java client notifications
-							sendClientNotifications(title, body);
-							//send mobile notifications
-							sendMobileNotifications(title, body);
-						}
-					}
-					//remove a match if it is more than 4 hours old
-					if(match.getLastUpdated() < ( System.currentTimeMillis() - 1000*60*60*4) ){ 
-						it.remove();
-					}
-				}
-				try{
-					TimeUnit.SECONDS.sleep(5); 
-				}catch(InterruptedException e){
-					e.printStackTrace();
-				};
-
-				System.out.println(dtf.format(LocalDateTime.now()) + ": Refreshing webpage...");
+		//matches are initialized once
+		Hashtable<String,Match> matches = new Hashtable<String,Match>();	
+		//timestamp league last forever
+		League timestamp = new League();
+		while(run){
+			//ensure driver is connected
+			if(driver == null){
+				System.err.println("No driver found. Exiting...");
+				System.exit(0); 
 			} 
-			System.out.println("ScoreChecker thread stopped!");
+
+			driver.get("http://www.flashscore.com/"+sport+"/"); 
+
+			//set the timezone
+			WebElement tzDropdownDOM = null;
+			try{
+				tzDropdownDOM = driver.findElement(By.cssSelector("#tzactual"));
+				if(tzDropdownDOM != null){ 
+					tzDropdownDOM.click();
+				}
+			}
+			catch(NoSuchElementException e){
+				e.printStackTrace();
+			}
+			catch(StaleElementReferenceException e){
+				e.printStackTrace();
+			}
+			try{
+				TimeUnit.SECONDS.sleep(3); 
+			}catch(InterruptedException e){
+				e.printStackTrace();
+			};
+			WebElement tzDOM = null;
+			try{
+				tzDOM = driver.findElement(By.cssSelector("#tzcontent > li:nth-child(14) > a"));
+				if(tzDOM != null){ 
+					tzDOM.click();
+				}
+			}
+			catch(NoSuchElementException e){
+				e.printStackTrace();
+			}
+			catch(StaleElementReferenceException e){
+				e.printStackTrace();
+			} 
+
+			//get the league tables scheduled for today
+			try {
+				tables = driver.findElements(By.cssSelector(".fs-table>.table-main>."+sport)); 
+			} catch(Exception e){
+				e.printStackTrace();
+			}
+
+			//leagues are intialized every loop
+			Leagues leagues = new Leagues();	
+
+			for(WebElement table : tables){ 
+				//get the league for this table
+				League league = getLeague(table); 
+				leagues.add(league);
+
+				//get the match rows in this league table
+				try {
+					rows = table.findElements(By.cssSelector("tbody>tr."+stage));
+				} catch (NoSuchElementException e){
+					e.printStackTrace();	
+				} 
+
+				//get matches
+				for(WebElement row : rows){
+					Match match = getMatch(row, league, matches);
+					matches.put(match.getId(), match);
+				}	
+			}
+
+			//get timestamp league from file if it exists
+			Leagues l = null;
+			Gson gson = new Gson();
+			try (Reader reader = new FileReader("../data/leagues.json")) { 
+				// Convert JSON to Java Object
+				l = (Leagues) gson.fromJson(reader, Leagues.class);
+			} catch (IOException e) { 
+				e.printStackTrace();
+			} 
+			if(l != null){
+				Iterator<League> it1 = l.getLeagues().values().iterator();	
+				while(it1.hasNext()){
+					League league = it1.next();
+					if(league.getId().indexOf('#') != -1){
+						timestamp = league;
+						it1.remove();
+					}
+					//last ditch effort to update leagues
+					if(leagues.get(league.getId()) != null){
+						leagues.get(league.getId()).setEnabled(league.getEnabled());
+					}
+				}
+				timestamp.setCountry("# Select All ");
+				TimeZone tz = java.util.TimeZone.getTimeZone("Europe/Warsaw");
+				Calendar c = java.util.Calendar.getInstance(tz);
+				c.setTimeZone(tz);
+				timestamp.setName("(Last Updated: " + c.get(Calendar.DAY_OF_MONTH)+" "+c.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + " " + c.get(Calendar.HOUR_OF_DAY)+":"+String.format("%1$02d",c.get(Calendar.MINUTE))+")");
+				timestamp.setId(timestamp.getCountry()+timestamp.getName());
+				leagues.add(timestamp); 
+			}
+
+			//save leagues to file
+			try (FileWriter writer = new FileWriter("../data/leagues.json")) { 
+				gson.toJson(leagues, writer); 
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			//send out notifications
+			Iterator<Match> it = matches.values().iterator(); 
+			while(it.hasNext()){
+				Match match = it.next();
+				System.out.println(match); 
+				boolean notificationsEnabled = false;
+				League league = leagues.get(match.getLeagueId());
+				if(league != null){
+					notificationsEnabled = league.getEnabled();
+				}
+				if(notificationsEnabled){
+					if(match.doesMeetConditionOne() || match.doesMeetConditionTwo()){
+						System.out.println( "------\n------\n MATCH\n------\n------\n");
+						String title = league.getCountry() + ": " + league.getName();
+						String body = match.getCondition() + ": " + match.getMatchName();
+						// send java client notifications
+						sendClientNotifications(title, body);
+						//send mobile notifications
+						sendMobileNotifications(title, body);
+					}
+				}
+				//remove a match if it is more than 4 hours old
+				if(match.getLastUpdated() < ( System.currentTimeMillis() - 1000*60*60*4) ){ 
+					it.remove();
+				}
+			}
+			try{
+				TimeUnit.SECONDS.sleep(5); 
+			}catch(InterruptedException e){
+				e.printStackTrace();
+			};
+
+			System.out.println(dtf.format(LocalDateTime.now()) + ": Refreshing webpage...");
 		} 
-	}
+		System.out.println("ScoreChecker thread stopped!");
+	} 
 
 	public static void sendMobileNotifications(String title, String body){
 		try{
