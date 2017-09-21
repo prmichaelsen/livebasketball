@@ -1,0 +1,4 @@
+cd server
+put post-deploy.sh
+exit
+
