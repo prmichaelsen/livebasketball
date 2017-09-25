@@ -142,7 +142,8 @@ healthCheck = () => {
 				else {
 					if(serverInSync){
 						runScript('print_logs.sh', 'Server Scraper Stopped', ` 
-							You are receiving this message because the server scraper service has stopped: Scraper is out of sync.
+							You are receiving this message because the server 
+							scraper service has stopped: Scraper is out of sync.
 						`);
 						runScript('restart_scraper.sh', 'Server Scraper Restart Attempted', `
 							You are receiving this message because the scraper
