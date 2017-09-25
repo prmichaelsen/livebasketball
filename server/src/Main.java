@@ -64,6 +64,19 @@ public class Main {
 			Linux = true;
 		}
 
+		//add shutdown hook
+		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+			public void run() {
+				System.out.println("Shutting down!");
+				if(driver != null){
+					driver.quit();
+				}
+				System.out.println("Main thread stopped!");
+				System.exit(128);
+			}
+		}));
+
+
 		//load resources
 		push_notifications_py = explodeExecutableResource("push_notifications.py"); 
 
