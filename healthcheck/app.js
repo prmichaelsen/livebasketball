@@ -97,9 +97,9 @@ healthCheck = () => {
             if(res.ok){
                 if(!serverUp){
                     sendEmail('Server Rest Back Online', `
-					You are receving this email because the server
-					rest service stopped and was successfully restarted
-					automatically.
+					    You are receving this email because the server
+					    rest service stopped and was successfully restarted
+					    automatically.
 					`);
                 }
                 serverUp = true;
@@ -108,17 +108,15 @@ healthCheck = () => {
             else{
                 if(serverUp){
                     runScript('print_logs.sh', 'Server Rest Service Stopped', `
-					You are receiving this message because the server rest
-					service has stopped: 
-					Server status was ${res.status}
-					`
-                    );
+					    You are receiving this message because the server rest
+					    service has stopped: 
+					    Server status was ${res.status}
+					`);
                     runScript('restart_rest.sh', 'Server Rest Restart Attempted', `
-					You are receiving this message because the rest
-					has attempted an automatic restart. See the attached
-					output
-					`
-                    );
+					    You are receiving this message because the rest
+					    has attempted an automatic restart. See the attached
+					    output
+					`);
                 }
                 serverUp = false;
             }
@@ -134,28 +132,25 @@ healthCheck = () => {
                 if( localMinutes - 2 < serverMinutes && serverMinutes < localMinutes + 2){
                     if(!serverInSync){
                         sendEmail('Server Scraper Back Online', `
-						You are receving this email because the server
-						scraper stopped and was successfully restarted
-						automatically.
+						    You are receving this email because the server
+						    scraper stopped and was successfully restarted
+						    automatically.
 						`);
                     }
                     serverInSync = true;
                 }
                 else {
                     if(serverInSync){
-                        runScript('print_logs.sh', 'Server Scraper Stopped', `
-						You are receiving this message because the server scraper
-						service has stopped: 
-						Scraper is out of sync.
-						`
-                        );
-                        runScript('restart_scraper.sh', 'Server Scraper Restart Attempted',
-                            `
+                        runScript('print_logs.sh', 'Server Scraper Stopped', ` 
+                            You are receiving this message because the server scraper
+						    service has stopped: 
+					    	Scraper is out of sync.
+					    `);
+                        runScript('restart_scraper.sh', 'Server Scraper Restart Attempted', `
 							You are receiving this message because the scraper
 							has attempted an automatic restart. See the attached
 							output
-							`
-                        );
+						`);
                     }
                     serverInSync = false;
                 }
