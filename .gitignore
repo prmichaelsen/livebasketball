@@ -28,3 +28,7 @@ rest/lib/
 server/bin/
 
 server/lib/
+server/post-deploy.sh
+
+healthcheck/.env
+healthcheck/node_modules
