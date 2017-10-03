@@ -40,3 +40,5 @@ rest/\.idea/workspace\.xml
 server/build/
 
 server/phantomjs
+
+server/resources/phantomjs
