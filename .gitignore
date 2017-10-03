@@ -32,3 +32,11 @@ server/post-deploy.sh
 
 healthcheck/.env
 healthcheck/node_modules
+
+healthcheck/\.idea/workspace\.xml
+
+rest/\.idea/workspace\.xml
+
+server/build/
+
+server/phantomjs
