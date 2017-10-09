@@ -1,4 +1,4 @@
-package com.patrickmichaelsen.livebasketball.core; 
+package com.parm.livebasketball.core;
 
 import java.util.Map;
 import java.util.HashMap;

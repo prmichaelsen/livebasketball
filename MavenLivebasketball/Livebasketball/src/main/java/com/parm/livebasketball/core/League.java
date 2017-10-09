@@ -1,4 +1,4 @@
-package com.patrickmichaelsen.livebasketball.core;
+package com.parm.livebasketball.core;
 
 public class League implements Comparable<League>{
 	private String country;

@@ -1,19 +1,20 @@
-package com.patrickmichaelsen.livebasketball.core; 
+package com.parm.livebasketball.core;
 
-import java.util.Hashtable;
+import com.google.gson.internal.LinkedTreeMap;
 import java.lang.StringBuilder;
 import java.util.Iterator;
+import java.util.Map;
 
 public class Leagues{ 
-	private Hashtable<String,League> leagues; 
+	private LinkedTreeMap<String,League> leagues;
 
 	public Leagues(){ 
-		leagues = new Hashtable<String,League>();
+		leagues = new LinkedTreeMap<String,League>();
 	};
 
-	public Hashtable<String,League> getLeagues(){ return leagues; }
-	public void setLeagues(Hashtable<String,League> leagues){
-		this.leagues = leagues;
+	public LinkedTreeMap<String,League> getLeagues(){ return leagues; }
+	public void setLeagues(Map<String,League> leagues){
+		this.leagues = (LinkedTreeMap) leagues;
 	} 
 
 	public League get(String leagueId){ 
@@ -23,7 +24,7 @@ public class Leagues{
 		return leagues.put(league.getId(), league); 
 	}
 	public boolean containsLeague(League league){
-		return leagues.contains(league.getId());
+		return leagues.containsKey(league.getId());
 	}
 
 	@Override
@@ -32,7 +33,7 @@ public class Leagues{
 		if(leagues != null){
 			Iterator<League> it = leagues.values().iterator();
 			while(it.hasNext()){
-				League league = (League)it.next();
+				League league = it.next();
 				sb.append(league.toString());
 				sb.append("\n");
 			} 

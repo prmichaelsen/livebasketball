@@ -1,9 +1,9 @@
-package com.patrickmichaelsen.livebasketball;
+package com.parm.livebasketball.core;
 
 import java.util.List;
 import java.util.ArrayList;
 
-public class Match implements Comparable<Match>{
+public class Game implements Comparable<Game>{
 	private String homeTeam;
 	private String awayTeam;
 	private List<Integer> homeScores;
@@ -17,7 +17,7 @@ public class Match implements Comparable<Match>{
 	private boolean potentialMatch;
 	private long lastUpdated;
 
-	public Match(String id, String leagueId){
+	public Game(String id, String leagueId){
 		this.id = id;
 		this.leagueId = leagueId;
 		homeScores = new ArrayList<Integer>();
@@ -180,12 +180,10 @@ public class Match implements Comparable<Match>{
 			homeTeam + ": " + homeScores + "\n" + 
 			awayTeam + ": " + awayScores + "\n" +
 			"League" + ": " + leagueId + "\n";
-	} 
+	}
 
-
-	@Override
-	public int compareTo(Match match){ 
-		return (int) (this.lastUpdated - match.getLastUpdated());
+	public int compareTo(Game game){
+		return (int) (this.lastUpdated - game.getLastUpdated());
 	}
 
 } 
