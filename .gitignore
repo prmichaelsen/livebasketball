@@ -42,3 +42,17 @@ server/build/
 server/phantomjs
 
 server/resources/phantomjs
+
+MavenLivebasketball/Livebasketball/\.idea/workspace\.xml
+
+MavenLivebasketball/Livebasketball/phantomjsdriver\.log
+
+MavenLivebasketball/Livebasketball/target/classes/
+
+MavenLivebasketball/Livebasketball/target/maven-archiver/
+
+MavenLivebasketball/Livebasketball/target/maven-status/
+
+MavenLivebasketball/Livebasketball/target/
+
+MavenLivebasketball/Livebasketball/\.idea/libraries/
