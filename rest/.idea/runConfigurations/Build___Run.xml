@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Build &amp; Run" type="BashConfigurationType" factoryName="Bash" singleton="true">
+    <option name="INTERPRETER_OPTIONS" value="" />
+    <option name="INTERPRETER_PATH" value="C:\Program Files\Git\bin\bash" />
+    <option name="WORKING_DIRECTORY" value="C:\Users\Patrick\livebasketball\rest" />
+    <option name="PARENT_ENVS" value="true" />
+    <option name="SCRIPT_NAME" value="C:\Users\Patrick\livebasketball\rest\compile_run.sh" />
+    <option name="PARAMETERS" value="-t com.patrickmichaelsen.livebasketball.Main -b -r" />
+    <module name="" />
+    <envs />
+    <method />
+  </configuration>
+</component>
