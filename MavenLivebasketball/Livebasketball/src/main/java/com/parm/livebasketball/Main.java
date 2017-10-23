@@ -37,10 +37,8 @@ public class Main {
     static String sport;
     static String stage;
     static boolean Windows, Linux, Mac = false;
-    static File push_notifications_py = null;
     static boolean run = true;
     static FirebaseService firebaseService;
-    static PushService pushService;
     static DatabaseReference db;
     static FcmClient fcmMessenger;
 
@@ -48,7 +46,7 @@ public class Main {
         Properties fcmjavaProps = getProperties("fcmjava.properties");
         // Creates the Client using the default settings location, which is System.getProperty("user.home") + "/.fcmjava/fcmjava.properties":
         fcmMessenger = new FcmClient(PropertiesBasedSettings.createFromProperties(fcmjavaProps));
-        sendMobileNotifications("hello", "world");
+        sendNotifications("hello", "world");
 
         //initialize retrofit
         firebaseService = (new Retrofit.Builder()
@@ -56,11 +54,6 @@ public class Main {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build())
                 .create(FirebaseService.class);
-        pushService = (new Retrofit.Builder()
-                .baseUrl("https://fcm.googleapis.com/fcm/send/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build())
-                .create(PushService.class);
 
         try {
             InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("LiveBasketball-prod-4b2b17eef509.json");
@@ -107,7 +100,6 @@ public class Main {
 
 
         //load resources
-        //push_notifications_py = explodeExecutableResource("push_notifications.py");
         PhantomJsDriverManager.getInstance().setup();
 
         //set up driver
@@ -257,6 +249,11 @@ public class Main {
             Iterator<Game> it = games.values().iterator();
             while(it.hasNext()){
                 Game game = it.next();
+                //TODO this is how notifs will be sent once both front-ends are updated
+                //String title = league.getCountry() + ": " + league.getName();
+                //String body = game.getCondition() + ": " + game.getMatchName();
+                //String topic = leagueId;
+                //sendNotification(topic, title, body);
                 System.out.println(game);
                 boolean notificationsEnabled = false;
                 League league = firebaseLeagues.get(game.getLeagueId());
@@ -268,10 +265,7 @@ public class Main {
                         System.out.println( "------\n------\n MATCH\n------\n------\n");
                         String title = league.getCountry() + ": " + league.getName();
                         String body = game.getCondition() + ": " + game.getMatchName();
-                        // send java client notifications
-                        sendClientNotifications(title, body);
-                        //send mobile notifications
-                        sendMobileNotifications(title, body);
+                        sendNotifications(title, body);
                     }
                 }
                 //remove a game if it is more than 4 hours old
@@ -290,7 +284,7 @@ public class Main {
         System.out.println("ScoreChecker thread stopped!");
     }
 
-    public static void sendMobileNotifications(String title, String body){
+    public static void sendNotifications(String title, String body){
 
         // Message Options:
         FcmMessageOptions options = FcmMessageOptions.builder()
@@ -301,32 +295,6 @@ public class Main {
         reqBody.put("title", title);
         reqBody.put("body", body);
         fcmMessenger.send(new TopicUnicastMessage(options, new Topic("live_basketball"), reqBody));
-    }
-
-    public static void sendClientNotifications(String title, String body){
-        Gson gson = new Gson();
-        Notifications notifications = null;
-
-        // read notifs
-        try (Reader reader = new FileReader("../data/notifications.json")) {
-            notifications = (Notifications) gson.fromJson(reader, Notifications.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        if(notifications == null){
-            notifications = new Notifications();
-        }
-
-        Notification notification = new Notification(title, body);
-        notifications.add(notification);
-
-        // save notifs
-        try (FileWriter writer = new FileWriter("../data/notifications.json")) {
-            gson.toJson(notifications, writer);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public static League getLeague(WebElement table){
