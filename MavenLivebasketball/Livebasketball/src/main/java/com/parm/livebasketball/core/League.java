@@ -4,26 +4,26 @@ public class League implements Comparable<League>{
 	private String country;
 	private String name;
 	private String id;
-	private boolean enabled;
+
+	public League(String country, String name, String id) {
+		this.country = country;
+		this.name = name;
+		this.id = id;
+	}
 
 	public League(){
 		country = "";
 		name = "";
 		id = "";
-		enabled = false; 
-	};
+	}
 
-	public String hashId(){ return id = country + name; }
-
-	public void setCountry(String country){ this.country = country; };
-	public void setName(String name){ this.name = name; };
-	public void setId(String id){ this.id = id; };
-	public void setEnabled(boolean enabled){ this.enabled = enabled; };
+	public void setCountry(String country){ this.country = country; }
+	public void setName(String name){ this.name = name; }
+	public void setId(String id){ this.id = id; }
 
 	public String getCountry(){ return country; }
 	public String getName(){ return name; }
 	public String getId(){ return id; }
-	public boolean getEnabled(){ return enabled; }
 
 	@Override
 	public int compareTo(League league){
@@ -38,6 +38,6 @@ public class League implements Comparable<League>{
 
 	@Override
 	public String toString(){
-		return this.getId() + ": " + ((enabled)? "Enabled" : "Disabled");
+		return country + name;
 	}
 } 

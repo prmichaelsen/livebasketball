@@ -14,7 +14,8 @@ public class Leagues{
 
 	public LinkedTreeMap<String,League> getLeagues(){ return leagues; }
 	public void setLeagues(Map<String,League> leagues){
-		this.leagues = (LinkedTreeMap) leagues;
+		if(leagues != null)
+			this.leagues = (LinkedTreeMap) leagues;
 	} 
 
 	public League get(String leagueId){ 

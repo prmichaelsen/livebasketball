@@ -1,5 +1,10 @@
 package com.parm.livebasketball;
 
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 import com.parm.livebasketball.core.*;
@@ -7,14 +12,11 @@ import io.github.bonigarcia.wdm.PhantomJsDriverManager;
 
 import java.io.*;
 import java.lang.InterruptedException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.attribute.PosixFilePermission;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+
 import org.openqa.selenium.*;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
@@ -34,11 +36,12 @@ public class Main {
     static boolean run = true;
     static FirebaseService firebaseService;
     static PushService pushService;
+    static DatabaseReference db;
 
     public static void main(String args[]){
         //initialize retrofit
         firebaseService = (new Retrofit.Builder()
-                .baseUrl("https://livebasketballdev.firebaseio.com/")
+                .baseUrl("https://livebasketball-prod.firebaseio.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build())
                 .create(FirebaseService.class);
@@ -48,8 +51,21 @@ public class Main {
                 .build())
                 .create(PushService.class);
 
-        FileInputStream serviceAccount = new FileInputStream("")
+        try {
+            InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("LiveBasketball-prod-4b2b17eef509.json");
+            FirebaseOptions options = new FirebaseOptions.Builder()
+                    .setCredentials(GoogleCredentials.fromStream(inputStream))
+                    .setDatabaseUrl("https://livebasketball-prod.firebaseio.com/")
+                    .build();
+            FirebaseApp.initializeApp(options);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+        db = FirebaseDatabase.getInstance().getReference();
+        if(db == null){
+            throw new Error("Could not get firebase database reference");
+        }
 
         //initialize program options
         sport = Constants.Sport.BASKETBALL;
@@ -96,8 +112,17 @@ public class Main {
         //games are initialized once
         Hashtable<String,Game> games = new Hashtable<String,Game>();
         //timestamp league last forever
-        League timestamp = new League();
         while(run){
+            // just send the time to firebase to verify scraper is running
+            try {
+                Response res = firebaseService.putServerStatus(new ServerStatus(System.currentTimeMillis()/1000L)).execute();
+                if(!res.isSuccessful()){
+                    System.err.println(res.errorBody().string());
+                }
+            } catch(IOException e){
+                e.printStackTrace();
+            }
+
             //ensure driver is connected
             if(driver == null){
                 System.err.println("No driver found. Exiting...");
@@ -140,13 +165,25 @@ public class Main {
                 e.printStackTrace();
             }
 
-            //leagues are intialized every loop
-            Leagues leagues = new Leagues();
+            //leagues are initialized every loop
+            List<League> flashscoreLeagues = new ArrayList<>();
+            //read leagues from db
+            Leagues firebaseLeagues = new Leagues();
+            try {
+                Response res = firebaseService.getLeagues().execute();
+                if(res.isSuccessful()){
+                    firebaseLeagues.setLeagues((LinkedTreeMap<String,League>)res.body());
+                } else {
+                    System.err.println(res.errorBody().string());
+                }
+            } catch(IOException e){
+                e.printStackTrace();
+            }
 
             for(WebElement table : tables){
                 //get the league for this table
                 League league = getLeague(table);
-                leagues.add(league);
+                flashscoreLeagues.add(league);
 
                 //get the match rows in this league table
                 try {
@@ -162,53 +199,46 @@ public class Main {
                 }
             }
 
-            //get timestamp league from file if it exists
-            //read leagues from file
-            Leagues l = new Leagues();
-            try {
-                Response res = firebaseService.getLeagues().execute();
-                if(res.isSuccessful()){
-                    l.setLeagues((LinkedTreeMap<String,League>)res.body());
-                } else {
-                    System.err.println(res.errorBody().string());
-                }
-            } catch(IOException e){
-                e.printStackTrace();
-            }
-            if(l != null){
-                Iterator<League> it1 = l.getLeagues().values().iterator();
-                while(it1.hasNext()){
-                    League league = it1.next();
-                    if(league.getId().indexOf('#') != -1){
-                        timestamp = league;
-                        it1.remove();
-                    }
-                    //last ditch effort to update leagues
-                    if(leagues.get(league.getId()) != null){
-                        leagues.get(league.getId()).setEnabled(league.getEnabled());
+            for(League flashscoreLeague: flashscoreLeagues){
+                //post the league if not already set
+                boolean leagueIsNew = true;
+                for(League firebaseLeague: firebaseLeagues.getLeagues().values()){
+                    if(flashscoreLeague.compareTo(firebaseLeague) == 0) {
+                        leagueIsNew = false;
                     }
                 }
-                timestamp.setCountry("# Select All ");
-                TimeZone tz = java.util.TimeZone.getTimeZone("Europe/Warsaw");
-                Calendar c = java.util.Calendar.getInstance(tz);
-                c.setTimeZone(tz);
-                timestamp.setName("(Last Updated: " + c.get(Calendar.DAY_OF_MONTH)+" "+c.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + " " + c.get(Calendar.HOUR_OF_DAY)+":"+String.format("%1$02d",c.get(Calendar.MINUTE))+")");
-                timestamp.setId(timestamp.getCountry()+timestamp.getName());
-                leagues.add(timestamp);
+                if(leagueIsNew){
+                    try {
+                        Response res = firebaseService.postLeague(flashscoreLeague).execute();
+                        if(res.isSuccessful()) {
+                        } else {
+                            System.err.println(res.errorBody().string());
+                        }
+                    } catch(IOException e){
+                        e.printStackTrace();
+                    }
+                }
             }
 
-            //save leagues to file
-            Iterator<League> leagueIterator = leagues.getLeagues().values().iterator();
-            while(leagueIterator.hasNext()){
-                try {
-                    Response res = firebaseService.postLeague(leagueIterator.next()).execute();
-                    if(res.isSuccessful()){
-                        int a = 0;
-                    } else {
-                        System.err.println(res.errorBody().string());
+            for(LinkedTreeMap.Entry<String, League> firebaseLeagueEntry: firebaseLeagues.getLeagues().entrySet()){
+                // delete any leagues that are no longer on the flashscores website
+                boolean leagueIsOutdated = true;
+                for(League flashscoreLeague: flashscoreLeagues){
+                    if(flashscoreLeague.compareTo(firebaseLeagueEntry.getValue()) == 0) {
+                        leagueIsOutdated = false;
                     }
-                } catch (IOException e){
-                    e.printStackTrace();
+                }
+                if(leagueIsOutdated){
+                    try {
+                        Response res = firebaseService.deleteLeague(firebaseLeagueEntry.getKey()).execute();
+                        if(!res.isSuccessful()){
+                            System.err.println(res.errorBody().string());
+                        }
+                    } catch(IOException e){
+                        e.printStackTrace();
+                    }
+                } else {
+                    //patchLeagueSetting("2", firebaseLeagueEntry);
                 }
             }
 
@@ -218,9 +248,9 @@ public class Main {
                 Game game = it.next();
                 System.out.println(game);
                 boolean notificationsEnabled = false;
-                League league = leagues.get(game.getLeagueId());
+                League league = firebaseLeagues.get(game.getLeagueId());
                 if(league != null){
-                    notificationsEnabled = league.getEnabled();
+                    //notificationsEnabled = league.getEnabled();
                 }
                 if(notificationsEnabled){
                     if(game.doesMeetConditionOne() || game.doesMeetConditionTwo()){
@@ -315,19 +345,6 @@ public class Main {
         List<WebElement> leaguesDOM = null;
         League league = new League();
 
-        //read leagues from file
-        Leagues leagues = new Leagues();
-        try {
-            Response res = firebaseService.getLeagues().execute();
-            if(res.isSuccessful()){
-                leagues.setLeagues((LinkedTreeMap<String,League>)res.body());
-            } else {
-                System.err.println(res.errorBody().string());
-            }
-        } catch(IOException e){
-            e.printStackTrace();
-        }
-
         //get league info from DOM
         try {
             leaguesDOM = table.findElements(By.cssSelector("thead > tr > td.head_ab > span.country.left > span.name"));
@@ -363,22 +380,6 @@ public class Main {
             }
         }
 
-        if(league == null){
-            return null;
-        }
-
-        if(league.hashId() == null){
-            return null;
-        }
-
-        //check to see if league is saved
-        if(leagues != null){
-            if(leagues.containsLeague(league)){
-                return leagues.get(league.getId());
-            }
-        }
-
-        //otherwise return new league
         return league;
     }
 
@@ -492,40 +493,22 @@ public class Main {
         return game;
     }
 
-    // voodoo magic
-    // extracts the file located at path
-    // from the jar and places it in
-    // the working directory
-    // and makes it executable
-    public static File explodeExecutableResource(String name){
-        File file = null;
-        try{
-            file = File.createTempFile(name, null);
-            Path path = Paths.get(file.getAbsolutePath());
-            //load from jar
-            OutputStream out = new FileOutputStream(file);
-            InputStream in = Main.class.getClassLoader().getResourceAsStream("resources/"+name);
-            //write to file
-            byte[] buffer = new byte[1024*100];
-            int len;
-            while ((len = in.read(buffer)) != -1) {
-                out.write(buffer, 0, len);
+    /**
+     *  this is a helper function that won't likely be in use anywhere.
+     * However, it is a nice example of how to use retrofit + firebase REST api
+     * @param userId the user id to update
+     * @param firebaseLeagueEntry a Map.Entry from a leagueId to a League
+     */
+    public static void patchLeagueSetting(String userId, LinkedTreeMap.Entry<String, League> firebaseLeagueEntry){
+        try {
+            HashMap<String, Boolean> body = new HashMap<String, Boolean>();
+            body.put(firebaseLeagueEntry.getKey(), false);
+            Response res = firebaseService.patchUserLeagueSetting(userId, body).execute();
+            if(!res.isSuccessful()){
+                System.err.println(res.errorBody().string());
             }
-            out.close();
-            in.close();
-            //set respective os perms
-            if(Linux){
-                Set<PosixFilePermission> permissions = Files.getPosixFilePermissions(path);
-                permissions.add(PosixFilePermission.OWNER_EXECUTE);
-                Files.setPosixFilePermissions(path, permissions);
-            }
-            if(Windows){
-                file.setExecutable(true, false);
-            }
-        }	catch (Exception e){
+        } catch(IOException e){
             e.printStackTrace();
         }
-        file.deleteOnExit();
-        return file;
     }
 }
