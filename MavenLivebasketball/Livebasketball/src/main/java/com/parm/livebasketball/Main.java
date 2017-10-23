@@ -8,6 +8,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 import com.parm.livebasketball.core.*;
+import de.bytefish.fcmjava.client.FcmClient;
+import de.bytefish.fcmjava.client.settings.PropertiesBasedSettings;
+import de.bytefish.fcmjava.model.options.FcmMessageOptions;
+import de.bytefish.fcmjava.model.topics.Topic;
+import de.bytefish.fcmjava.requests.topic.TopicUnicastMessage;
 import io.github.bonigarcia.wdm.PhantomJsDriverManager;
 
 import java.io.*;
@@ -37,8 +42,14 @@ public class Main {
     static FirebaseService firebaseService;
     static PushService pushService;
     static DatabaseReference db;
+    static FcmClient fcmMessenger;
 
     public static void main(String args[]){
+        Properties fcmjavaProps = getProperties("fcmjava.properties");
+        // Creates the Client using the default settings location, which is System.getProperty("user.home") + "/.fcmjava/fcmjava.properties":
+        fcmMessenger = new FcmClient(PropertiesBasedSettings.createFromProperties(fcmjavaProps));
+        sendMobileNotifications("hello", "world");
+
         //initialize retrofit
         firebaseService = (new Retrofit.Builder()
                 .baseUrl("https://livebasketball-prod.firebaseio.com/")
@@ -281,38 +292,15 @@ public class Main {
 
     public static void sendMobileNotifications(String title, String body){
 
-        try{
-            String s = null;
-            String[] cmd = new String[] {
-                    "python3",
-                    push_notifications_py.getAbsolutePath(),
-                    title,
-                    body
-            };
-            Process p = Runtime.getRuntime().exec(cmd);
-            BufferedReader stdInput = new BufferedReader(new
-                    InputStreamReader(p.getInputStream()));
+        // Message Options:
+        FcmMessageOptions options = FcmMessageOptions.builder()
+                .build();
 
-            BufferedReader stdError = new BufferedReader(new
-                    InputStreamReader(p.getErrorStream()));
-
-            // read the output from the command
-            System.out.println("Here is the standard output of the command:\n");
-            while ((s = stdInput.readLine()) != null) {
-                System.out.println(s);
-            }
-
-            // read any errors from the attempted command
-            System.out.println("Here is the standard error of the command (if any):\n");
-            while ((s = stdError.readLine()) != null) {
-                System.out.println(s);
-            }
-            System.out.println(cmd);
-            System.out.println("Sent push notifications");
-        }catch(IOException er){
-            System.err.println("Could not send push notifications");
-            System.err.println(er);
-        }
+        // Send a Message:
+        Map<String, String> reqBody = new HashMap<>();
+        reqBody.put("title", title);
+        reqBody.put("body", body);
+        fcmMessenger.send(new TopicUnicastMessage(options, new Topic("live_basketball"), reqBody));
     }
 
     public static void sendClientNotifications(String title, String body){
@@ -510,5 +498,29 @@ public class Main {
         } catch(IOException e){
             e.printStackTrace();
         }
+    }
+
+    public static Properties getProperties(String fileName){
+        Properties properties = new Properties();
+        InputStream input = null;
+
+        try {
+
+            input = Main.class.getClassLoader().getResourceAsStream("config/"+fileName);
+            properties.load(input);
+            return properties;
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } finally {
+            if (input != null) {
+                try {
+                    input.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
     }
 }
