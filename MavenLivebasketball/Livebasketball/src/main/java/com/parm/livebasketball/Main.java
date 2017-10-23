@@ -5,7 +5,6 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 import com.parm.livebasketball.core.*;
 import de.bytefish.fcmjava.client.FcmClient;
