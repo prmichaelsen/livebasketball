@@ -1,0 +1,2478 @@
+{
+  "leagues" : {
+    "-KvzjjyxD7tM98KA4EAB" : {
+      "country" : "FRANCE: ",
+      "enabled" : false,
+      "id" : "FRANCE: LNB",
+      "name" : "LNB"
+    },
+    "-Kvzjk-KIShGZMsnWASK" : {
+      "country" : "ITALY: ",
+      "enabled" : false,
+      "id" : "ITALY: Lega A",
+      "name" : "Lega A"
+    },
+    "-Kvzjk0d8AkX_tY-ZKd0" : {
+      "country" : "USA: ",
+      "enabled" : false,
+      "id" : "USA: NBA - Pre-season",
+      "name" : "NBA - Pre-season"
+    },
+    "-Kvzjk20I-SqarHAQ171" : {
+      "country" : "ARGENTINA: ",
+      "enabled" : false,
+      "id" : "ARGENTINA: Torneo Super 20",
+      "name" : "Torneo Super 20"
+    },
+    "-Kvzjk3NerT0l1R9gKfx" : {
+      "country" : "AUSTRIA: ",
+      "enabled" : false,
+      "id" : "AUSTRIA: ABL",
+      "name" : "ABL"
+    },
+    "-Kvzjk4m9ZE4aoDLRahe" : {
+      "country" : "CHILE: ",
+      "enabled" : false,
+      "id" : "CHILE: LNB",
+      "name" : "LNB"
+    },
+    "-Kvzjk6BFkSSCdh9dOX3" : {
+      "country" : "DENMARK: ",
+      "enabled" : false,
+      "id" : "DENMARK: Denmark Cup Women",
+      "name" : "Denmark Cup Women"
+    },
+    "-Kvzjk7Z5qyFqmP7ieTw" : {
+      "country" : "ESTONIA: ",
+      "enabled" : false,
+      "id" : "ESTONIA: Korvpalli Meistriliiga",
+      "name" : "Korvpalli Meistriliiga"
+    },
+    "-Kvzjk8wjR8I8g9SEDMf" : {
+      "country" : "EUROPE: ",
+      "enabled" : false,
+      "id" : "EUROPE: ABA League",
+      "name" : "ABA League"
+    },
+    "-KvzjkAOL3x11g6AUb3K" : {
+      "country" : "EUROPE: ",
+      "enabled" : false,
+      "id" : "EUROPE: WBBL Women",
+      "name" : "WBBL Women"
+    },
+    "-KvzjkBj0y23-AIzCHwv" : {
+      "country" : "GREECE: ",
+      "enabled" : false,
+      "id" : "GREECE: Basket League",
+      "name" : "Basket League"
+    },
+    "-KvzjkD6zmLha6Xcw4TN" : {
+      "country" : "ISRAEL: ",
+      "enabled" : false,
+      "id" : "ISRAEL: Super League",
+      "name" : "Super League"
+    },
+    "-KvzjkEX8BpPhi7GTYk3" : {
+      "country" : "JAPAN: ",
+      "enabled" : false,
+      "id" : "JAPAN: B.League",
+      "name" : "B.League"
+    },
+    "-KvzjkG4lPV2Jc08_Dn1" : {
+      "country" : "POLAND: ",
+      "enabled" : false,
+      "id" : "POLAND: Tauron Basket Liga",
+      "name" : "Tauron Basket Liga"
+    },
+    "-KvzjkHS8coZ2XQX_h10" : {
+      "country" : "POLAND: ",
+      "enabled" : false,
+      "id" : "POLAND: 1. Liga",
+      "name" : "1. Liga"
+    },
+    "-KvzjkIwx_KnWqk-eklW" : {
+      "country" : "RUSSIA: ",
+      "enabled" : false,
+      "id" : "RUSSIA: VTB United League",
+      "name" : "VTB United League"
+    },
+    "-KvzjkKQragTgwAtA_7l" : {
+      "country" : "RUSSIA: ",
+      "enabled" : false,
+      "id" : "RUSSIA: Russian Cup - Play Offs",
+      "name" : "Russian Cup - Play Offs"
+    },
+    "-KvzjkLrDGHakYEaBV9w" : {
+      "country" : "SWEDEN: ",
+      "enabled" : false,
+      "id" : "SWEDEN: Ligan",
+      "name" : "Ligan"
+    },
+    "-KvzjkNHH_KfapM_NjRb" : {
+      "country" : "TURKEY: ",
+      "enabled" : false,
+      "id" : "TURKEY: TBL",
+      "name" : "TBL"
+    },
+    "-KvzjkOdP3fRXRi8XRE8" : {
+      "country" : "# Select All ",
+      "enabled" : false,
+      "id" : "# Select All (Last Updated: 9 Oct 8:07)",
+      "name" : "(Last Updated: 9 Oct 8:07)"
+    },
+    "-KvzjsAkKnxkrDj-yCXD" : {
+      "country" : "FRANCE: ",
+      "enabled" : false,
+      "id" : "FRANCE: LNB",
+      "name" : "LNB"
+    },
+    "-KvzjsC7xhHcG2mRUAdQ" : {
+      "country" : "ITALY: ",
+      "enabled" : false,
+      "id" : "ITALY: Lega A",
+      "name" : "Lega A"
+    },
+    "-KvzjsDW4Tka9nfW-PFu" : {
+      "country" : "USA: ",
+      "enabled" : false,
+      "id" : "USA: NBA - Pre-season",
+      "name" : "NBA - Pre-season"
+    },
+    "-KvzjsEqkFdelLmudl5e" : {
+      "country" : "ARGENTINA: ",
+      "enabled" : false,
+      "id" : "ARGENTINA: Torneo Super 20",
+      "name" : "Torneo Super 20"
+    },
+    "-KvzjsGCVPEq_DjLvNJI" : {
+      "country" : "AUSTRIA: ",
+      "enabled" : false,
+      "id" : "AUSTRIA: ABL",
+      "name" : "ABL"
+    },
+    "-KvzjsHXUSWIuL1GC2nF" : {
+      "country" : "CHILE: ",
+      "enabled" : false,
+      "id" : "CHILE: LNB",
+      "name" : "LNB"
+    },
+    "-KvzjsIxU1RAqao6DA-T" : {
+      "country" : "DENMARK: ",
+      "enabled" : false,
+      "id" : "DENMARK: Denmark Cup Women",
+      "name" : "Denmark Cup Women"
+    },
+    "-KvzjsKHIj_5Sr7bEWzS" : {
+      "country" : "ESTONIA: ",
+      "enabled" : false,
+      "id" : "ESTONIA: Korvpalli Meistriliiga",
+      "name" : "Korvpalli Meistriliiga"
+    },
+    "-KvzjsLdIWfvRbuZJ_rQ" : {
+      "country" : "EUROPE: ",
+      "enabled" : false,
+      "id" : "EUROPE: ABA League",
+      "name" : "ABA League"
+    },
+    "-KvzjsN19hyQRbG_a88w" : {
+      "country" : "EUROPE: ",
+      "enabled" : false,
+      "id" : "EUROPE: WBBL Women",
+      "name" : "WBBL Women"
+    },
+    "-KvzjsORTcqpuCerB417" : {
+      "country" : "GREECE: ",
+      "enabled" : false,
+      "id" : "GREECE: Basket League",
+      "name" : "Basket League"
+    },
+    "-KvzjsPoYXyeGdV472Si" : {
+      "country" : "ISRAEL: ",
+      "enabled" : false,
+      "id" : "ISRAEL: Super League",
+      "name" : "Super League"
+    },
+    "-KvzjsRG1xPApse50Zak" : {
+      "country" : "JAPAN: ",
+      "enabled" : false,
+      "id" : "JAPAN: B.League",
+      "name" : "B.League"
+    },
+    "-KvzjsSqBBEZICKcAlTQ" : {
+      "country" : "POLAND: ",
+      "enabled" : false,
+      "id" : "POLAND: Tauron Basket Liga",
+      "name" : "Tauron Basket Liga"
+    },
+    "-KvzjsUBkrXAzbp6ODFE" : {
+      "country" : "POLAND: ",
+      "enabled" : false,
+      "id" : "POLAND: 1. Liga",
+      "name" : "1. Liga"
+    },
+    "-KvzjsV_HIaB_sLfJJKu" : {
+      "country" : "RUSSIA: ",
+      "enabled" : false,
+      "id" : "RUSSIA: VTB United League",
+      "name" : "VTB United League"
+    },
+    "-KvzjtQBBQKQfB3mwY0h" : {
+      "country" : "RUSSIA: ",
+      "enabled" : false,
+      "id" : "RUSSIA: Russian Cup - Play Offs",
+      "name" : "Russian Cup - Play Offs"
+    },
+    "-KvzjtRVRq9Om5T0jMcn" : {
+      "country" : "SWEDEN: ",
+      "enabled" : false,
+      "id" : "SWEDEN: Ligan",
+      "name" : "Ligan"
+    },
+    "-KvzjtSp5WxkZyJvqxIT" : {
+      "country" : "TURKEY: ",
+      "enabled" : false,
+      "id" : "TURKEY: TBL",
+      "name" : "TBL"
+    },
+    "-KvzjtUJbY0s0IBcN_5k" : {
+      "country" : "# Select All ",
+      "enabled" : false,
+      "id" : "# Select All (Last Updated: 9 Oct 8:08)",
+      "name" : "(Last Updated: 9 Oct 8:08)"
+    },
+    "-Kvzk7InfV28iAXX83EL" : {
+      "country" : "FRANCE: ",
+      "enabled" : false,
+      "id" : "FRANCE: LNB",
+      "name" : "LNB"
+    },
+    "-Kvzk7KDKm1Azm9j7az2" : {
+      "country" : "ITALY: ",
+      "enabled" : false,
+      "id" : "ITALY: Lega A",
+      "name" : "Lega A"
+    },
+    "-Kvzk7LfIXRnSLON3N38" : {
+      "country" : "USA: ",
+      "enabled" : false,
+      "id" : "USA: NBA - Pre-season",
+      "name" : "NBA - Pre-season"
+    },
+    "-Kvzk7N0vq_4rBlhZEL5" : {
+      "country" : "ARGENTINA: ",
+      "enabled" : false,
+      "id" : "ARGENTINA: Torneo Super 20",
+      "name" : "Torneo Super 20"
+    },
+    "-Kvzk7OMC9pwVEzU1Nom" : {
+      "country" : "AUSTRIA: ",
+      "enabled" : false,
+      "id" : "AUSTRIA: ABL",
+      "name" : "ABL"
+    },
+    "-Kvzk7PnJcSelyMnQPCS" : {
+      "country" : "CHILE: ",
+      "enabled" : false,
+      "id" : "CHILE: LNB",
+      "name" : "LNB"
+    },
+    "-Kvzk7RAJpbflp9C_6Ri" : {
+      "country" : "DENMARK: ",
+      "enabled" : false,
+      "id" : "DENMARK: Denmark Cup Women",
+      "name" : "Denmark Cup Women"
+    },
+    "-Kvzk7SWALIk9OxM4U7_" : {
+      "country" : "ESTONIA: ",
+      "enabled" : false,
+      "id" : "ESTONIA: Korvpalli Meistriliiga",
+      "name" : "Korvpalli Meistriliiga"
+    },
+    "-Kvzk7TsU0Ov2r6RmKPO" : {
+      "country" : "EUROPE: ",
+      "enabled" : false,
+      "id" : "EUROPE: ABA League",
+      "name" : "ABA League"
+    },
+    "-Kvzk7VFMqh1c6FlbSfV" : {
+      "country" : "EUROPE: ",
+      "enabled" : false,
+      "id" : "EUROPE: WBBL Women",
+      "name" : "WBBL Women"
+    },
+    "-Kvzk7Wbnl9tdPI_QrEH" : {
+      "country" : "GREECE: ",
+      "enabled" : false,
+      "id" : "GREECE: Basket League",
+      "name" : "Basket League"
+    },
+    "-Kvzk7Y-zQ-qDeWW9Y_L" : {
+      "country" : "ISRAEL: ",
+      "enabled" : false,
+      "id" : "ISRAEL: Super League",
+      "name" : "Super League"
+    },
+    "-Kvzk7ZO-36eL0e0nxSU" : {
+      "country" : "JAPAN: ",
+      "enabled" : false,
+      "id" : "JAPAN: B.League",
+      "name" : "B.League"
+    },
+    "-Kvzk7_is3BcmTDtyPSN" : {
+      "country" : "POLAND: ",
+      "enabled" : false,
+      "id" : "POLAND: Tauron Basket Liga",
+      "name" : "Tauron Basket Liga"
+    },
+    "-Kvzk7b5tuSyG3hMYbxw" : {
+      "country" : "POLAND: ",
+      "enabled" : false,
+      "id" : "POLAND: 1. Liga",
+      "name" : "1. Liga"
+    },
+    "-Kvzk7cVkI0Xn9W83Ybp" : {
+      "country" : "RUSSIA: ",
+      "enabled" : false,
+      "id" : "RUSSIA: VTB United League",
+      "name" : "VTB United League"
+    },
+    "-Kvzk7dqhxLniZkXYhaB" : {
+      "country" : "RUSSIA: ",
+      "enabled" : false,
+      "id" : "RUSSIA: Russian Cup - Play Offs",
+      "name" : "Russian Cup - Play Offs"
+    },
+    "-Kvzk7fBBh1qkMM70i5g" : {
+      "country" : "SWEDEN: ",
+      "enabled" : false,
+      "id" : "SWEDEN: Ligan",
+      "name" : "Ligan"
+    },
+    "-Kvzk7gb8U6Y7E07_uHV" : {
+      "country" : "TURKEY: ",
+      "enabled" : false,
+      "id" : "TURKEY: TBL",
+      "name" : "TBL"
+    },
+    "-Kvzk7hyn6Yy63-FK7RM" : {
+      "country" : "# Select All ",
+      "enabled" : false,
+      "id" : "# Select All (Last Updated: 9 Oct 8:09)",
+      "name" : "(Last Updated: 9 Oct 8:09)"
+    },
+    "-KvzkFoAiGttJJN5gxZb" : {
+      "country" : "FRANCE: ",
+      "enabled" : false,
+      "id" : "FRANCE: LNB",
+      "name" : "LNB"
+    },
+    "-KvzkFpVUXHYuNBYNlde" : {
+      "country" : "ITALY: ",
+      "enabled" : false,
+      "id" : "ITALY: Lega A",
+      "name" : "Lega A"
+    },
+    "-KvzkFqproYm5tn44PUL" : {
+      "country" : "USA: ",
+      "enabled" : false,
+      "id" : "USA: NBA - Pre-season",
+      "name" : "NBA - Pre-season"
+    },
+    "-KvzkFsCUNqqtrbUq2Yo" : {
+      "country" : "ARGENTINA: ",
+      "enabled" : false,
+      "id" : "ARGENTINA: Torneo Super 20",
+      "name" : "Torneo Super 20"
+    },
+    "-KvzkFtXR8Zdwr9bNg1T" : {
+      "country" : "AUSTRIA: ",
+      "enabled" : false,
+      "id" : "AUSTRIA: ABL",
+      "name" : "ABL"
+    },
+    "-KvzkFuqrQYf90BJqZpg" : {
+      "country" : "CHILE: ",
+      "enabled" : false,
+      "id" : "CHILE: LNB",
+      "name" : "LNB"
+    },
+    "-KvzkFwAryb-DZ6_C66D" : {
+      "country" : "DENMARK: ",
+      "enabled" : false,
+      "id" : "DENMARK: Denmark Cup Women",
+      "name" : "Denmark Cup Women"
+    },
+    "-KvzkGrWBNGrvx65L306" : {
+      "country" : "ESTONIA: ",
+      "enabled" : false,
+      "id" : "ESTONIA: Korvpalli Meistriliiga",
+      "name" : "Korvpalli Meistriliiga"
+    },
+    "-KvzkGssyB4judAtZh3o" : {
+      "country" : "EUROPE: ",
+      "enabled" : false,
+      "id" : "EUROPE: ABA League",
+      "name" : "ABA League"
+    },
+    "-KvzkGuBlCO2goeVLQOa" : {
+      "country" : "EUROPE: ",
+      "enabled" : false,
+      "id" : "EUROPE: WBBL Women",
+      "name" : "WBBL Women"
+    },
+    "-KvzkGvaggctSRg1Rj0a" : {
+      "country" : "GREECE: ",
+      "enabled" : false,
+      "id" : "GREECE: Basket League",
+      "name" : "Basket League"
+    },
+    "-KvzkGwyO6cPWS7hH7wL" : {
+      "country" : "ISRAEL: ",
+      "enabled" : false,
+      "id" : "ISRAEL: Super League",
+      "name" : "Super League"
+    },
+    "-KvzkGyPsN5EBYGHWkjl" : {
+      "country" : "JAPAN: ",
+      "enabled" : false,
+      "id" : "JAPAN: B.League",
+      "name" : "B.League"
+    },
+    "-KvzkGznGZChS6rbeWDn" : {
+      "country" : "POLAND: ",
+      "enabled" : false,
+      "id" : "POLAND: Tauron Basket Liga",
+      "name" : "Tauron Basket Liga"
+    },
+    "-KvzkH07in8WNp6a8J9t" : {
+      "country" : "POLAND: ",
+      "enabled" : false,
+      "id" : "POLAND: 1. Liga",
+      "name" : "1. Liga"
+    },
+    "-KvzkH1R4ATn6D8-ZHgg" : {
+      "country" : "RUSSIA: ",
+      "enabled" : false,
+      "id" : "RUSSIA: VTB United League",
+      "name" : "VTB United League"
+    },
+    "-KvzkH2mFbzVBKUWFzy8" : {
+      "country" : "RUSSIA: ",
+      "enabled" : false,
+      "id" : "RUSSIA: Russian Cup - Play Offs",
+      "name" : "Russian Cup - Play Offs"
+    },
+    "-KvzkH47GxF4hRLapoac" : {
+      "country" : "SWEDEN: ",
+      "enabled" : false,
+      "id" : "SWEDEN: Ligan",
+      "name" : "Ligan"
+    },
+    "-KvzkH5QLlAj8XFnJYay" : {
+      "country" : "TURKEY: ",
+      "enabled" : false,
+      "id" : "TURKEY: TBL",
+      "name" : "TBL"
+    },
+    "-KvzkH6oZnw_Gxr97sty" : {
+      "country" : "# Select All ",
+      "enabled" : false,
+      "id" : "# Select All (Last Updated: 9 Oct 8:09)",
+      "name" : "(Last Updated: 9 Oct 8:09)"
+    },
+    "-KwNSOaV5n7LF7-hQvQH" : {
+      "country" : "FRANCE: ",
+      "enabled" : false,
+      "id" : "FRANCE: LNB",
+      "name" : "LNB"
+    },
+    "-KwNSObqzM-YiNkEMUu2" : {
+      "country" : "ITALY: ",
+      "enabled" : false,
+      "id" : "ITALY: Lega A",
+      "name" : "Lega A"
+    },
+    "-KwNSOdCwtRjRorNmuah" : {
+      "country" : "SPAIN: ",
+      "enabled" : false,
+      "id" : "SPAIN: ACB",
+      "name" : "ACB"
+    },
+    "-KwNSOe_IJm88Fz6tU34" : {
+      "country" : "TURKEY: ",
+      "enabled" : false,
+      "id" : "TURKEY: Super Ligi",
+      "name" : "Super Ligi"
+    },
+    "-KwNSOg31vT1X9TfIl9c" : {
+      "country" : "USA: ",
+      "enabled" : false,
+      "id" : "USA: NBA - Pre-season",
+      "name" : "NBA - Pre-season"
+    },
+    "-KwNSOhR-q8MyHs-G5Yd" : {
+      "country" : "ARGENTINA: ",
+      "enabled" : false,
+      "id" : "ARGENTINA: Torneo Super 20",
+      "name" : "Torneo Super 20"
+    },
+    "-KwNSOirhUANrFEqRczL" : {
+      "country" : "AUSTRALIA: ",
+      "enabled" : false,
+      "id" : "AUSTRALIA: NBL",
+      "name" : "NBL"
+    },
+    "-KwNSOkDo4ME1y_jasWK" : {
+      "country" : "AUSTRALIA: ",
+      "enabled" : false,
+      "id" : "AUSTRALIA: WNBL Women",
+      "name" : "WNBL Women"
+    },
+    "-KwNSOlbcfIghvY0uF2n" : {
+      "country" : "AUSTRIA: ",
+      "enabled" : false,
+      "id" : "AUSTRIA: Zweite Liga",
+      "name" : "Zweite Liga"
+    },
+    "-KwNSOmzRDR43KNC3ikH" : {
+      "country" : "AUSTRIA: ",
+      "enabled" : false,
+      "id" : "AUSTRIA: ASWBL Women",
+      "name" : "ASWBL Women"
+    },
+    "-KwNSPihV5GvkIfeq9Lg" : {
+      "country" : "BELARUS: ",
+      "enabled" : false,
+      "id" : "BELARUS: Premier League",
+      "name" : "Premier League"
+    },
+    "-KwNSPk6v1B4QIVgien5" : {
+      "country" : "BELGIUM: ",
+      "enabled" : false,
+      "id" : "BELGIUM: EuroMillions Basketball League",
+      "name" : "EuroMillions Basketball League"
+    },
+    "-KwNSPlYKDXeEJJMh46B" : {
+      "country" : "BOSNIA AND HERZEGOVINA: ",
+      "enabled" : false,
+      "id" : "BOSNIA AND HERZEGOVINA: Prvenstvo BiH",
+      "name" : "Prvenstvo BiH"
+    },
+    "-KwNSPn0NFxyhtTpEefg" : {
+      "country" : "BULGARIA: ",
+      "enabled" : false,
+      "id" : "BULGARIA: NBL",
+      "name" : "NBL"
+    },
+    "-KwNSPoVfKyVMWpcLSNw" : {
+      "country" : "CROATIA: ",
+      "enabled" : false,
+      "id" : "CROATIA: A1 Liga",
+      "name" : "A1 Liga"
+    },
+    "-KwNSPq9y1b5cw3WtLgL" : {
+      "country" : "CYPRUS: ",
+      "enabled" : false,
+      "id" : "CYPRUS: Division A",
+      "name" : "Division A"
+    },
+    "-KwNSPrTzbXdNbDPlkKR" : {
+      "country" : "CZECH REPUBLIC: ",
+      "enabled" : false,
+      "id" : "CZECH REPUBLIC: NBL",
+      "name" : "NBL"
+    },
+    "-KwNSPsoD2xe_W4HBUR1" : {
+      "country" : "CZECH REPUBLIC: ",
+      "enabled" : false,
+      "id" : "CZECH REPUBLIC: ZBL Women",
+      "name" : "ZBL Women"
+    },
+    "-KwNSPu7PbvpXAyzB0hq" : {
+      "country" : "DENMARK: ",
+      "enabled" : false,
+      "id" : "DENMARK: Denmark Cup",
+      "name" : "Denmark Cup"
+    },
+    "-KwNSPvSh1ZhQiia5T3O" : {
+      "country" : "DENMARK: ",
+      "enabled" : false,
+      "id" : "DENMARK: Denmark Cup Women",
+      "name" : "Denmark Cup Women"
+    },
+    "-KwNSPwttqpI4nfTtM1L" : {
+      "country" : "ESTONIA: ",
+      "enabled" : false,
+      "id" : "ESTONIA: Korvpalli Meistriliiga",
+      "name" : "Korvpalli Meistriliiga"
+    },
+    "-KwNSPyI1VUphERVXjNl" : {
+      "country" : "EUROPE: ",
+      "enabled" : false,
+      "id" : "EUROPE: ABA League",
+      "name" : "ABA League"
+    },
+    "-KwNSPzdC9BrDLAD5Lrf" : {
+      "country" : "EUROPE: ",
+      "enabled" : false,
+      "id" : "EUROPE: WBBL Women",
+      "name" : "WBBL Women"
+    },
+    "-KwNSQ4Opq6VCVnVlPbY" : {
+      "country" : "FINLAND: ",
+      "enabled" : false,
+      "id" : "FINLAND: Korisliiga",
+      "name" : "Korisliiga"
+    },
+    "-KwNSQ5mnisHdbT3HY2V" : {
+      "country" : "FINLAND: ",
+      "enabled" : false,
+      "id" : "FINLAND: Korisliiga Women",
+      "name" : "Korisliiga Women"
+    },
+    "-KwNSQ75puVzIMinol-F" : {
+      "country" : "FRANCE: ",
+      "enabled" : false,
+      "id" : "FRANCE: Pro B",
+      "name" : "Pro B"
+    },
+    "-KwNSQ8ZSd8w94Qg-7ni" : {
+      "country" : "FRANCE: ",
+      "enabled" : false,
+      "id" : "FRANCE: LFB Women",
+      "name" : "LFB Women"
+    },
+    "-KwNSQ9uIqmpiUHvbb60" : {
+      "country" : "FYR OF MACEDONIA: ",
+      "enabled" : false,
+      "id" : "FYR OF MACEDONIA: Superleague",
+      "name" : "Superleague"
+    },
+    "-KwNSQBF4qcD_glIphBg" : {
+      "country" : "GEORGIA: ",
+      "enabled" : false,
+      "id" : "GEORGIA: Superleague",
+      "name" : "Superleague"
+    },
+    "-KwNSQCbwNHjIfZGjFJb" : {
+      "country" : "GERMANY: ",
+      "enabled" : false,
+      "id" : "GERMANY: Pro A",
+      "name" : "Pro A"
+    },
+    "-KwNSQDx3dOA76PydheK" : {
+      "country" : "GERMANY: ",
+      "enabled" : false,
+      "id" : "GERMANY: DBBL Women",
+      "name" : "DBBL Women"
+    },
+    "-KwNSQFKhU1w6ByG1CYX" : {
+      "country" : "GREECE: ",
+      "enabled" : false,
+      "id" : "GREECE: Basket League",
+      "name" : "Basket League"
+    },
+    "-KwNSQGhOl3cP3nUMK0X" : {
+      "country" : "GREECE: ",
+      "enabled" : false,
+      "id" : "GREECE: A2",
+      "name" : "A2"
+    },
+    "-KwNSQIGZ0ptHUsJc7di" : {
+      "country" : "HUNGARY: ",
+      "enabled" : false,
+      "id" : "HUNGARY: NB I. A",
+      "name" : "NB I. A"
+    },
+    "-KwNSQJgTH_JwHiwdbt6" : {
+      "country" : "HUNGARY: ",
+      "enabled" : false,
+      "id" : "HUNGARY: Division 1 Women",
+      "name" : "Division 1 Women"
+    },
+    "-KwNSQL8Le2QamiZUBG4" : {
+      "country" : "IRELAND: ",
+      "enabled" : false,
+      "id" : "IRELAND: SuperLeague",
+      "name" : "SuperLeague"
+    },
+    "-KwNSQMWHcokTmzIZmYs" : {
+      "country" : "ISRAEL: ",
+      "enabled" : false,
+      "id" : "ISRAEL: Super League",
+      "name" : "Super League"
+    },
+    "-KwNSQNtEAx5XINJzjBG" : {
+      "country" : "ITALY: ",
+      "enabled" : false,
+      "id" : "ITALY: A2 West",
+      "name" : "A2 West"
+    },
+    "-KwNSQPFDbro6WqbTRLE" : {
+      "country" : "ITALY: ",
+      "enabled" : false,
+      "id" : "ITALY: A2 East",
+      "name" : "A2 East"
+    },
+    "-KwNSQQZwurFQGgKbFEW" : {
+      "country" : "ITALY: ",
+      "enabled" : false,
+      "id" : "ITALY: Serie A1 Women",
+      "name" : "Serie A1 Women"
+    },
+    "-KwNSQRwFHhDnGeHpitV" : {
+      "country" : "JAPAN: ",
+      "enabled" : false,
+      "id" : "JAPAN: B.League",
+      "name" : "B.League"
+    },
+    "-KwNSQTL2Uid2eiWwsiG" : {
+      "country" : "KAZAKHSTAN: ",
+      "enabled" : false,
+      "id" : "KAZAKHSTAN: Premier League",
+      "name" : "Premier League"
+    },
+    "-KwNSQUhzG3ne1o_89l0" : {
+      "country" : "KOSOVO: ",
+      "enabled" : false,
+      "id" : "KOSOVO: Superliga",
+      "name" : "Superliga"
+    },
+    "-KwNSQW4HjsCSCOF15ph" : {
+      "country" : "LATVIA: ",
+      "enabled" : false,
+      "id" : "LATVIA: LBL",
+      "name" : "LBL"
+    },
+    "-KwNSQXRS8f1sEsWOYoH" : {
+      "country" : "LITHUANIA: ",
+      "enabled" : false,
+      "id" : "LITHUANIA: LKL",
+      "name" : "LKL"
+    },
+    "-KwNSQYmAPNugTuLzYDc" : {
+      "country" : "LITHUANIA: ",
+      "enabled" : false,
+      "id" : "LITHUANIA: LMKL Women",
+      "name" : "LMKL Women"
+    },
+    "-KwNSQ_86_oYVGp8UEoy" : {
+      "country" : "LITHUANIA: ",
+      "enabled" : false,
+      "id" : "LITHUANIA: NKL",
+      "name" : "NKL"
+    },
+    "-KwNSQakGMnU4HrNd2gK" : {
+      "country" : "NETHERLANDS: ",
+      "enabled" : false,
+      "id" : "NETHERLANDS: DBL",
+      "name" : "DBL"
+    },
+    "-KwNSQcResjyglvSE3C-" : {
+      "country" : "NORWAY: ",
+      "enabled" : false,
+      "id" : "NORWAY: BLNO",
+      "name" : "BLNO"
+    },
+    "-KwNSQfu_4HJOhOX5_zs" : {
+      "country" : "NORWAY: ",
+      "enabled" : false,
+      "id" : "NORWAY: Kvinneligaen Women",
+      "name" : "Kvinneligaen Women"
+    },
+    "-KwNSQlyfwObCQ1CKmYb" : {
+      "country" : "POLAND: ",
+      "enabled" : false,
+      "id" : "POLAND: Tauron Basket Liga",
+      "name" : "Tauron Basket Liga"
+    },
+    "-KwNSQnOkkjkKdaD9AIP" : {
+      "country" : "POLAND: ",
+      "enabled" : false,
+      "id" : "POLAND: Ekstraklasa Women",
+      "name" : "Ekstraklasa Women"
+    },
+    "-KwNSQpKEbNtMUVMN3Et" : {
+      "country" : "POLAND: ",
+      "enabled" : false,
+      "id" : "POLAND: 1. Liga",
+      "name" : "1. Liga"
+    },
+    "-KwNSQqotUAUEzxHqtJ-" : {
+      "country" : "PORTUGAL: ",
+      "enabled" : false,
+      "id" : "PORTUGAL: LPB",
+      "name" : "LPB"
+    },
+    "-KwNSQsDQImJPAn0wGnB" : {
+      "country" : "ROMANIA: ",
+      "enabled" : false,
+      "id" : "ROMANIA: Divizia A",
+      "name" : "Divizia A"
+    },
+    "-KwNSQt_TI1fbDWKMG_7" : {
+      "country" : "RUSSIA: ",
+      "enabled" : false,
+      "id" : "RUSSIA: VTB United League",
+      "name" : "VTB United League"
+    },
+    "-KwNSQuuupurtb-f7Kpe" : {
+      "country" : "RUSSIA: ",
+      "enabled" : false,
+      "id" : "RUSSIA: Super League",
+      "name" : "Super League"
+    },
+    "-KwNSQwKZvdg1WQ1RU-M" : {
+      "country" : "RUSSIA: ",
+      "enabled" : false,
+      "id" : "RUSSIA: Superleague A Women",
+      "name" : "Superleague A Women"
+    },
+    "-KwNSQxrEtatC77Fyp6A" : {
+      "country" : "SERBIA: ",
+      "enabled" : false,
+      "id" : "SERBIA: First League",
+      "name" : "First League"
+    },
+    "-KwNSQzrqzRCsgOJfI5K" : {
+      "country" : "SLOVAKIA: ",
+      "enabled" : false,
+      "id" : "SLOVAKIA: Extraliga",
+      "name" : "Extraliga"
+    },
+    "-KwNSR0GEq672vKYaE2y" : {
+      "country" : "SLOVAKIA: ",
+      "enabled" : false,
+      "id" : "SLOVAKIA: Extraliga Women",
+      "name" : "Extraliga Women"
+    },
+    "-KwNSR1eXCp6ZGHUEkbP" : {
+      "country" : "SLOVENIA: ",
+      "enabled" : false,
+      "id" : "SLOVENIA: Liga Nova KBM",
+      "name" : "Liga Nova KBM"
+    },
+    "-KwNSR3L8H0E4AUunPyY" : {
+      "country" : "SLOVENIA: ",
+      "enabled" : false,
+      "id" : "SLOVENIA: 1. SKL Women",
+      "name" : "1. SKL Women"
+    },
+    "-KwNSR4ggsfwfKmgMe0G" : {
+      "country" : "SOUTH AMERICA: ",
+      "enabled" : false,
+      "id" : "SOUTH AMERICA: South American League - Preliminary",
+      "name" : "South American League - Preliminary"
+    },
+    "-KwNSR63s0qYwT1MqG9c" : {
+      "country" : "SOUTH KOREA: ",
+      "enabled" : false,
+      "id" : "SOUTH KOREA: KBL",
+      "name" : "KBL"
+    },
+    "-KwNSR7Pph5MPRPo14-S" : {
+      "country" : "SPAIN: ",
+      "enabled" : false,
+      "id" : "SPAIN: LEB Oro",
+      "name" : "LEB Oro"
+    },
+    "-KwNSR8lrWnIO0_7jouj" : {
+      "country" : "SPAIN: ",
+      "enabled" : false,
+      "id" : "SPAIN: LEB Plata",
+      "name" : "LEB Plata"
+    },
+    "-KwNSRA7etrTbxBi2SQa" : {
+      "country" : "SPAIN: ",
+      "enabled" : false,
+      "id" : "SPAIN: Liga Femenina Women",
+      "name" : "Liga Femenina Women"
+    },
+    "-KwNSRBgIcEHBjHqrh_A" : {
+      "country" : "SWEDEN: ",
+      "enabled" : false,
+      "id" : "SWEDEN: Basketligan Women",
+      "name" : "Basketligan Women"
+    },
+    "-KwNSRD1upTYStUxy5AV" : {
+      "country" : "SWITZERLAND: ",
+      "enabled" : false,
+      "id" : "SWITZERLAND: LNA",
+      "name" : "LNA"
+    },
+    "-KwNSREOp50HovOkNppV" : {
+      "country" : "SWITZERLAND: ",
+      "enabled" : false,
+      "id" : "SWITZERLAND: LNAF Women",
+      "name" : "LNAF Women"
+    },
+    "-KwNSS9-bi6IpFLzWfVC" : {
+      "country" : "TURKEY: ",
+      "enabled" : false,
+      "id" : "TURKEY: TBL",
+      "name" : "TBL"
+    },
+    "-KwNSSAPmLdFB99psbyI" : {
+      "country" : "TURKEY: ",
+      "enabled" : false,
+      "id" : "TURKEY: TB2L - First stage",
+      "name" : "TB2L - First stage"
+    },
+    "-KwNSSBqm8pG5yGBkvbk" : {
+      "country" : "TURKEY: ",
+      "enabled" : false,
+      "id" : "TURKEY: KBSL Women",
+      "name" : "KBSL Women"
+    },
+    "-KwNSSDBCt_CXkIn4Jzp" : {
+      "country" : "UNITED KINGDOM: ",
+      "enabled" : false,
+      "id" : "UNITED KINGDOM: WBBL Women",
+      "name" : "WBBL Women"
+    },
+    "-KwNSSEZGYl1iHvLhBSG" : {
+      "country" : "WORLD: ",
+      "enabled" : false,
+      "id" : "WORLD: Club Friendly",
+      "name" : "Club Friendly"
+    },
+    "-KwNSSGWtHHCxTgHaFUG" : {
+      "country" : "# Select All ",
+      "enabled" : false,
+      "id" : "# Select All (Last Updated: 14 Oct 3:18)",
+      "name" : "(Last Updated: 14 Oct 3:18)"
+    },
+    "-KwNTTwaHRxzMZ3yHp-o" : {
+      "country" : "FRANCE: ",
+      "enabled" : false,
+      "id" : "FRANCE: LNB",
+      "name" : "LNB"
+    },
+    "-KwNTTy1BozmQOVqYWC8" : {
+      "country" : "ITALY: ",
+      "enabled" : false,
+      "id" : "ITALY: Lega A",
+      "name" : "Lega A"
+    },
+    "-KwNTTzSSpC3mfA_SJNZ" : {
+      "country" : "SPAIN: ",
+      "enabled" : false,
+      "id" : "SPAIN: ACB",
+      "name" : "ACB"
+    },
+    "-KwNTU-pGB4fc8N0AUpc" : {
+      "country" : "TURKEY: ",
+      "enabled" : false,
+      "id" : "TURKEY: Super Ligi",
+      "name" : "Super Ligi"
+    },
+    "-KwNTU1Fv3xYwxzJL82O" : {
+      "country" : "USA: ",
+      "enabled" : false,
+      "id" : "USA: NBA - Pre-season",
+      "name" : "NBA - Pre-season"
+    },
+    "-KwNTU2egSuVVGcklhGC" : {
+      "country" : "ARGENTINA: ",
+      "enabled" : false,
+      "id" : "ARGENTINA: Torneo Super 20",
+      "name" : "Torneo Super 20"
+    },
+    "-KwNTU4CoNTwxKa-ry1E" : {
+      "country" : "AUSTRALIA: ",
+      "enabled" : false,
+      "id" : "AUSTRALIA: NBL",
+      "name" : "NBL"
+    },
+    "-KwNTU5ctFzuCo5MdkQr" : {
+      "country" : "AUSTRALIA: ",
+      "enabled" : false,
+      "id" : "AUSTRALIA: WNBL Women",
+      "name" : "WNBL Women"
+    },
+    "-KwNTU7-HuXeg_mep2BH" : {
+      "country" : "AUSTRIA: ",
+      "enabled" : false,
+      "id" : "AUSTRIA: Zweite Liga",
+      "name" : "Zweite Liga"
+    },
+    "-KwNTU8OxOsW2sDQ1avt" : {
+      "country" : "AUSTRIA: ",
+      "enabled" : false,
+      "id" : "AUSTRIA: ASWBL Women",
+      "name" : "ASWBL Women"
+    },
+    "-KwNTU9m32SbW4Ioc4zz" : {
+      "country" : "BELARUS: ",
+      "enabled" : false,
+      "id" : "BELARUS: Premier League",
+      "name" : "Premier League"
+    },
+    "-KwNTUB516Wj9w6JksLz" : {
+      "country" : "BELGIUM: ",
+      "enabled" : false,
+      "id" : "BELGIUM: EuroMillions Basketball League",
+      "name" : "EuroMillions Basketball League"
+    },
+    "-KwNTUCV3rTolysknBIL" : {
+      "country" : "BOSNIA AND HERZEGOVINA: ",
+      "enabled" : false,
+      "id" : "BOSNIA AND HERZEGOVINA: Prvenstvo BiH",
+      "name" : "Prvenstvo BiH"
+    },
+    "-KwNTUDs7-dFXLr854Ol" : {
+      "country" : "BULGARIA: ",
+      "enabled" : false,
+      "id" : "BULGARIA: NBL",
+      "name" : "NBL"
+    },
+    "-KwNTUFH-VVHr6iKLiQz" : {
+      "country" : "CROATIA: ",
+      "enabled" : false,
+      "id" : "CROATIA: A1 Liga",
+      "name" : "A1 Liga"
+    },
+    "-KwNTUH-s9L1Dg3OcFSu" : {
+      "country" : "CYPRUS: ",
+      "enabled" : false,
+      "id" : "CYPRUS: Division A",
+      "name" : "Division A"
+    },
+    "-KwNTUIRvSokFtsefhSU" : {
+      "country" : "CZECH REPUBLIC: ",
+      "enabled" : false,
+      "id" : "CZECH REPUBLIC: NBL",
+      "name" : "NBL"
+    },
+    "-KwNTUJq5esEsfJGXIRY" : {
+      "country" : "CZECH REPUBLIC: ",
+      "enabled" : false,
+      "id" : "CZECH REPUBLIC: ZBL Women",
+      "name" : "ZBL Women"
+    },
+    "-KwNTUL92NSl5oUvC5Hb" : {
+      "country" : "DENMARK: ",
+      "enabled" : false,
+      "id" : "DENMARK: Denmark Cup",
+      "name" : "Denmark Cup"
+    },
+    "-KwNTUMdTmohbgAbpqfw" : {
+      "country" : "DENMARK: ",
+      "enabled" : false,
+      "id" : "DENMARK: Denmark Cup Women",
+      "name" : "Denmark Cup Women"
+    },
+    "-KwNTUNyaU6X4-nlczMm" : {
+      "country" : "ESTONIA: ",
+      "enabled" : false,
+      "id" : "ESTONIA: Korvpalli Meistriliiga",
+      "name" : "Korvpalli Meistriliiga"
+    },
+    "-KwNTUPQrqZbYYhXGgB8" : {
+      "country" : "EUROPE: ",
+      "enabled" : false,
+      "id" : "EUROPE: ABA League",
+      "name" : "ABA League"
+    },
+    "-KwNTUQliU_Bn6Xnh8Yl" : {
+      "country" : "EUROPE: ",
+      "enabled" : false,
+      "id" : "EUROPE: WBBL Women",
+      "name" : "WBBL Women"
+    },
+    "-KwNTUWAn4ibpnPg_Qpg" : {
+      "country" : "FINLAND: ",
+      "enabled" : false,
+      "id" : "FINLAND: Korisliiga",
+      "name" : "Korisliiga"
+    },
+    "-KwNTUXYsybsyIwRAYP6" : {
+      "country" : "FINLAND: ",
+      "enabled" : false,
+      "id" : "FINLAND: Korisliiga Women",
+      "name" : "Korisliiga Women"
+    },
+    "-KwNTUYtzA8O9PNUE77e" : {
+      "country" : "FRANCE: ",
+      "enabled" : false,
+      "id" : "FRANCE: Pro B",
+      "name" : "Pro B"
+    },
+    "-KwNTU_ahBZL0bfng1YO" : {
+      "country" : "FRANCE: ",
+      "enabled" : false,
+      "id" : "FRANCE: LFB Women",
+      "name" : "LFB Women"
+    },
+    "-KwNTUb06WDTBPnNIlfR" : {
+      "country" : "FYR OF MACEDONIA: ",
+      "enabled" : false,
+      "id" : "FYR OF MACEDONIA: Superleague",
+      "name" : "Superleague"
+    },
+    "-KwNTUcSYZVoEE_aUdpt" : {
+      "country" : "GEORGIA: ",
+      "enabled" : false,
+      "id" : "GEORGIA: Superleague",
+      "name" : "Superleague"
+    },
+    "-KwNTUdpy4JXCk3DMk38" : {
+      "country" : "GERMANY: ",
+      "enabled" : false,
+      "id" : "GERMANY: Pro A",
+      "name" : "Pro A"
+    },
+    "-KwNTUfCm90H-lJ3lpcM" : {
+      "country" : "GERMANY: ",
+      "enabled" : false,
+      "id" : "GERMANY: DBBL Women",
+      "name" : "DBBL Women"
+    },
+    "-KwNTUiMsVi_z7qzznF_" : {
+      "country" : "GREECE: ",
+      "enabled" : false,
+      "id" : "GREECE: Basket League",
+      "name" : "Basket League"
+    },
+    "-KwNTUjpXTYUIOsHTDaG" : {
+      "country" : "GREECE: ",
+      "enabled" : false,
+      "id" : "GREECE: A2",
+      "name" : "A2"
+    },
+    "-KwNTUlIqNq7s7L1dkbx" : {
+      "country" : "HUNGARY: ",
+      "enabled" : false,
+      "id" : "HUNGARY: NB I. A",
+      "name" : "NB I. A"
+    },
+    "-KwNTUmlbMBB8x6nAMsn" : {
+      "country" : "HUNGARY: ",
+      "enabled" : false,
+      "id" : "HUNGARY: Division 1 Women",
+      "name" : "Division 1 Women"
+    },
+    "-KwNTUoBab8C_RkRCiA7" : {
+      "country" : "IRELAND: ",
+      "enabled" : false,
+      "id" : "IRELAND: SuperLeague",
+      "name" : "SuperLeague"
+    },
+    "-KwNTUpXEBFv32jDCYzn" : {
+      "country" : "ISRAEL: ",
+      "enabled" : false,
+      "id" : "ISRAEL: Super League",
+      "name" : "Super League"
+    },
+    "-KwNTUqt2VcemB4852IE" : {
+      "country" : "ITALY: ",
+      "enabled" : false,
+      "id" : "ITALY: A2 West",
+      "name" : "A2 West"
+    },
+    "-KwNTUsIkCHK3fx4PoHA" : {
+      "country" : "ITALY: ",
+      "enabled" : false,
+      "id" : "ITALY: A2 East",
+      "name" : "A2 East"
+    },
+    "-KwNTUtelfYOxpN62REE" : {
+      "country" : "ITALY: ",
+      "enabled" : false,
+      "id" : "ITALY: Serie A1 Women",
+      "name" : "Serie A1 Women"
+    },
+    "-KwNTUv4GPrlebZq_Yx0" : {
+      "country" : "JAPAN: ",
+      "enabled" : false,
+      "id" : "JAPAN: B.League",
+      "name" : "B.League"
+    },
+    "-KwNTUwZb6LLGGlYgipo" : {
+      "country" : "KAZAKHSTAN: ",
+      "enabled" : false,
+      "id" : "KAZAKHSTAN: Premier League",
+      "name" : "Premier League"
+    },
+    "-KwNTVquaFwv6AV3745S" : {
+      "country" : "KOSOVO: ",
+      "enabled" : false,
+      "id" : "KOSOVO: Superliga",
+      "name" : "Superliga"
+    },
+    "-KwNTVsIx-u5jSaNLzmu" : {
+      "country" : "LATVIA: ",
+      "enabled" : false,
+      "id" : "LATVIA: LBL",
+      "name" : "LBL"
+    },
+    "-KwNTVthJgdR6A9YEm1C" : {
+      "country" : "LITHUANIA: ",
+      "enabled" : false,
+      "id" : "LITHUANIA: LKL",
+      "name" : "LKL"
+    },
+    "-KwNTVvGwS8-BDKTvwSL" : {
+      "country" : "LITHUANIA: ",
+      "enabled" : false,
+      "id" : "LITHUANIA: LMKL Women",
+      "name" : "LMKL Women"
+    },
+    "-KwNTVwgBfPORVxhMsqu" : {
+      "country" : "LITHUANIA: ",
+      "enabled" : false,
+      "id" : "LITHUANIA: NKL",
+      "name" : "NKL"
+    },
+    "-KwNTVy23krtAlrpRO3C" : {
+      "country" : "NETHERLANDS: ",
+      "enabled" : false,
+      "id" : "NETHERLANDS: DBL",
+      "name" : "DBL"
+    },
+    "-KwNTVzNNErw7854iQtN" : {
+      "country" : "NORWAY: ",
+      "enabled" : false,
+      "id" : "NORWAY: BLNO",
+      "name" : "BLNO"
+    },
+    "-KwNTW-lpjnMroEfBGzt" : {
+      "country" : "NORWAY: ",
+      "enabled" : false,
+      "id" : "NORWAY: Kvinneligaen Women",
+      "name" : "Kvinneligaen Women"
+    },
+    "-KwNTW19-VW6MOMxAith" : {
+      "country" : "POLAND: ",
+      "enabled" : false,
+      "id" : "POLAND: Tauron Basket Liga",
+      "name" : "Tauron Basket Liga"
+    },
+    "-KwNTW2aOgPQfKIrWdnq" : {
+      "country" : "POLAND: ",
+      "enabled" : false,
+      "id" : "POLAND: Ekstraklasa Women",
+      "name" : "Ekstraklasa Women"
+    },
+    "-KwNTW3w5JDuMgyCK5Jb" : {
+      "country" : "POLAND: ",
+      "enabled" : false,
+      "id" : "POLAND: 1. Liga",
+      "name" : "1. Liga"
+    },
+    "-KwNTW5Pq_l7jZG5fVaV" : {
+      "country" : "PORTUGAL: ",
+      "enabled" : false,
+      "id" : "PORTUGAL: LPB",
+      "name" : "LPB"
+    },
+    "-KwNTW75JIABaRmswYIa" : {
+      "country" : "ROMANIA: ",
+      "enabled" : false,
+      "id" : "ROMANIA: Divizia A",
+      "name" : "Divizia A"
+    },
+    "-KwNTW8Se6O4RspC9QhM" : {
+      "country" : "RUSSIA: ",
+      "enabled" : false,
+      "id" : "RUSSIA: VTB United League",
+      "name" : "VTB United League"
+    },
+    "-KwNTW9ngyhdkdUqUxwP" : {
+      "country" : "RUSSIA: ",
+      "enabled" : false,
+      "id" : "RUSSIA: Super League",
+      "name" : "Super League"
+    },
+    "-KwNTWBDUcYCjTGWfo9K" : {
+      "country" : "RUSSIA: ",
+      "enabled" : false,
+      "id" : "RUSSIA: Superleague A Women",
+      "name" : "Superleague A Women"
+    },
+    "-KwNTWCXROf9TcfopE0v" : {
+      "country" : "SERBIA: ",
+      "enabled" : false,
+      "id" : "SERBIA: First League",
+      "name" : "First League"
+    },
+    "-KwNTWDvO7cw1cJx4xGu" : {
+      "country" : "SLOVAKIA: ",
+      "enabled" : false,
+      "id" : "SLOVAKIA: Extraliga",
+      "name" : "Extraliga"
+    },
+    "-KwNTWFHSOzgOiXBiVPy" : {
+      "country" : "SLOVAKIA: ",
+      "enabled" : false,
+      "id" : "SLOVAKIA: Extraliga Women",
+      "name" : "Extraliga Women"
+    },
+    "-KwNTWGe7zvw703Al4HO" : {
+      "country" : "SLOVENIA: ",
+      "enabled" : false,
+      "id" : "SLOVENIA: Liga Nova KBM",
+      "name" : "Liga Nova KBM"
+    },
+    "-KwNTWI7Yhz4JjHGYvq3" : {
+      "country" : "SLOVENIA: ",
+      "enabled" : false,
+      "id" : "SLOVENIA: 1. SKL Women",
+      "name" : "1. SKL Women"
+    },
+    "-KwNTWJVHphiBKfOBWEP" : {
+      "country" : "SOUTH AMERICA: ",
+      "enabled" : false,
+      "id" : "SOUTH AMERICA: South American League - Preliminary",
+      "name" : "South American League - Preliminary"
+    },
+    "-KwNTWKruCHsSZ0Sd4by" : {
+      "country" : "SOUTH KOREA: ",
+      "enabled" : false,
+      "id" : "SOUTH KOREA: KBL",
+      "name" : "KBL"
+    },
+    "-KwNTWMGCQjuKmtXzb9q" : {
+      "country" : "SPAIN: ",
+      "enabled" : false,
+      "id" : "SPAIN: LEB Oro",
+      "name" : "LEB Oro"
+    },
+    "-KwNTWNcjx_UXzBAtSs_" : {
+      "country" : "SPAIN: ",
+      "enabled" : false,
+      "id" : "SPAIN: LEB Plata",
+      "name" : "LEB Plata"
+    },
+    "-KwNTWP1G-cnl1gXenrt" : {
+      "country" : "SPAIN: ",
+      "enabled" : false,
+      "id" : "SPAIN: Liga Femenina Women",
+      "name" : "Liga Femenina Women"
+    },
+    "-KwNTWQOHCy6xpC7VPqp" : {
+      "country" : "SWEDEN: ",
+      "enabled" : false,
+      "id" : "SWEDEN: Basketligan Women",
+      "name" : "Basketligan Women"
+    },
+    "-KwNTWRkKedg2-I7wYCT" : {
+      "country" : "SWITZERLAND: ",
+      "enabled" : false,
+      "id" : "SWITZERLAND: LNA",
+      "name" : "LNA"
+    },
+    "-KwNTWT5Kk8niSeCh2ZW" : {
+      "country" : "SWITZERLAND: ",
+      "enabled" : false,
+      "id" : "SWITZERLAND: LNAF Women",
+      "name" : "LNAF Women"
+    },
+    "-KwNTWUTnShMbGSN4Bdy" : {
+      "country" : "TURKEY: ",
+      "enabled" : false,
+      "id" : "TURKEY: TBL",
+      "name" : "TBL"
+    },
+    "-KwNTWVquLaj4RSEzVTU" : {
+      "country" : "TURKEY: ",
+      "enabled" : false,
+      "id" : "TURKEY: TB2L - First stage",
+      "name" : "TB2L - First stage"
+    },
+    "-KwNTWXC_pkVyPcF0ccC" : {
+      "country" : "TURKEY: ",
+      "enabled" : false,
+      "id" : "TURKEY: KBSL Women",
+      "name" : "KBSL Women"
+    },
+    "-KwNTWYaBnBi_1q1-6TD" : {
+      "country" : "UNITED KINGDOM: ",
+      "enabled" : false,
+      "id" : "UNITED KINGDOM: WBBL Women",
+      "name" : "WBBL Women"
+    },
+    "-KwNTWZvfUFD-t5aU1s1" : {
+      "country" : "WORLD: ",
+      "enabled" : false,
+      "id" : "WORLD: Club Friendly",
+      "name" : "Club Friendly"
+    },
+    "-KwNTWaMYuD4J_iD9Dnt" : {
+      "country" : "# Select All ",
+      "enabled" : false,
+      "id" : "# Select All (Last Updated: 14 Oct 3:22)",
+      "name" : "(Last Updated: 14 Oct 3:22)"
+    },
+    "-KwNTuMy0uVVfLslVjW1" : {
+      "country" : "FRANCE: ",
+      "enabled" : false,
+      "id" : "FRANCE: LNB",
+      "name" : "LNB"
+    },
+    "-KwNTuOPcEd2CuLZUA2u" : {
+      "country" : "ITALY: ",
+      "enabled" : false,
+      "id" : "ITALY: Lega A",
+      "name" : "Lega A"
+    },
+    "-KwNTuPsClGfBwHn7dru" : {
+      "country" : "SPAIN: ",
+      "enabled" : false,
+      "id" : "SPAIN: ACB",
+      "name" : "ACB"
+    },
+    "-KwNTuREqfKyCOhGM0Ed" : {
+      "country" : "TURKEY: ",
+      "enabled" : false,
+      "id" : "TURKEY: Super Ligi",
+      "name" : "Super Ligi"
+    },
+    "-KwNTuT1uBlZgalpsw6T" : {
+      "country" : "USA: ",
+      "enabled" : false,
+      "id" : "USA: NBA - Pre-season",
+      "name" : "NBA - Pre-season"
+    },
+    "-KwNTuUQSJVf67xwJVHa" : {
+      "country" : "ARGENTINA: ",
+      "enabled" : false,
+      "id" : "ARGENTINA: Torneo Super 20",
+      "name" : "Torneo Super 20"
+    },
+    "-KwNTuVk2mWFwqODE3hg" : {
+      "country" : "AUSTRALIA: ",
+      "enabled" : false,
+      "id" : "AUSTRALIA: NBL",
+      "name" : "NBL"
+    },
+    "-KwNTuX9ky4KCXE_Rrji" : {
+      "country" : "AUSTRALIA: ",
+      "enabled" : false,
+      "id" : "AUSTRALIA: WNBL Women",
+      "name" : "WNBL Women"
+    },
+    "-KwNTuYTEeq5-MTQOE6K" : {
+      "country" : "AUSTRIA: ",
+      "enabled" : false,
+      "id" : "AUSTRIA: Zweite Liga",
+      "name" : "Zweite Liga"
+    },
+    "-KwNTuZo-RYvScBHHcab" : {
+      "country" : "AUSTRIA: ",
+      "enabled" : false,
+      "id" : "AUSTRIA: ASWBL Women",
+      "name" : "ASWBL Women"
+    },
+    "-KwNTuaCkDpg6mdsBNKy" : {
+      "country" : "BELARUS: ",
+      "enabled" : false,
+      "id" : "BELARUS: Premier League",
+      "name" : "Premier League"
+    },
+    "-KwNTubX4RfAwDmYaKGh" : {
+      "country" : "BELGIUM: ",
+      "enabled" : false,
+      "id" : "BELGIUM: EuroMillions Basketball League",
+      "name" : "EuroMillions Basketball League"
+    },
+    "-KwNTucuE7mCqBaW7Jhc" : {
+      "country" : "BOSNIA AND HERZEGOVINA: ",
+      "enabled" : false,
+      "id" : "BOSNIA AND HERZEGOVINA: Prvenstvo BiH",
+      "name" : "Prvenstvo BiH"
+    },
+    "-KwNTueOGNGTQHCvTLQx" : {
+      "country" : "BULGARIA: ",
+      "enabled" : false,
+      "id" : "BULGARIA: NBL",
+      "name" : "NBL"
+    },
+    "-KwNTug9aowmDmWvcEQv" : {
+      "country" : "CROATIA: ",
+      "enabled" : false,
+      "id" : "CROATIA: A1 Liga",
+      "name" : "A1 Liga"
+    },
+    "-KwNTuhVed5nMoVQxnJ9" : {
+      "country" : "CYPRUS: ",
+      "enabled" : false,
+      "id" : "CYPRUS: Division A",
+      "name" : "Division A"
+    },
+    "-KwNTujAEyI_RJRCUVVi" : {
+      "country" : "CZECH REPUBLIC: ",
+      "enabled" : false,
+      "id" : "CZECH REPUBLIC: NBL",
+      "name" : "NBL"
+    },
+    "-KwNTukki99DY4_2CNiQ" : {
+      "country" : "CZECH REPUBLIC: ",
+      "enabled" : false,
+      "id" : "CZECH REPUBLIC: ZBL Women",
+      "name" : "ZBL Women"
+    },
+    "-KwNTum7-dNrIqwbrlwP" : {
+      "country" : "DENMARK: ",
+      "enabled" : false,
+      "id" : "DENMARK: Denmark Cup",
+      "name" : "Denmark Cup"
+    },
+    "-KwNTunSUtCzmfIZxx6E" : {
+      "country" : "DENMARK: ",
+      "enabled" : false,
+      "id" : "DENMARK: Denmark Cup Women",
+      "name" : "Denmark Cup Women"
+    },
+    "-KwNTuonEI-XQcnXR7ly" : {
+      "country" : "ESTONIA: ",
+      "enabled" : false,
+      "id" : "ESTONIA: Korvpalli Meistriliiga",
+      "name" : "Korvpalli Meistriliiga"
+    },
+    "-KwNTvjj8hZrbmuIcnwO" : {
+      "country" : "EUROPE: ",
+      "enabled" : false,
+      "id" : "EUROPE: ABA League",
+      "name" : "ABA League"
+    },
+    "-KwNTvl4Fqjl1dpsyd4Z" : {
+      "country" : "EUROPE: ",
+      "enabled" : false,
+      "id" : "EUROPE: WBBL Women",
+      "name" : "WBBL Women"
+    },
+    "-KwNTvmSCq3zw4LAuvdz" : {
+      "country" : "FINLAND: ",
+      "enabled" : false,
+      "id" : "FINLAND: Korisliiga",
+      "name" : "Korisliiga"
+    },
+    "-KwNTvnnorSLnovqO4Ws" : {
+      "country" : "FINLAND: ",
+      "enabled" : false,
+      "id" : "FINLAND: Korisliiga Women",
+      "name" : "Korisliiga Women"
+    },
+    "-KwNTvpYtMAmWbnPYLvC" : {
+      "country" : "FRANCE: ",
+      "enabled" : false,
+      "id" : "FRANCE: Pro B",
+      "name" : "Pro B"
+    },
+    "-KwNTvqu9oPa45VML-3S" : {
+      "country" : "FRANCE: ",
+      "enabled" : false,
+      "id" : "FRANCE: LFB Women",
+      "name" : "LFB Women"
+    },
+    "-KwNTvsTm_0oR6OHBTf8" : {
+      "country" : "FYR OF MACEDONIA: ",
+      "enabled" : false,
+      "id" : "FYR OF MACEDONIA: Superleague",
+      "name" : "Superleague"
+    },
+    "-KwNTvtsdbb89U03-asJ" : {
+      "country" : "GEORGIA: ",
+      "enabled" : false,
+      "id" : "GEORGIA: Superleague",
+      "name" : "Superleague"
+    },
+    "-KwNTvvCOzfnkt4hvebq" : {
+      "country" : "GERMANY: ",
+      "enabled" : false,
+      "id" : "GERMANY: Pro A",
+      "name" : "Pro A"
+    },
+    "-KwNTvwaRLtBNJBYEEGp" : {
+      "country" : "GERMANY: ",
+      "enabled" : false,
+      "id" : "GERMANY: DBBL Women",
+      "name" : "DBBL Women"
+    },
+    "-KwNTvy3nfGLnF654q3l" : {
+      "country" : "GREECE: ",
+      "enabled" : false,
+      "id" : "GREECE: Basket League",
+      "name" : "Basket League"
+    },
+    "-KwNTvzPD7MRUUTDkc-K" : {
+      "country" : "GREECE: ",
+      "enabled" : false,
+      "id" : "GREECE: A2",
+      "name" : "A2"
+    },
+    "-KwNTw-nl-_ptTIzbCFe" : {
+      "country" : "HUNGARY: ",
+      "enabled" : false,
+      "id" : "HUNGARY: NB I. A",
+      "name" : "NB I. A"
+    },
+    "-KwNTw17bbdPzqYM92hf" : {
+      "country" : "HUNGARY: ",
+      "enabled" : false,
+      "id" : "HUNGARY: Division 1 Women",
+      "name" : "Division 1 Women"
+    },
+    "-KwNTw2URCQoW1hizMDi" : {
+      "country" : "IRELAND: ",
+      "enabled" : false,
+      "id" : "IRELAND: SuperLeague",
+      "name" : "SuperLeague"
+    },
+    "-KwNTw3rrCUQ-DZvVtry" : {
+      "country" : "ISRAEL: ",
+      "enabled" : false,
+      "id" : "ISRAEL: Super League",
+      "name" : "Super League"
+    },
+    "-KwNTw635gVGOd4i310M" : {
+      "country" : "ITALY: ",
+      "enabled" : false,
+      "id" : "ITALY: A2 West",
+      "name" : "A2 West"
+    },
+    "-KwNTw7RjJknATyKFNni" : {
+      "country" : "ITALY: ",
+      "enabled" : false,
+      "id" : "ITALY: A2 East",
+      "name" : "A2 East"
+    },
+    "-KwNTw8l0h1FsI0H2kFE" : {
+      "country" : "ITALY: ",
+      "enabled" : false,
+      "id" : "ITALY: Serie A1 Women",
+      "name" : "Serie A1 Women"
+    },
+    "-KwNTwAAYQNuw_YwF45J" : {
+      "country" : "JAPAN: ",
+      "enabled" : false,
+      "id" : "JAPAN: B.League",
+      "name" : "B.League"
+    },
+    "-KwNTwBV7LpMDms_27KD" : {
+      "country" : "KAZAKHSTAN: ",
+      "enabled" : false,
+      "id" : "KAZAKHSTAN: Premier League",
+      "name" : "Premier League"
+    },
+    "-KwNTwCuRw3Ep9SpaVj6" : {
+      "country" : "KOSOVO: ",
+      "enabled" : false,
+      "id" : "KOSOVO: Superliga",
+      "name" : "Superliga"
+    },
+    "-KwNTwEHcj7xcsnm-eki" : {
+      "country" : "LATVIA: ",
+      "enabled" : false,
+      "id" : "LATVIA: LBL",
+      "name" : "LBL"
+    },
+    "-KwNTwFeokA5Umj6xLlb" : {
+      "country" : "LITHUANIA: ",
+      "enabled" : false,
+      "id" : "LITHUANIA: LKL",
+      "name" : "LKL"
+    },
+    "-KwNTwH1eFg7ForDH_Ij" : {
+      "country" : "LITHUANIA: ",
+      "enabled" : false,
+      "id" : "LITHUANIA: LMKL Women",
+      "name" : "LMKL Women"
+    },
+    "-KwNTwIO2e357-y1Fi6s" : {
+      "country" : "LITHUANIA: ",
+      "enabled" : false,
+      "id" : "LITHUANIA: NKL",
+      "name" : "NKL"
+    },
+    "-KwNTwJxt9lY2vPkx4iR" : {
+      "country" : "NETHERLANDS: ",
+      "enabled" : false,
+      "id" : "NETHERLANDS: DBL",
+      "name" : "DBL"
+    },
+    "-KwNTwLLiaZc4vPXEwzC" : {
+      "country" : "NORWAY: ",
+      "enabled" : false,
+      "id" : "NORWAY: BLNO",
+      "name" : "BLNO"
+    },
+    "-KwNTwMhylDwxLYfay01" : {
+      "country" : "NORWAY: ",
+      "enabled" : false,
+      "id" : "NORWAY: Kvinneligaen Women",
+      "name" : "Kvinneligaen Women"
+    },
+    "-KwNTwO3Pi7wHX5Q_4yp" : {
+      "country" : "POLAND: ",
+      "enabled" : false,
+      "id" : "POLAND: Tauron Basket Liga",
+      "name" : "Tauron Basket Liga"
+    },
+    "-KwNTwPPo4VQpsP2k9G9" : {
+      "country" : "POLAND: ",
+      "enabled" : false,
+      "id" : "POLAND: Ekstraklasa Women",
+      "name" : "Ekstraklasa Women"
+    },
+    "-KwNTwQj1OezwZe9nVtx" : {
+      "country" : "POLAND: ",
+      "enabled" : false,
+      "id" : "POLAND: 1. Liga",
+      "name" : "1. Liga"
+    },
+    "-KwNTwS9rGYha4kaFQ26" : {
+      "country" : "PORTUGAL: ",
+      "enabled" : false,
+      "id" : "PORTUGAL: LPB",
+      "name" : "LPB"
+    },
+    "-KwNTwTiyMdgJvh-0_PX" : {
+      "country" : "ROMANIA: ",
+      "enabled" : false,
+      "id" : "ROMANIA: Divizia A",
+      "name" : "Divizia A"
+    },
+    "-KwNTwVCUZmJozthzWtM" : {
+      "country" : "RUSSIA: ",
+      "enabled" : false,
+      "id" : "RUSSIA: VTB United League",
+      "name" : "VTB United League"
+    },
+    "-KwNTwWmV_ZcJEyJ6CZT" : {
+      "country" : "RUSSIA: ",
+      "enabled" : false,
+      "id" : "RUSSIA: Super League",
+      "name" : "Super League"
+    },
+    "-KwNTwY8UWL_dH84eQeQ" : {
+      "country" : "RUSSIA: ",
+      "enabled" : false,
+      "id" : "RUSSIA: Superleague A Women",
+      "name" : "Superleague A Women"
+    },
+    "-KwNTwZVQ5FhX1MBr1mU" : {
+      "country" : "SERBIA: ",
+      "enabled" : false,
+      "id" : "SERBIA: First League",
+      "name" : "First League"
+    },
+    "-KwNTw_qRnKxqHK9aVvM" : {
+      "country" : "SLOVAKIA: ",
+      "enabled" : false,
+      "id" : "SLOVAKIA: Extraliga",
+      "name" : "Extraliga"
+    },
+    "-KwNTwbJrO7-7xKwD1Rz" : {
+      "country" : "SLOVAKIA: ",
+      "enabled" : false,
+      "id" : "SLOVAKIA: Extraliga Women",
+      "name" : "Extraliga Women"
+    },
+    "-KwNTweAxP2g4W4h6KH3" : {
+      "country" : "SLOVENIA: ",
+      "enabled" : false,
+      "id" : "SLOVENIA: Liga Nova KBM",
+      "name" : "Liga Nova KBM"
+    },
+    "-KwNTwfmiUc9k83ypCvW" : {
+      "country" : "SLOVENIA: ",
+      "enabled" : false,
+      "id" : "SLOVENIA: 1. SKL Women",
+      "name" : "1. SKL Women"
+    },
+    "-KwNTwh7F4_eolHN4mHq" : {
+      "country" : "SOUTH AMERICA: ",
+      "enabled" : false,
+      "id" : "SOUTH AMERICA: South American League - Preliminary",
+      "name" : "South American League - Preliminary"
+    },
+    "-KwNTwiS_LBUZar23p2k" : {
+      "country" : "SOUTH KOREA: ",
+      "enabled" : false,
+      "id" : "SOUTH KOREA: KBL",
+      "name" : "KBL"
+    },
+    "-KwNTwjmhiApNouwuWDQ" : {
+      "country" : "SPAIN: ",
+      "enabled" : false,
+      "id" : "SPAIN: LEB Oro",
+      "name" : "LEB Oro"
+    },
+    "-KwNTwl7MUsEhasXzO0c" : {
+      "country" : "SPAIN: ",
+      "enabled" : false,
+      "id" : "SPAIN: LEB Plata",
+      "name" : "LEB Plata"
+    },
+    "-KwNTwmT0037_oqa-cib" : {
+      "country" : "SPAIN: ",
+      "enabled" : false,
+      "id" : "SPAIN: Liga Femenina Women",
+      "name" : "Liga Femenina Women"
+    },
+    "-KwNTwo5iXfR5byub456" : {
+      "country" : "SWEDEN: ",
+      "enabled" : false,
+      "id" : "SWEDEN: Basketligan Women",
+      "name" : "Basketligan Women"
+    },
+    "-KwNTwtbPBmeNrvXjc0_" : {
+      "country" : "SWITZERLAND: ",
+      "enabled" : false,
+      "id" : "SWITZERLAND: LNA",
+      "name" : "LNA"
+    },
+    "-KwNTwuxIWrF--7EGrt3" : {
+      "country" : "SWITZERLAND: ",
+      "enabled" : false,
+      "id" : "SWITZERLAND: LNAF Women",
+      "name" : "LNAF Women"
+    },
+    "-KwNTwwb4wiNwSRlU3VG" : {
+      "country" : "TURKEY: ",
+      "enabled" : false,
+      "id" : "TURKEY: TBL",
+      "name" : "TBL"
+    },
+    "-KwNTwxxAPP2G0H_gqYH" : {
+      "country" : "TURKEY: ",
+      "enabled" : false,
+      "id" : "TURKEY: TB2L - First stage",
+      "name" : "TB2L - First stage"
+    },
+    "-KwNTwzK0sC5NRKpvvIZ" : {
+      "country" : "TURKEY: ",
+      "enabled" : false,
+      "id" : "TURKEY: KBSL Women",
+      "name" : "KBSL Women"
+    },
+    "-KwNTx-hMmjHCQv6qzF2" : {
+      "country" : "UNITED KINGDOM: ",
+      "enabled" : false,
+      "id" : "UNITED KINGDOM: WBBL Women",
+      "name" : "WBBL Women"
+    },
+    "-KwNTx12FxYztGoNEj40" : {
+      "country" : "WORLD: ",
+      "enabled" : false,
+      "id" : "WORLD: Club Friendly",
+      "name" : "Club Friendly"
+    },
+    "-KwNTx2OWkuEzFruKNd-" : {
+      "country" : "# Select All ",
+      "enabled" : false,
+      "id" : "# Select All (Last Updated: 14 Oct 3:24)",
+      "name" : "(Last Updated: 14 Oct 3:24)"
+    },
+    "-KwNUJf8ePVdrpER3XwM" : {
+      "country" : "FRANCE: ",
+      "enabled" : false,
+      "id" : "FRANCE: LNB",
+      "name" : "LNB"
+    },
+    "-KwNUJgRUj4BOVqktvDn" : {
+      "country" : "ITALY: ",
+      "enabled" : false,
+      "id" : "ITALY: Lega A",
+      "name" : "Lega A"
+    },
+    "-KwNUJhpshN5y4aGTQ2g" : {
+      "country" : "SPAIN: ",
+      "enabled" : false,
+      "id" : "SPAIN: ACB",
+      "name" : "ACB"
+    },
+    "-KwNUJjJQiU1aZQgYOs0" : {
+      "country" : "TURKEY: ",
+      "enabled" : false,
+      "id" : "TURKEY: Super Ligi",
+      "name" : "Super Ligi"
+    },
+    "-KwNUJkgILLXMeWhN_4t" : {
+      "country" : "USA: ",
+      "enabled" : false,
+      "id" : "USA: NBA - Pre-season",
+      "name" : "NBA - Pre-season"
+    },
+    "-KwNUJm09VL7zwI5j1IE" : {
+      "country" : "ARGENTINA: ",
+      "enabled" : false,
+      "id" : "ARGENTINA: Torneo Super 20",
+      "name" : "Torneo Super 20"
+    },
+    "-KwNUJnPGymHjnnTivDQ" : {
+      "country" : "AUSTRALIA: ",
+      "enabled" : false,
+      "id" : "AUSTRALIA: NBL",
+      "name" : "NBL"
+    },
+    "-KwNUJokuAGuGn8oxoIM" : {
+      "country" : "AUSTRALIA: ",
+      "enabled" : false,
+      "id" : "AUSTRALIA: WNBL Women",
+      "name" : "WNBL Women"
+    },
+    "-KwNUJq3XwLpqwhZZhb9" : {
+      "country" : "AUSTRIA: ",
+      "enabled" : false,
+      "id" : "AUSTRIA: Zweite Liga",
+      "name" : "Zweite Liga"
+    },
+    "-KwNUJrNsQCHTHXqTiqx" : {
+      "country" : "AUSTRIA: ",
+      "enabled" : false,
+      "id" : "AUSTRIA: ASWBL Women",
+      "name" : "ASWBL Women"
+    },
+    "-KwNUJsg01afBDcXcBPR" : {
+      "country" : "BELARUS: ",
+      "enabled" : false,
+      "id" : "BELARUS: Premier League",
+      "name" : "Premier League"
+    },
+    "-KwNUJuFN861UH1bGpC2" : {
+      "country" : "BELGIUM: ",
+      "enabled" : false,
+      "id" : "BELGIUM: EuroMillions Basketball League",
+      "name" : "EuroMillions Basketball League"
+    },
+    "-KwNUJva7cGvQSELa6Wk" : {
+      "country" : "BOSNIA AND HERZEGOVINA: ",
+      "enabled" : false,
+      "id" : "BOSNIA AND HERZEGOVINA: Prvenstvo BiH",
+      "name" : "Prvenstvo BiH"
+    },
+    "-KwNUJwz-H0XTwZwHUxt" : {
+      "country" : "BULGARIA: ",
+      "enabled" : false,
+      "id" : "BULGARIA: NBL",
+      "name" : "NBL"
+    },
+    "-KwNUJyK4syUxkN6QvnN" : {
+      "country" : "CROATIA: ",
+      "enabled" : false,
+      "id" : "CROATIA: A1 Liga",
+      "name" : "A1 Liga"
+    },
+    "-KwNUK3kCzw83JPf_yuj" : {
+      "country" : "CYPRUS: ",
+      "enabled" : false,
+      "id" : "CYPRUS: Division A",
+      "name" : "Division A"
+    },
+    "-KwNUK53U_CZSrObbJBu" : {
+      "country" : "CZECH REPUBLIC: ",
+      "enabled" : false,
+      "id" : "CZECH REPUBLIC: NBL",
+      "name" : "NBL"
+    },
+    "-KwNUK6h6OeXlurZEYVl" : {
+      "country" : "CZECH REPUBLIC: ",
+      "enabled" : false,
+      "id" : "CZECH REPUBLIC: ZBL Women",
+      "name" : "ZBL Women"
+    },
+    "-KwNUK85nQimgb7ixVEO" : {
+      "country" : "DENMARK: ",
+      "enabled" : false,
+      "id" : "DENMARK: Denmark Cup",
+      "name" : "Denmark Cup"
+    },
+    "-KwNUK9kpj7EBj1fV_g9" : {
+      "country" : "DENMARK: ",
+      "enabled" : false,
+      "id" : "DENMARK: Denmark Cup Women",
+      "name" : "Denmark Cup Women"
+    },
+    "-KwNUKBBYBwEFLGtkEYS" : {
+      "country" : "ESTONIA: ",
+      "enabled" : false,
+      "id" : "ESTONIA: Korvpalli Meistriliiga",
+      "name" : "Korvpalli Meistriliiga"
+    },
+    "-KwNUKCZyHotFrsHCIG2" : {
+      "country" : "EUROPE: ",
+      "enabled" : false,
+      "id" : "EUROPE: ABA League",
+      "name" : "ABA League"
+    },
+    "-KwNUKDyTw0yb4XgnyAk" : {
+      "country" : "EUROPE: ",
+      "enabled" : false,
+      "id" : "EUROPE: WBBL Women",
+      "name" : "WBBL Women"
+    },
+    "-KwNUKFIARMY-26ze6QJ" : {
+      "country" : "FINLAND: ",
+      "enabled" : false,
+      "id" : "FINLAND: Korisliiga",
+      "name" : "Korisliiga"
+    },
+    "-KwNUKGeUaHxI9u2cPbu" : {
+      "country" : "FINLAND: ",
+      "enabled" : false,
+      "id" : "FINLAND: Korisliiga Women",
+      "name" : "Korisliiga Women"
+    },
+    "-KwNUKI0TTq5pETlgF7X" : {
+      "country" : "FRANCE: ",
+      "enabled" : false,
+      "id" : "FRANCE: Pro B",
+      "name" : "Pro B"
+    },
+    "-KwNUKJMg4cyxhvCBuAA" : {
+      "country" : "FRANCE: ",
+      "enabled" : false,
+      "id" : "FRANCE: LFB Women",
+      "name" : "LFB Women"
+    },
+    "-KwNUKKiTDlmb9j0gier" : {
+      "country" : "FYR OF MACEDONIA: ",
+      "enabled" : false,
+      "id" : "FYR OF MACEDONIA: Superleague",
+      "name" : "Superleague"
+    },
+    "-KwNUKM5zur-RVdbkZ9J" : {
+      "country" : "GEORGIA: ",
+      "enabled" : false,
+      "id" : "GEORGIA: Superleague",
+      "name" : "Superleague"
+    },
+    "-KwNUKNTVQJJJzj5WlPy" : {
+      "country" : "GERMANY: ",
+      "enabled" : false,
+      "id" : "GERMANY: Pro A",
+      "name" : "Pro A"
+    },
+    "-KwNUKOqVDCLBWfgP6tQ" : {
+      "country" : "GERMANY: ",
+      "enabled" : false,
+      "id" : "GERMANY: DBBL Women",
+      "name" : "DBBL Women"
+    },
+    "-KwNUKQDl67EaVYqOCsw" : {
+      "country" : "GREECE: ",
+      "enabled" : false,
+      "id" : "GREECE: Basket League",
+      "name" : "Basket League"
+    },
+    "-KwNUKRYxBEGo-r2A7sN" : {
+      "country" : "GREECE: ",
+      "enabled" : false,
+      "id" : "GREECE: A2",
+      "name" : "A2"
+    },
+    "-KwNUKSw22B86yghchdR" : {
+      "country" : "HUNGARY: ",
+      "enabled" : false,
+      "id" : "HUNGARY: NB I. A",
+      "name" : "NB I. A"
+    },
+    "-KwNUKUJEM_lB_8sktMG" : {
+      "country" : "HUNGARY: ",
+      "enabled" : false,
+      "id" : "HUNGARY: Division 1 Women",
+      "name" : "Division 1 Women"
+    },
+    "-KwNUKVhnwhGpWrOov7l" : {
+      "country" : "IRELAND: ",
+      "enabled" : false,
+      "id" : "IRELAND: SuperLeague",
+      "name" : "SuperLeague"
+    },
+    "-KwNUKXGAyMBjJS_tOJp" : {
+      "country" : "ISRAEL: ",
+      "enabled" : false,
+      "id" : "ISRAEL: Super League",
+      "name" : "Super League"
+    },
+    "-KwNUKYbvm0pYLOo8vsN" : {
+      "country" : "ITALY: ",
+      "enabled" : false,
+      "id" : "ITALY: A2 West",
+      "name" : "A2 West"
+    },
+    "-KwNUK_-YSLVRUA7c3Ti" : {
+      "country" : "ITALY: ",
+      "enabled" : false,
+      "id" : "ITALY: A2 East",
+      "name" : "A2 East"
+    },
+    "-KwNUKaw-Io7Ej0lNluh" : {
+      "country" : "ITALY: ",
+      "enabled" : false,
+      "id" : "ITALY: Serie A1 Women",
+      "name" : "Serie A1 Women"
+    },
+    "-KwNUKcN6MqIyT1Vf1Kr" : {
+      "country" : "JAPAN: ",
+      "enabled" : false,
+      "id" : "JAPAN: B.League",
+      "name" : "B.League"
+    },
+    "-KwNUKdmL7xgWMS79mcf" : {
+      "country" : "KAZAKHSTAN: ",
+      "enabled" : false,
+      "id" : "KAZAKHSTAN: Premier League",
+      "name" : "Premier League"
+    },
+    "-KwNUKf9hT86o7z7o_53" : {
+      "country" : "KOSOVO: ",
+      "enabled" : false,
+      "id" : "KOSOVO: Superliga",
+      "name" : "Superliga"
+    },
+    "-KwNULa1i4fSaLCvEvv2" : {
+      "country" : "LATVIA: ",
+      "enabled" : false,
+      "id" : "LATVIA: LBL",
+      "name" : "LBL"
+    },
+    "-KwNULbWQEetwfLah7F0" : {
+      "country" : "LITHUANIA: ",
+      "enabled" : false,
+      "id" : "LITHUANIA: LKL",
+      "name" : "LKL"
+    },
+    "-KwNULd6i-M1hpMxwxsO" : {
+      "country" : "LITHUANIA: ",
+      "enabled" : false,
+      "id" : "LITHUANIA: LMKL Women",
+      "name" : "LMKL Women"
+    },
+    "-KwNULeV1HUIW0s97lYF" : {
+      "country" : "LITHUANIA: ",
+      "enabled" : false,
+      "id" : "LITHUANIA: NKL",
+      "name" : "NKL"
+    },
+    "-KwNULfvgaAw-NdCdwiX" : {
+      "country" : "NETHERLANDS: ",
+      "enabled" : false,
+      "id" : "NETHERLANDS: DBL",
+      "name" : "DBL"
+    },
+    "-KwNULhIsWrTKHuI3ddn" : {
+      "country" : "NORWAY: ",
+      "enabled" : false,
+      "id" : "NORWAY: BLNO",
+      "name" : "BLNO"
+    },
+    "-KwNULiipKS2NZUd0JM-" : {
+      "country" : "NORWAY: ",
+      "enabled" : false,
+      "id" : "NORWAY: Kvinneligaen Women",
+      "name" : "Kvinneligaen Women"
+    },
+    "-KwNULktFUd3ukp4shEL" : {
+      "country" : "POLAND: ",
+      "enabled" : false,
+      "id" : "POLAND: Tauron Basket Liga",
+      "name" : "Tauron Basket Liga"
+    },
+    "-KwNULmbHxQ8FCb6og6K" : {
+      "country" : "POLAND: ",
+      "enabled" : false,
+      "id" : "POLAND: Ekstraklasa Women",
+      "name" : "Ekstraklasa Women"
+    },
+    "-KwNULnzNRf2QdK8UWj8" : {
+      "country" : "POLAND: ",
+      "enabled" : false,
+      "id" : "POLAND: 1. Liga",
+      "name" : "1. Liga"
+    },
+    "-KwNULpPbtmOgwj9o-G2" : {
+      "country" : "PORTUGAL: ",
+      "enabled" : false,
+      "id" : "PORTUGAL: LPB",
+      "name" : "LPB"
+    },
+    "-KwNULqmwjuETFcIfCNS" : {
+      "country" : "ROMANIA: ",
+      "enabled" : false,
+      "id" : "ROMANIA: Divizia A",
+      "name" : "Divizia A"
+    },
+    "-KwNULs7xYvyfrbOw5ty" : {
+      "country" : "RUSSIA: ",
+      "enabled" : false,
+      "id" : "RUSSIA: VTB United League",
+      "name" : "VTB United League"
+    },
+    "-KwNULtWCWp2mNuQc-Ke" : {
+      "country" : "RUSSIA: ",
+      "enabled" : false,
+      "id" : "RUSSIA: Super League",
+      "name" : "Super League"
+    },
+    "-KwNULutaniFFSUypBJv" : {
+      "country" : "RUSSIA: ",
+      "enabled" : false,
+      "id" : "RUSSIA: Superleague A Women",
+      "name" : "Superleague A Women"
+    },
+    "-KwNULwKdFOkKjvLVRwq" : {
+      "country" : "SERBIA: ",
+      "enabled" : false,
+      "id" : "SERBIA: First League",
+      "name" : "First League"
+    },
+    "-KwNULxezKXucyBV9iZW" : {
+      "country" : "SLOVAKIA: ",
+      "enabled" : false,
+      "id" : "SLOVAKIA: Extraliga",
+      "name" : "Extraliga"
+    },
+    "-KwNULz0sEFv7stxbd6i" : {
+      "country" : "SLOVAKIA: ",
+      "enabled" : false,
+      "id" : "SLOVAKIA: Extraliga Women",
+      "name" : "Extraliga Women"
+    },
+    "-KwNUM-QfElmdpg3dAVX" : {
+      "country" : "SLOVENIA: ",
+      "enabled" : false,
+      "id" : "SLOVENIA: Liga Nova KBM",
+      "name" : "Liga Nova KBM"
+    },
+    "-KwNUM0lLtmPXXM2O5Jn" : {
+      "country" : "SLOVENIA: ",
+      "enabled" : false,
+      "id" : "SLOVENIA: 1. SKL Women",
+      "name" : "1. SKL Women"
+    },
+    "-KwNUM25h6sakb80Pxi-" : {
+      "country" : "SOUTH AMERICA: ",
+      "enabled" : false,
+      "id" : "SOUTH AMERICA: South American League - Preliminary",
+      "name" : "South American League - Preliminary"
+    },
+    "-KwNUM3tz3BEU1n85ujq" : {
+      "country" : "SOUTH KOREA: ",
+      "enabled" : false,
+      "id" : "SOUTH KOREA: KBL",
+      "name" : "KBL"
+    },
+    "-KwNUM5JLpibmgzldWjj" : {
+      "country" : "SPAIN: ",
+      "enabled" : false,
+      "id" : "SPAIN: LEB Oro",
+      "name" : "LEB Oro"
+    },
+    "-KwNUM6dPlNMmcZyeWEb" : {
+      "country" : "SPAIN: ",
+      "enabled" : false,
+      "id" : "SPAIN: LEB Plata",
+      "name" : "LEB Plata"
+    },
+    "-KwNUM87x0yesQysd1_G" : {
+      "country" : "SPAIN: ",
+      "enabled" : false,
+      "id" : "SPAIN: Liga Femenina Women",
+      "name" : "Liga Femenina Women"
+    },
+    "-KwNUM9cv6kp340cYCDI" : {
+      "country" : "SWEDEN: ",
+      "enabled" : false,
+      "id" : "SWEDEN: Basketligan Women",
+      "name" : "Basketligan Women"
+    },
+    "-KwNUMBIE_N10dCC1UHG" : {
+      "country" : "SWITZERLAND: ",
+      "enabled" : false,
+      "id" : "SWITZERLAND: LNA",
+      "name" : "LNA"
+    },
+    "-KwNUMCjwbm8EvHyRL5F" : {
+      "country" : "SWITZERLAND: ",
+      "enabled" : false,
+      "id" : "SWITZERLAND: LNAF Women",
+      "name" : "LNAF Women"
+    },
+    "-KwNUME609XC4X7_RqPO" : {
+      "country" : "TURKEY: ",
+      "enabled" : false,
+      "id" : "TURKEY: TBL",
+      "name" : "TBL"
+    },
+    "-KwNUMFeRrJuk4JNwiUF" : {
+      "country" : "TURKEY: ",
+      "enabled" : false,
+      "id" : "TURKEY: TB2L - First stage",
+      "name" : "TB2L - First stage"
+    },
+    "-KwNUMH0a5IXSM6sRYZ_" : {
+      "country" : "TURKEY: ",
+      "enabled" : false,
+      "id" : "TURKEY: KBSL Women",
+      "name" : "KBSL Women"
+    },
+    "-KwNUMIPQDiR5skVvitq" : {
+      "country" : "UNITED KINGDOM: ",
+      "enabled" : false,
+      "id" : "UNITED KINGDOM: WBBL Women",
+      "name" : "WBBL Women"
+    },
+    "-KwNUMJl9CqQEEJebzv8" : {
+      "country" : "WORLD: ",
+      "enabled" : false,
+      "id" : "WORLD: Club Friendly",
+      "name" : "Club Friendly"
+    },
+    "-KwNUML9QM73ex6yKpJu" : {
+      "country" : "# Select All ",
+      "enabled" : false,
+      "id" : "# Select All (Last Updated: 14 Oct 3:26)",
+      "name" : "(Last Updated: 14 Oct 3:26)"
+    },
+    "-KwNfIxL_KE-AGiD2Lo7" : {
+      "country" : "# Select All ",
+      "enabled" : false,
+      "id" : "# Select All (Last Updated: 14 Oct 4:18)",
+      "name" : "(Last Updated: 14 Oct 4:18)"
+    },
+    "-KwNfSZqGjRJqksszRtv" : {
+      "country" : "# Select All ",
+      "enabled" : false,
+      "id" : "# Select All (Last Updated: 14 Oct 4:19)",
+      "name" : "(Last Updated: 14 Oct 4:19)"
+    },
+    "-KwNfV6qsNDGN1eYYpv8" : {
+      "country" : "# Select All ",
+      "enabled" : false,
+      "id" : "# Select All (Last Updated: 14 Oct 4:19)",
+      "name" : "(Last Updated: 14 Oct 4:19)"
+    },
+    "-KwNfXeUhdTHSVd7vTZ4" : {
+      "country" : "# Select All ",
+      "enabled" : false,
+      "id" : "# Select All (Last Updated: 14 Oct 4:19)",
+      "name" : "(Last Updated: 14 Oct 4:19)"
+    },
+    "-KwNfaE0qJt9cPR-5Tj0" : {
+      "country" : "# Select All ",
+      "enabled" : false,
+      "id" : "# Select All (Last Updated: 14 Oct 4:20)",
+      "name" : "(Last Updated: 14 Oct 4:20)"
+    },
+    "-KwNfcmLh4BgB2ohJR4w" : {
+      "country" : "# Select All ",
+      "enabled" : false,
+      "id" : "# Select All (Last Updated: 14 Oct 4:20)",
+      "name" : "(Last Updated: 14 Oct 4:20)"
+    },
+    "-KwNfgH-tVBl3oobZvE_" : {
+      "country" : "# Select All ",
+      "enabled" : false,
+      "id" : "# Select All (Last Updated: 14 Oct 4:20)",
+      "name" : "(Last Updated: 14 Oct 4:20)"
+    },
+    "-KwNfio5ozMT6l5oUYhn" : {
+      "country" : "# Select All ",
+      "enabled" : false,
+      "id" : "# Select All (Last Updated: 14 Oct 4:20)",
+      "name" : "(Last Updated: 14 Oct 4:20)"
+    },
+    "-KwNfmNpO43PObxA04Rg" : {
+      "country" : "# Select All ",
+      "enabled" : false,
+      "id" : "# Select All (Last Updated: 14 Oct 4:20)",
+      "name" : "(Last Updated: 14 Oct 4:20)"
+    },
+    "-KwNfovfBMaBKLW9f0wf" : {
+      "country" : "# Select All ",
+      "enabled" : false,
+      "id" : "# Select All (Last Updated: 14 Oct 4:21)",
+      "name" : "(Last Updated: 14 Oct 4:21)"
+    },
+    "-KwNfsMJYyLi-iNG4pji" : {
+      "country" : "# Select All ",
+      "enabled" : false,
+      "id" : "# Select All (Last Updated: 14 Oct 4:21)",
+      "name" : "(Last Updated: 14 Oct 4:21)"
+    },
+    "-KwNfuu_iYJt_rftU4j8" : {
+      "country" : "# Select All ",
+      "enabled" : false,
+      "id" : "# Select All (Last Updated: 14 Oct 4:21)",
+      "name" : "(Last Updated: 14 Oct 4:21)"
+    },
+    "-KwNfxR1w92jICCLh9dG" : {
+      "country" : "# Select All ",
+      "enabled" : false,
+      "id" : "# Select All (Last Updated: 14 Oct 4:21)",
+      "name" : "(Last Updated: 14 Oct 4:21)"
+    },
+    "-KwNg--wzgxNX_3p0iqg" : {
+      "country" : "# Select All ",
+      "enabled" : false,
+      "id" : "# Select All (Last Updated: 14 Oct 4:21)",
+      "name" : "(Last Updated: 14 Oct 4:21)"
+    },
+    "-KwNg2SY0OmjdBaxHcOH" : {
+      "country" : "# Select All ",
+      "enabled" : false,
+      "id" : "# Select All (Last Updated: 14 Oct 4:22)",
+      "name" : "(Last Updated: 14 Oct 4:22)"
+    },
+    "-KwNg514dK_sJw95QYt_" : {
+      "country" : "# Select All ",
+      "enabled" : false,
+      "id" : "# Select All (Last Updated: 14 Oct 4:22)",
+      "name" : "(Last Updated: 14 Oct 4:22)"
+    },
+    "-KwNg8T7jWa5njwjxix1" : {
+      "country" : "# Select All ",
+      "enabled" : false,
+      "id" : "# Select All (Last Updated: 14 Oct 4:22)",
+      "name" : "(Last Updated: 14 Oct 4:22)"
+    },
+    "-KwNgB1Gwc1IyOpTtjOj" : {
+      "country" : "# Select All ",
+      "enabled" : false,
+      "id" : "# Select All (Last Updated: 14 Oct 4:22)",
+      "name" : "(Last Updated: 14 Oct 4:22)"
+    },
+    "-KwNgDYysg-bnFhgtWQp" : {
+      "country" : "# Select All ",
+      "enabled" : false,
+      "id" : "# Select All (Last Updated: 14 Oct 4:22)",
+      "name" : "(Last Updated: 14 Oct 4:22)"
+    },
+    "-KwNgH7-42WdzjuyZx9B" : {
+      "country" : "# Select All ",
+      "enabled" : false,
+      "id" : "# Select All (Last Updated: 14 Oct 4:23)",
+      "name" : "(Last Updated: 14 Oct 4:23)"
+    },
+    "-KwNgKjS_lxRAXdE7C6g" : {
+      "country" : "# Select All ",
+      "enabled" : false,
+      "id" : "# Select All (Last Updated: 14 Oct 4:23)",
+      "name" : "(Last Updated: 14 Oct 4:23)"
+    },
+    "-KwNgNOnBQBGChQEBhiU" : {
+      "country" : "# Select All ",
+      "enabled" : false,
+      "id" : "# Select All (Last Updated: 14 Oct 4:23)",
+      "name" : "(Last Updated: 14 Oct 4:23)"
+    },
+    "-KwNgQukRdK-f10YW32Z" : {
+      "country" : "# Select All ",
+      "enabled" : false,
+      "id" : "# Select All (Last Updated: 14 Oct 4:23)",
+      "name" : "(Last Updated: 14 Oct 4:23)"
+    },
+    "-Kx53kCPLa3vnon8vQja" : {
+      "id" : "FRANCE OPEN"
+    }
+  },
+  "users" : {
+    "ODMgYM7BU2fvL1kA1Gfzp2grz752" : {
+      "displayName" : "Patrick Michaelsen"
+    }
+  }
+}
