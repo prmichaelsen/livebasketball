@@ -66,3 +66,5 @@ MavenLivebasketball/Livebasketball/src/main/resources/LiveBasketball-prod-4b2b17
 MavenLivebasketball/Livebasketball/dependency-reduced-pom\.xml
 
 MavenLivebasketball/Livebasketball/src/main/resources/config/
+
+expo/livebasketball/\.env
