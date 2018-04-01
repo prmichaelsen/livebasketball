@@ -24,9 +24,11 @@ import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.*;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
+import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
 
 public class Main {
     static WebDriver driver;
@@ -38,27 +40,37 @@ public class Main {
     static boolean Windows, Linux, Mac = false;
     static boolean run = true;
     static FirebaseService firebaseService;
+    static ExpoService expoService;
     static DatabaseReference db;
     static FcmClient fcmMessenger;
+    static String DB_URL="https://livebasketballdev.firebaseio.com";
+    static String SERVICE_ACCOUNT_PATH= "config/livebasketballdev-firebase-adminsdk-nrecm-c10aa4836a.json";
 
     public static void main(String args[]){
-        Properties fcmjavaProps = getProperties("fcmjava.properties");
-        // Creates the Client using the default settings location, which is System.getProperty("user.home") + "/.fcmjava/fcmjava.properties":
-        fcmMessenger = new FcmClient(PropertiesBasedSettings.createFromProperties(fcmjavaProps));
-        sendNotifications("hello", "world");
-
-        //initialize retrofit
+        //initialize firebase service
         firebaseService = (new Retrofit.Builder()
-                .baseUrl("https://livebasketball-prod.firebaseio.com/")
+                .baseUrl(DB_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build())
                 .create(FirebaseService.class);
 
+        //initialize expo service
+        expoService = (new Retrofit.Builder()
+                .baseUrl("https://exp.host/--/api/v2/push/send/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build())
+                .create(ExpoService.class);
+
+        // Properties fcmjavaProps = getProperties("fcmjava.properties");
+        // Creates the Client using the default settings location, which is System.getProperty("user.home") + "/.fcmjava/fcmjava.properties":
+        // fcmMessenger = new FcmClient(PropertiesBasedSettings.createFromProperties(fcmjavaProps));
+        sendNotifications("hello", "world");
+
         try {
-            InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("LiveBasketball-prod-4b2b17eef509.json");
+            InputStream inputStream = Main.class.getClassLoader().getResourceAsStream(SERVICE_ACCOUNT_PATH);
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(inputStream))
-                    .setDatabaseUrl("https://livebasketball-prod.firebaseio.com/")
+                    .setDatabaseUrl(DB_URL)
                     .build();
             FirebaseApp.initializeApp(options);
         } catch (IOException e) {
@@ -248,19 +260,15 @@ public class Main {
             Iterator<Game> it = games.values().iterator();
             while(it.hasNext()){
                 Game game = it.next();
-                //TODO this is how notifs will be sent once both front-ends are updated
-                //String title = league.getCountry() + ": " + league.getName();
-                //String body = game.getCondition() + ": " + game.getMatchName();
-                //String topic = leagueId;
-                //sendNotification(topic, title, body);
                 System.out.println(game);
-                boolean notificationsEnabled = false;
-                League league = firebaseLeagues.get(game.getLeagueId());
-                if(league != null){
-                    //notificationsEnabled = league.getEnabled();
+                League league = null;
+                for (League current: firebaseLeagues.getLeagues().values()) {
+                   if(current.createId().compareTo(game.getLeagueId()) == 0) {
+                       league = current;
+                   }
                 }
-                if(notificationsEnabled){
-                    if(game.doesMeetConditionOne() || game.doesMeetConditionTwo()){
+                if(league != null && league.getEnabled()){
+                    if(true || game.doesMeetConditionOne() || game.doesMeetConditionTwo()){
                         System.out.println( "------\n------\n MATCH\n------\n------\n");
                         String title = league.getCountry() + ": " + league.getName();
                         String body = game.getCondition() + ": " + game.getMatchName();
@@ -284,16 +292,38 @@ public class Main {
     }
 
     public static void sendNotifications(String title, String body){
+        // get all tokens and build the request
+        LinkedTreeMap<String,ExpoToken> tokens;
+        Call sendReq = null;
+        try {
+            Response res = firebaseService.getTokens().execute();
+            if(res.isSuccessful()){
+                tokens = ((LinkedTreeMap<String,ExpoToken>)res.body());
+                for (ExpoToken token: tokens.values()) {
+                    String to = String.format("ExponentPushToken[%s]", token.getExponentPushToken());
+                    sendReq = expoService.sendNotification(new ExpoNotification(to, title, body));
+                }
+            } else {
+                System.err.println("Error: " + res.errorBody().string());
+            }
+        } catch(IOException e){
+            e.printStackTrace();
+        }
 
-        // Message Options:
-        FcmMessageOptions options = FcmMessageOptions.builder()
-                .build();
+        // send the notification post
+        if (sendReq != null) {
+            try {
+                Response res = sendReq.execute();
+                if(res.isSuccessful()){
+                    System.out.println("Sent a notification! " + res.body().toString());
+                } else {
+                    System.err.println(res.errorBody().string());
+                }
+            } catch(IOException e){
+                e.printStackTrace();
+            }
 
-        // Send a Message:
-        Map<String, String> reqBody = new HashMap<>();
-        reqBody.put("title", title);
-        reqBody.put("body", body);
-        fcmMessenger.send(new TopicUnicastMessage(options, new Topic("live_basketball"), reqBody));
+        }
     }
 
     public static League getLeague(WebElement table){
@@ -445,6 +475,7 @@ public class Main {
         }else if(isAwayTeam){
             game.setAwayScores(scores);
         }
+        game.setLeagueId(league.createId());
         return game;
     }
 

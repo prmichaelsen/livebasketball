@@ -25,9 +25,6 @@ export default (async function registerForPushNotificationsAsync() {
   // Get the token that uniquely identifies this device
   let token = await Notifications.getExpoPushTokenAsync();
   let tokenValue = token.substring(token.indexOf('[') + 1, token.indexOf(']'));
-  console.log('token', token);
-  console.log('tokenValue', tokenValue);
-  console.log('endpoint', `${PUSH_ENDPOINT}/${tokenValue}/.json`);
 
   // POST the token to our backend so we can use it to send pushes from there
   return fetch(`${PUSH_ENDPOINT}/${tokenValue}/.json`, {

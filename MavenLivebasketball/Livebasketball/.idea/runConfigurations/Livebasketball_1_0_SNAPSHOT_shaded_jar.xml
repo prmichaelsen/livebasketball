@@ -2,7 +2,8 @@
   <configuration default="false" name="Livebasketball-1.0-SNAPSHOT-shaded.jar" type="JarApplication" factoryName="JAR Application" singleton="true">
     <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
     <option name="JAR_PATH" value="$PROJECT_DIR$/target/Livebasketball-1.0-SNAPSHOT-shaded.jar" />
-    <option name="ALTERNATIVE_JRE_PATH" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+    <option name="ALTERNATIVE_JRE_PATH" value="C:/Program Files (x86)/Java/jre1.8.0_161" />
     <envs />
     <method />
   </configuration>

@@ -49,6 +49,7 @@
                 <directory>src/main/resources</directory>
                 <includes>
                     <include>LiveBasketball-prod-4b2b17eef509.json</include>
+                    <include>config/livebasketballdev-firebase-adminsdk-nrecm-c10aa4836a.json</include>
                     <include>config/fcmjava.properties</include>
                 </includes>
             </resource>

@@ -1,5 +1,6 @@
 package com.parm.livebasketball;
 
+import com.parm.livebasketball.core.ExpoToken;
 import com.parm.livebasketball.core.League;
 import com.parm.livebasketball.core.ServerStatus;
 import retrofit2.Call;
@@ -13,6 +14,9 @@ public interface FirebaseService {
 
     @GET("/leagues.json")
     Call<Map<String,League>> getLeagues();
+
+    @GET("/tokens.json")
+    Call<Map<String,ExpoToken>> getTokens();
 
     @DELETE("leagues/{leagueId}/.json")
     Call<League> deleteLeague(@Path("leagueId") String leagueId);

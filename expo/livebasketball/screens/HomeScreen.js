@@ -40,7 +40,7 @@ export default class HomeScreen extends React.Component {
     db.ref('leagues').on('value', (snapshot) => {
       var leagues = snapshot.val();
       this.setState({ 
-        leagues: Object.keys(leagues).map(id => { leagues[id].uuid = id; return leagues[id] }) ,
+        leagues: leagues ? Object.keys(leagues).map(id => { leagues[id].uuid = id; return leagues[id] }) : [],
         leaguesData: leagues,
       });
     });
@@ -104,7 +104,7 @@ export default class HomeScreen extends React.Component {
                         title="+"
                       />
                     }
-                    <Text style={{...styles.item, paddingTop: 10}}>{item.id}</Text>
+                    <Text style={{...styles.item, paddingTop: 10}}>{item.country}{item.name}</Text>
                   </View>
                 )
             }}
