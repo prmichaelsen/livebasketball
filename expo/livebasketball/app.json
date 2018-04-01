@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "livebasketball",
-    "description": "A very interesting project.",
+    "description": "Receive live updates on basketball.",
     "slug": "livebasketball",
     "privacy": "public",
     "sdkVersion": "26.0.0",
@@ -21,7 +21,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.patrickmichaelsen.livebasketball"
+    },
+    "android": {
+      "package": "com.patrickmichaelsen.livebasketball"
     }
   }
 }
