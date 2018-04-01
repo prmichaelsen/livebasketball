@@ -80,7 +80,7 @@ export default class HomeScreen extends React.Component {
               style={styles.welcomeImage}
             />
           </View>
-         */}
+         */} 
 
           <View style={styles.getStartedContainer}>
             {/*<Text>The key is: {FIREBASE_API_KEY}</Text>*/}
@@ -210,6 +210,7 @@ const styles = StyleSheet.create({
     marginLeft: -10,
   },
   getStartedContainer: {
+    paddingTop: 20,
     alignItems: 'center',
     marginHorizontal: 10,
   },
