@@ -11,29 +11,13 @@ import {
   Button,
 } from 'react-native';
 import { WebBrowser } from 'expo';
-import * as firebase from 'firebase';
-
-import { 
-  FIREBASE_API_KEY,
-  FIREBASE_AUTH_DOMAIN,
-  FIREBASE_DB_URL,
-  FIREBASE_BUCKET,
-} from 'react-native-dotenv';
-
 import { MonoText } from '../components/StyledText';
 
-const firebaseConfig = {
-  apiKey: FIREBASE_API_KEY,
-  authDomain: FIREBASE_AUTH_DOMAIN,
-  databaseURL: FIREBASE_DB_URL,
-  storageBucket: FIREBASE_BUCKET,
-}
-const firebaseApp = firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
+import { db } from '../navigation/RootNavigation';
 
-export default class HomeScreen extends React.Component {
+export default class LeaguesScreen extends React.Component {
   static navigationOptions = {
-    header: null,
+    title: 'Leagues',
   };
 
   componentWillMount() {
@@ -68,6 +52,9 @@ export default class HomeScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
+      <Text> 
+        Hi
+      </Text>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
           {/** 
           <View style={styles.welcomeContainer}>
@@ -82,8 +69,7 @@ export default class HomeScreen extends React.Component {
           </View>
          */} 
 
-          <View style={styles.getStartedContainer}>
-            {/*<Text>The key is: {FIREBASE_API_KEY}</Text>*/}
+          <View>
             <FlatList
               data={this.state.leagues}
               renderItem={({ item }) => {
@@ -95,9 +81,10 @@ export default class HomeScreen extends React.Component {
                     {item.enabled ? 
                       <Button
                         onPress={() => this.onRemoveLeague(item.uuid)} 
-                        title="-"
                         style={{color:'red'}}
-                      />
+                        title="-"
+                      >
+                      </Button>
                       :
                       <Button
                         onPress={() => this.onAddLeague(item.uuid)}

@@ -5,17 +5,17 @@ import { TabNavigator, TabBarBottom } from 'react-navigation';
 
 import Colors from '../constants/Colors';
 
-import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
+import LeaguesScreen from '../screens/LeaguesScreen';
+import LogsScreen from '../screens/LogsScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
 export default TabNavigator(
   {
-    Home: {
-      screen: HomeScreen,
+    Leagues: {
+      screen: LeaguesScreen,
     },
-    Links: {
-      screen: LinksScreen,
+    Logs: {
+      screen: LogsScreen,
     },
     Settings: {
       screen: SettingsScreen,
@@ -27,18 +27,18 @@ export default TabNavigator(
         const { routeName } = navigation.state;
         let iconName;
         switch (routeName) {
-          case 'Home':
+          case 'Leagues':
             iconName =
               Platform.OS === 'ios'
-                ? `ios-information-circle${focused ? '' : '-outline'}`
-                : 'md-information-circle';
+                ? `ios-basketball${focused ? '' : '-outline'}`
+                : 'md-basketball';
             break;
-          case 'Links':
-            iconName = Platform.OS === 'ios' ? `ios-link${focused ? '' : '-outline'}` : 'md-link';
+          case 'Logs':
+            iconName = Platform.OS === 'ios' ? `ios-list-box${focused ? '' : '-outline'}` : 'md-list-box';
             break;
           case 'Settings':
             iconName =
-              Platform.OS === 'ios' ? `ios-options${focused ? '' : '-outline'}` : 'md-options';
+              Platform.OS === 'ios' ? `ios-settings${focused ? '' : '-outline'}` : 'md-options';
         }
         return (
           <Ionicons
