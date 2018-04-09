@@ -1,16 +1,23 @@
 package com.parm.livebasketball;
 
-import com.parm.livebasketball.core.ExpoToken;
-import com.parm.livebasketball.core.League;
-import com.parm.livebasketball.core.ServerStatus;
+import com.parm.livebasketball.core.*;
 import retrofit2.Call;
 import retrofit2.http.*;
 
 import java.util.Map;
 
 public interface FirebaseService {
+    @GET("/settings/defaultUser.json")
+    Call<Settings> getSettings();
+
     @POST("/leagues.json")
     Call<League> postLeague(@Body League league);
+
+    @POST("/games.json")
+    Call<Game> postGame(@Body Game game);
+
+    @GET("/games.json")
+    Call<Map<String,Game>> getGames();
 
     @GET("/leagues.json")
     Call<Map<String,League>> getLeagues();
@@ -23,6 +30,9 @@ public interface FirebaseService {
 
     @PUT("serverStatus/.json")
     Call<ServerStatus> putServerStatus(@Body ServerStatus serverStatus);
+
+    @PUT("games/{gameUuid}/.json")
+    Call<Game> putGame(@Body Game game, @Path("gameUuid") String gameUuid);
 
     @GET("/leagueSettings/{userId}/{leagueId}/.json")
     Call<Boolean> getUserLeagueSetting(

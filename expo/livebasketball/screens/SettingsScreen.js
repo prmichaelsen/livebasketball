@@ -9,6 +9,7 @@ import {
   ScrollView,
   Text,
 } from 'react-native'; 
+import moment from 'moment';
 
 import
 {
@@ -34,6 +35,7 @@ export default class SettingsScreen extends React.Component {
 
   state = {
     switchValue: false, 
+    lastUpdated: null,
   }
 
   componentWillMount() {
@@ -43,11 +45,18 @@ export default class SettingsScreen extends React.Component {
         switchValue: settings.defaultUser.enableLeaguesByDefault,
       });
     });
-  }
 
-  // onValueChange = (switchValue) => {
-    // this.setState({ switchValue });
-  // }
+    db.ref('serverStatus').on('value', (snapshot) => {
+      var serverStatus = snapshot.val(); 
+      console.log(serverStatus);
+      var timestamp = serverStatus.timestamp;
+      var date = moment(timestamp); 
+      console.log(date);
+      this.setState({ 
+        lastUpdated: date.format('lll'),
+      });
+    });
+  } 
 
   onValueChange = (value) => { 
     db.ref('settings/' + 'defaultUser').set({
@@ -55,36 +64,7 @@ export default class SettingsScreen extends React.Component {
     })
   }
 
-  renderRow(setting) {
-    console.log(setting);
-    return ( 
-      <View key={setting.name} style={{ flex: 1, alignSelf: 'stretch'}}>
-        <Text> Hi </Text>
-        <View style={{ flex: 1, alignSelf: 'stretch' }}>
-          <Text>{setting.name}</Text>
-        </View>
-        <View style={{ flex: 1, alignSelf: 'stretch' }}>
-          <Text>{setting.value}</Text>
-        </View>
-      </View>
-    );
-  }
-
   render() {
-    let data = [
-      {
-        name: 'Last Updated',
-        value: 'None',
-      }
-    ];
-
-    let test = (
-        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            {data.map(datum => this.renderRow(datum))}
-          </View>
-        </ScrollView> 
-    );
     return (
       <View style={styles.container}>
         <ScrollView style={{ flex: 1, backgroundColor: (Platform.OS === 'ios') ? colors.iosSettingsBackground : colors.white }}>
@@ -94,11 +74,17 @@ export default class SettingsScreen extends React.Component {
           <SettingsDividerLong android={false} />
 
           <SettingsSwitch
-            title={'Allow Push Notifications'}
+            title={'Enable New Leagues by Default'}
             onSaveValue={this.onValueChange}
             value={this.state.switchValue}
             thumbTintColor={(this.state.switchValue) ? colors.switchEnabled : colors.switchDisabled}
             disabled={false}
+          />
+
+          <SettingsEditText
+            title={'Last Updated'} 
+            value={this.state.lastUpdated || 'Never'}
+            disabled={true}
           />
         </ScrollView> 
       </View>

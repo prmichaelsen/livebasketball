@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "live-basketball",
+  "private_key_id": "912499351461306c3064a352fb9af89f64358051",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDRzWP90ZLYhTgB\niBpL6mgnO4v+7A06N65Oa1OBhtUYMfef8dgIFc0YB5j53QC9nHlc8hupMyJhL1L6\nBv1MMF9IIf9Zm/d9AyA2014qJ9qWd5EZpl9K7UqVa0qYPCr/v0yddw+MqErUlV5o\nbmD9ClGNVCWowmxeHy718uNTq/7Ck82kWNkZmCNUdWh2xpo4xhJ7o5kxqeMfgbQx\nDl/NkQ+oXe8VNlAwuhoK6DyUken4QbDKpKLGTWSV1bkHW7KkoOucl7gklzoeGn8h\nIpBpBPmGoFcTp95rB26vM7PpSciTJGbJLGY2BwDF2AaDSbRKm8qAbrgEfAfBoeTw\nDShskYSfAgMBAAECggEAXncI6T2mTWh6ZbInCPyUBeo5aEBX2lk82iFYGa+gnkLN\nWM6Xc1iBnqq5FfQNA9MDEDcQ/lfASJr61Qo1ncr/8+Ye5/Wicz7nj9gPA5MrSGmw\nwyhWqtF6Lhn/ndklkT7M2+/CaBZUjzBsMEBW2kh9nNGBHWHhUmXfCq3g7ok4bdo3\nX9GYd28dO4RKSbmR6o5BqX9fFNV30cnlPqxSU1AA0yIxSlMGtBsThx0WgZ1SJjTm\np9bVoUDubXdzr0152XIilGkS9yajnuxluC1s8HI6XaARcjFbIfCp/1/T4jDgrmX3\n0bmcT5U0T6xsWGbLAkG8C43MdUejML7JJeeNhHauOQKBgQDoRkO1uNaEZv6Kqt9L\ngTLS3HQ5+ALg0MLONxvoP3V0/98/lWkIIFHl1NIes0QBAV2vdrdKa8QgBfrftjuf\n0kE66kDE+Tk9D3EjlarrHro5DpDvU0kF+pEFRpV+HxB7PIVQrYUBe2MYIYL+FOU6\n6Si8ytEq7BzEEfJPRq+HGk9oKQKBgQDnO4Ce00NbS/8QcZj2ZB2ezXAhGk2bZITt\nt/cd+Jio6A0aR/No8WYEPjOHpBVD/u/L3PpXXAuSXmWnsOaqqRQl+/VUjLAHsEJi\nBlP78R6pEFh19Ivk83swKcvPeuFNufMr4tfb0MVwuw416fOch2TQgpwAomb9eyf4\nfIvqGYO/hwKBgQDlk82I59DfvQ0J8ioSbvjVAaC/SytNGgnx2PZ0b4Sgx+bY6cyO\ng6NvDxM/1N/6Pmdi7mvr2uhW3pJAW9ZC+YYPvUmXZt30RDcHfP8atZxKmOMYKbGb\nfzWniURpDDs2E3ORcnBsLpCbYUQf7ndD6wCg2bY0PnuQMEzXnn4PgynJQQKBgBod\nxFcr8U2cdcB7tBUQFbBb77Atclp8re7TeluuOj/JhcFUIw/VQ/pytAs74xL89kSG\nPtgjE0OC2eRovITF9/qaTIkyIqebpsO/hzjLcPUTXYplBm/jeCRmdBiI/m1y9R4d\nzteK6uHinqZEODmTqTVLqyb/MLasdEVCe+MC4rh9AoGAfaYqtz47S9ITu6rxZIE2\n7m7dGVoS097v5bzgu2f0XsbcmaMP49IvI8Y2U1vQfHyA1MNE/TDASVM1MIoRdAy+\nCpE2PURWT52KkGh+T/J2zAVUIeEKRQFwn8zVXISep+lc8TDR4Dhm5cpVF+POMmym\nxJX3CjLnyGbJZtZ7hgUH0a8=\n-----END PRIVATE KEY-----\n",
+  "client_email": "live-basketball@appspot.gserviceaccount.com",
+  "client_id": "103650585471881042189",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/live-basketball%40appspot.gserviceaccount.com"
+}

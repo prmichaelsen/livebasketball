@@ -15,6 +15,16 @@ import { MonoText } from '../components/StyledText';
 
 import { db } from '../navigation/RootNavigation';
 
+import
+{
+  SettingsDividerShort,
+  SettingsDividerLong,
+  SettingsEditText,
+  SettingsCategoryHeader,
+  SettingsSwitch,
+  SettingsPicker
+} from 'react-native-settings-components';
+
 export default class LeaguesScreen extends React.Component {
   static navigationOptions = {
     title: 'Leagues',
@@ -33,104 +43,35 @@ export default class LeaguesScreen extends React.Component {
   state = {
     leagues: [],
     leaguesData: {},
-  };
-
-  onAddLeague = (uuid) => { 
-    db.ref('leagues/' + uuid).set({
-      ...(this.state.leaguesData[uuid]),
-      enabled: true,
-    })
-  }
-
-  onRemoveLeague = (uuid) => {
-    db.ref('leagues/' + uuid).set({
-      ...(this.state.leaguesData[uuid]),
-      enabled: false,
-    }) 
-  }
+  }; 
 
   render() {
     return (
       <View style={styles.container}>
-      <Text> 
-        Hi
-      </Text>
-        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-          {/** 
-          <View style={styles.welcomeContainer}>
-            <Image
-              source={
-                __DEV__
-                  ? require('../assets/images/robot-dev.png')
-                  : require('../assets/images/robot-prod.png')
-              }
-              style={styles.welcomeImage}
-            />
-          </View>
-         */} 
-
+        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}> 
           <View>
             <FlatList
               data={this.state.leagues}
               renderItem={({ item }) => {
-                return ( 
-                  <View style={{ 
-                    flexDirection: 'row',
-                    paddingBottom: 20,
-                  }}> 
-                    {item.enabled ? 
-                      <Button
-                        onPress={() => this.onRemoveLeague(item.uuid)} 
-                        style={{color:'red'}}
-                        title="-"
-                      >
-                      </Button>
-                      :
-                      <Button
-                        onPress={() => this.onAddLeague(item.uuid)}
-                        title="+"
-                      />
-                    }
-                    <Text style={{...styles.item, paddingTop: 10}}>{item.country}{item.name}</Text>
-                  </View>
-                )
-            }}
+                return (
+                  <SettingsSwitch
+                    title={item.country + item.name}
+                    onSaveValue={(value) => {
+                      db.ref('leagues/' + item.uuid).set({
+                        ...(this.state.leaguesData[item.uuid]),
+                        enabled: value,
+                      })
+                    }}
+                    value={item.enabled}
+                    thumbTintColor={(item.enabled) ? colors.switchEnabled : colors.switchDisabled}
+                    disabled={false}
+                  />
+                );
+              }}
               keyExtractor={(item) => item.uuid} 
-            />
-
-            {/*
-            {this._maybeRenderDevelopmentModeWarning()}
-
-            <Text style={styles.getStartedText}>Get started by opening</Text>
-
-            <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-              <MonoText style={styles.codeHighlightText}>screens/HomeScreen.js</MonoText>
-            </View>
-
-            <Text style={styles.getStartedText}>
-              Change this text and your app will automatically reload.
-            </Text>
-            */}
+            /> 
           </View>
-
-          {/*}
-          <View style={styles.helpContainer}>
-            <TouchableOpacity onPress={this._handleHelpPress} style={styles.helpLink}>
-              <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
-            </TouchableOpacity>
-          </View>
-          */}
-        </ScrollView>
-
-        {/*
-        <View style={styles.tabBarInfoContainer}>
-          <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
-
-          <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-            <MonoText style={styles.codeHighlightText}>navigation/MainTabNavigator.js</MonoText>
-          </View>
-        </View>
-          */}
+        </ScrollView> 
       </View>
     );
   }
@@ -258,3 +199,13 @@ const styles = StyleSheet.create({
     color: '#2e78b7',
   },
 });
+
+const colors = {
+  iosSettingsBackground: 'rgb(235,235,241)',
+  white: '#FFFFFF',
+  monza: '#C70039',
+  switchEnabled: (Platform.OS === 'android') ? '#C70039' : null,
+  switchDisabled: (Platform.OS === 'android') ? '#efeff3' : null,
+  switchOnTintColor: (Platform.OS === 'android') ? 'rgba(199, 0, 57, 0.6)' : null,
+  blueGem: '#27139A',
+};

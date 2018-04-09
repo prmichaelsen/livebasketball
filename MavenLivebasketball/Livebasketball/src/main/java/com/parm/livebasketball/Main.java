@@ -8,10 +8,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.internal.LinkedTreeMap;
 import com.parm.livebasketball.core.*;
 import de.bytefish.fcmjava.client.FcmClient;
-import de.bytefish.fcmjava.client.settings.PropertiesBasedSettings;
-import de.bytefish.fcmjava.model.options.FcmMessageOptions;
-import de.bytefish.fcmjava.model.topics.Topic;
-import de.bytefish.fcmjava.requests.topic.TopicUnicastMessage;
 import io.github.bonigarcia.wdm.PhantomJsDriverManager;
 
 import java.io.*;
@@ -64,7 +60,7 @@ public class Main {
         // Properties fcmjavaProps = getProperties("fcmjava.properties");
         // Creates the Client using the default settings location, which is System.getProperty("user.home") + "/.fcmjava/fcmjava.properties":
         // fcmMessenger = new FcmClient(PropertiesBasedSettings.createFromProperties(fcmjavaProps));
-        sendNotifications("hello", "world");
+        sendNotifications("Livebasketball Server Restarted!", "The server has restarted.");
 
         try {
             InputStream inputStream = Main.class.getClassLoader().getResourceAsStream(SERVICE_ACCOUNT_PATH);
@@ -129,7 +125,7 @@ public class Main {
         while(run){
             // just send the time to firebase to verify scraper is running
             try {
-                Response res = firebaseService.putServerStatus(new ServerStatus(System.currentTimeMillis()/1000L)).execute();
+                Response res = firebaseService.putServerStatus(new ServerStatus(System.currentTimeMillis())).execute();
                 if(!res.isSuccessful()){
                     System.err.println(res.errorBody().string());
                 }
@@ -194,6 +190,18 @@ public class Main {
                 e.printStackTrace();
             }
 
+            Map<String, Game> dbGames = null;
+            try {
+                Response res = firebaseService.getGames().execute();
+                if(res.isSuccessful()){
+                    dbGames = (Map<String,Game>)res.body();
+                } else {
+                    System.err.println(res.errorBody().string());
+                }
+            } catch(IOException e){
+                e.printStackTrace();
+            }
+
             for(WebElement table : tables){
                 //get the league for this table
                 League league = getLeague(table);
@@ -210,6 +218,73 @@ public class Main {
                 for(WebElement row : rows){
                     Game game = getMatch(row, league, games);
                     games.put(game.getId(), game);
+
+                    try {
+                        Response res = firebaseService.getGames().execute();
+                        if(res.isSuccessful()){
+                            dbGames = (Map<String,Game>)res.body();
+                        } else {
+                            System.err.println(res.errorBody().string());
+                        }
+                    } catch(IOException e){
+                        e.printStackTrace();
+                    }
+
+                    // update database if game is new
+                    if( dbGames != null ) {
+                        if( dbGames.isEmpty())
+                            try {
+                                Response res = firebaseService.postGame(game).execute();
+                                if (res.isSuccessful()) {
+                                } else {
+                                    System.err.println(res.errorBody().string());
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        boolean gameIsNew = true;
+                        String gameUuid = null;
+                        for (LinkedTreeMap.Entry<String, Game> entry: dbGames.entrySet()) {
+                            //post the game if not already set
+                            if(entry.getValue().getId().compareTo(game.getId()) == 0) {
+                                gameIsNew = false;
+                                gameUuid = entry.getKey();
+                            }
+                        }
+                        if (gameIsNew) {
+                            try {
+                                Response res = firebaseService.postGame(game).execute();
+                                if (res.isSuccessful()) {
+                                } else {
+                                    System.err.println(res.errorBody().string());
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        else {
+                            try {
+                                Response res = firebaseService.putGame(game, gameUuid).execute();
+                                if (res.isSuccessful()) {
+                                } else {
+                                    System.err.println(res.errorBody().string());
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                    else {
+                        try {
+                            Response res = firebaseService.postGame(game).execute();
+                            if (res.isSuccessful()) {
+                            } else {
+                                System.err.println(res.errorBody().string());
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
             }
 
@@ -222,6 +297,19 @@ public class Main {
                     }
                 }
                 if(leagueIsNew){
+                    Settings settings = null;
+                    try {
+                        Response res = firebaseService.getSettings().execute();
+                        if(res.isSuccessful()){
+                            settings = (Settings)res.body();
+                        } else {
+                            System.err.println(res.errorBody().string());
+                        }
+                    } catch(IOException e){
+                        e.printStackTrace();
+                    }
+                    if(settings != null)
+                        flashscoreLeague.setEnabled(settings.isEnableLeaguesByDefault());
                     try {
                         Response res = firebaseService.postLeague(flashscoreLeague).execute();
                         if(res.isSuccessful()) {
@@ -268,7 +356,7 @@ public class Main {
                    }
                 }
                 if(league != null && league.getEnabled()){
-                    if(true || game.doesMeetConditionOne() || game.doesMeetConditionTwo()){
+                    if(game.doesMeetConditionOne() || game.doesMeetConditionTwo()){
                         System.out.println( "------\n------\n MATCH\n------\n------\n");
                         String title = league.getCountry() + ": " + league.getName();
                         String body = game.getCondition() + ": " + game.getMatchName();
