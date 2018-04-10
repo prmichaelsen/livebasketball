@@ -10,6 +10,43 @@ import {
 import Modal from 'react-native-modal';
 import { db } from '../navigation/RootNavigation';
 
+const toRender = [
+  { title: 'League', key: 'leagueId' },
+  { title: 'Winning Team', key: 'winningTeam' },
+  { title: 'Home Team', key: 'homeTeam' },
+  { title: 'Away Team', key: 'awayTeam' },
+  {
+    title: 'Home Team Scores', key: 'homeScores', render: g =>
+      (
+        <FlatList
+          style={{ flexDirection: 'row' }}
+          keyExtractor={(item, i) => `homeScore-${i}`}
+          data={g.homeScores.map(score => String(score))}
+          renderItem={({ item }) => (
+            <Text style={{ flex: 1, paddingLeft: 10 }}>
+              {item}
+            </Text>
+          )}
+        />
+      )
+  },
+  {
+    title: 'Away Team Scores', key: 'awayScores', render: g =>
+      (
+        <FlatList
+          style={{ flexDirection: 'row' }}
+          keyExtractor={(item, i) => `awayScore-${i}`}
+          data={g.awayScores.map(score => String(score))}
+          renderItem={({ item }) => (
+            <Text style={{ flex: 1, paddingLeft: 10 }}>
+              {item}
+            </Text>
+          )}
+        />
+      )
+  },
+];
+
 export default class LogsScreen extends React.Component {
   static navigationOptions = {
     title: 'Logs',
@@ -51,8 +88,6 @@ export default class LogsScreen extends React.Component {
   } 
 
   renderRow = ({item}) => { 
-    console.log('title', item.title);
-    console.log('value', item.value);
     return (
       <View
         style={{
@@ -79,49 +114,20 @@ export default class LogsScreen extends React.Component {
     );
   } 
 
+  onCloseModal = () => { this.setState({ showGameModal: false }) };
+
   render() {
     let game = null;
     if(this.state.gamesData && this.state.selectedGameId) {
       game = this.state.gamesData[this.state.selectedGameId];
     }
-    const toRender = [
-      { title: 'League', key: 'leagueId' },
-      { title: 'Winning Team', key: 'winningTeam' },
-      { title: 'Home Team', key: 'homeTeam' },
-      { title: 'Away Team', key: 'awayTeam' },
-      { title: 'Home Team Scores', key: 'homeScores', render: g => 
-        (
-          <FlatList 
-            style={{ flexDirection: 'row' }} 
-            keyExtractor={(item, i) => `homeScore-${i}`}
-            data={g.homeScores.map(score => String(score))}
-            renderItem={({ item }) => (
-              <Text style={{ flex: 1, paddingLeft: 10 }}>
-                {item}
-              </Text>
-            )}
-          />
-        )
-      },
-      { title: 'Away Team Scores', key: 'awayScores', render: g => 
-        (
-          <FlatList 
-            style={{ flexDirection: 'row' }}
-            keyExtractor={(item, i) => `awayScore-${i}`}
-            data={g.awayScores.map(score => String(score))}
-            renderItem={({ item }) => (
-              <Text style={{ flex: 1, paddingLeft: 10 }}>
-                {item}
-              </Text>
-            )}
-          />
-        ) 
-      },
-    ];
+
     return (
       <View style={styles.container}>
         <Modal
           isVisible={this.state.showGameModal}
+          onBackButtonPress={this.onCloseModal}
+          onBackdropPress={this.onCloseModal}
         >
           <View style={styles.modalContent}>
             <ScrollView style={{ flexGrow: 1}}>
