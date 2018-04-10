@@ -48,10 +48,8 @@ export default class SettingsScreen extends React.Component {
 
     db.ref('serverStatus').on('value', (snapshot) => {
       var serverStatus = snapshot.val(); 
-      console.log(serverStatus);
       var timestamp = serverStatus.timestamp;
       var date = moment(timestamp); 
-      console.log(date);
       this.setState({ 
         lastUpdated: date.format('lll'),
       });

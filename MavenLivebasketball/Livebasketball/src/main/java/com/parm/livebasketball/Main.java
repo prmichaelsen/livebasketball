@@ -358,7 +358,7 @@ public class Main {
                 if(league != null && league.getEnabled()){
                     if(game.doesMeetConditionOne() || game.doesMeetConditionTwo()){
                         System.out.println( "------\n------\n MATCH\n------\n------\n");
-                        String title = league.getCountry() + ": " + league.getName();
+                        String title = league.getCountry() + league.getName();
                         String body = game.getCondition() + ": " + game.getMatchName();
                         sendNotifications(title, body);
                     }

@@ -1,6 +1,7 @@
 import { Notifications } from 'expo';
 import React from 'react';
 import { StackNavigator } from 'react-navigation';
+import { Vibration } from 'react-native';
 
 import MainTabNavigator from './MainTabNavigator';
 import registerForPushNotificationsAsync from '../api/registerForPushNotificationsAsync';
@@ -22,6 +23,8 @@ const firebaseConfig = {
 export const firebaseApp = firebase.initializeApp(firebaseConfig);
 export const db = firebase.database();
 
+const PATTERN = [1000, 2000, 3000];
+const TIMEOUT = 60;
 const RootStackNavigator = StackNavigator(
   {
     Main: {
@@ -63,5 +66,9 @@ export default class RootNavigator extends React.Component {
 
   _handleNotification = ({ origin, data }) => {
     console.log(`Push notification ${origin} with data: ${JSON.stringify(data)}`);
+    Vibration.vibrate(PATTERN, true);
+    setTimeout(()=> {
+      Vibration.cancel();
+    }, TIMEOUT * 1000);
   };
 }
